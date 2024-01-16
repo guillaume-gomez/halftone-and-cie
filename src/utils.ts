@@ -5,16 +5,22 @@ function map(value: number, minA: number, maxA: number, minB: number, maxB: numb
 
 
 function positionToDataIndex(x: number, y: number, width: number) : number {
-  width = width || WIDTH;
   // data is arranged as [R, G, B, A, R, G, B, A, ...]
   return (y * width + x) * 4;
 }
 
-function getContext(canvasSource: HTMLCanvasElement) {
+function getContext(canvasSource: HTMLCanvasElement)  {
    const context = canvasSource.getContext('2d');
     if(!context) {
-      console.error("Cannot find context");
-      return;
+      throw new Error("Cannot find context");
+    }
+    return context;
+}
+
+function getContextBuffer(canvasSource: HTMLCanvasElement) {
+   const context = canvasSource.getContext('2d');
+    if(!context) {
+      throw new Error("Cannot find context");
     }
     return context;
 }
@@ -23,14 +29,18 @@ export function halftone(canvasSource: HTMLCanvasElement, canvasTarget: HTMLCanv
   const width = canvasSource.width;
   const height = canvasSource.height;
 
+  canvasTarget.width = width;
+  canvasTarget.height = height;
+
   const contextSource = getContext(canvasSource);
   const contextTarget = getContext(canvasTarget);
+
 
   const sourceImageData = contextSource.getImageData(0, 0, width, height);
 
   for (let y = 0; y < height; y += pixelsPerDot) {
     for (let x = 0; x < width; x += pixelsPerDot) {
-      const index = positionToDataIndex(x, y);
+      const index = positionToDataIndex(x, y, width);
       // extract the R, G, B from the source image.
       // because it's grayscale, only the red channel needs to be sampled.
       const value = sourceImageData.data[index];
@@ -51,7 +61,6 @@ export function loadImage(imagepath: string, canvas: HTMLCanvasElement) {
     canvas.width = image.width;
     canvas.height = image.height;
     context.drawImage(image, 0, 0, image.width, image.height);
-    console.log('loaded')
   };
   image.src = imagepath;
 }

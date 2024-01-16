@@ -8,13 +8,14 @@ import { halftone, loadImage } from "./utils";
 function App() {
   const [count, setCount] = useState(0);
   const imageRef = useRef<HTMLCanvasElement>(null);
+  const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if(canvasRef.current) {
-      loadImage(frida, canvasRef.current);
+    if(canvasBufferRef.current) {
+      loadImage(frida, canvasBufferRef.current);
     }
-  }, [canvasRef])
+  }, [canvasBufferRef])
 
   return (
     <>
@@ -27,8 +28,8 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <button onClick={halftone}>Generate</button>
-      <img src={frida} ref={imageRef} />
+      <button onClick={() => halftone(canvasBufferRef.current, canvasRef.current, 10)}>Generate</button>
+      <canvas ref={canvasBufferRef} style={{display: "none"}} />
       <canvas ref={canvasRef} />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
