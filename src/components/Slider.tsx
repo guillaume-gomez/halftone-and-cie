@@ -1,5 +1,5 @@
 
-interface SliderProp {
+interface SliderProps {
     label: string
     value: number;
     min: number;
@@ -7,7 +7,7 @@ interface SliderProp {
     onChange: (value: number) => void;
 }
 
-function Slider({ label, value, onChange, min, max } : SliderProp) {
+function Slider({ label, value, onChange, min, max } : SliderProps) {
     return (
         <div>
             <label>{label}</label>
