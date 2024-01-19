@@ -36,6 +36,22 @@ function getContext(canvasSource: HTMLCanvasElement) : CanvasRenderingContext2D 
     return context;
 }
 
+function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
+  if(width > maxSize) {
+    const aspectRatio = height / width;
+    const newWidth = Math.min(width, maxSize);
+
+    return [newWidth, newWidth * aspectRatio];
+  } else if(height > maxSize) {
+    const aspectRatio = width / height;
+    const newHeight = Math.min(height, maxSize);
+
+    return [newHeight * aspectRatio, newHeight];
+  } else {
+    return [width, height];
+  }
+}
+
 interface HalftoneParams {
   dotSize: number;
   angle: number;
@@ -107,13 +123,15 @@ export function halftone(
 }
 
 
-export function loadImage(imagepath: string, canvas: HTMLCanvasElement) {
+export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize: number) {
   const context = canvas.getContext("2d");
   const image = new Image();
   image.onload = () => {
-    canvas.width = image.width;
-    canvas.height = image.height;
-    context.drawImage(image, 0, 0, image.width, image.height);
+    const [width, height] = resizeWithRatio(image.width, image.height, maxSize)
+
+    canvas.width = width;
+    canvas.height = height;
+    context.drawImage(image, 0, 0, width, height);
   };
   image.src = imagepath;
 }
