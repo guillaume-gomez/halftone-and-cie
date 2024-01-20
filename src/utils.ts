@@ -52,6 +52,71 @@ function resizeWithRatio(width: number, height: number, maxSize: number) : [numb
   }
 }
 
+function duatone(canvasSource: HTMLCanvasElement) : [HTMLCanvasElement, HTMLCanvasElement] {
+  const canvasLayerOne = document.createElement('canvas');
+  const canvasLayerTwo = document.createElement('canvas');
+
+  canvasLayerOne.width = canvasSource.width;
+  canvasLayerTwo.width = canvasSource.width;
+
+  canvasLayerOne.height = canvasSource.height;
+  canvasLayerTwo.height = canvasSource.height;
+
+  const contextCanvasSource = getContext(canvasSource);
+  const contextLayerOne = getContext(canvasLayerOne);
+  const contextLayerTwo = getContext(canvasLayerTwo);
+
+  const dataCanvasSource = contextCanvasSource.getImageData(
+    0,
+    0,
+    canvasSource.width,
+    canvasSource.height
+  );
+
+  const dataLayerOne = contextLayerOne.getImageData(
+    0,
+    0,
+    canvasSource.width,
+    canvasSource.height
+  );
+
+    const dataLayerTwo = contextLayerTwo.getImageData(
+    0,
+    0,
+    canvasSource.width,
+    canvasSource.height
+  );
+
+  for (let y = 0; y < canvasSource.height; y++) {
+    for (let x = 0; x < canvasSource.width; x++) {
+      const index = positionToDataIndex(x, y, canvasSource.width);
+      const [r, g, b, a] = [
+        dataCanvasSource.data[index + 0],
+        dataCanvasSource.data[index + 1],
+        dataCanvasSource.data[index + 2],
+        dataCanvasSource.data[index + 3],
+      ];
+      const value = (r + g + b) / 3;
+      if (value < duotoneThreshold) {
+        const adjustedValue = map(value, 0, duotoneThreshold, 0, 255);
+        dataLayerTwo.data[index + 0] = adjustedValue;
+        dataLayerTwo.data[index + 1] = adjustedValue;
+        dataLayerTwo.data[index + 2] = adjustedValue;
+        dataLayerTwo.data[index + 3] = 255;
+      }
+      contextLayerOne.data[index + 0] = value;
+      contextLayerOne.data[index + 1] = value;
+      contextLayerOne.data[index + 2] = value;
+      contextLayerOne.data[index + 3] = 255;
+    }
+  }
+  contextLayerOne.putImageData(contextLayerOne, 0, 0);
+  contextLayerTwo.putImageData(dataLayerTwo, 0, 0);
+
+  return [canvasLayerOne, canvasLayerTwo];
+
+}
+
 interface HalftoneParams {
   dotSize: number;
   angle: number;
