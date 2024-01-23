@@ -8,7 +8,7 @@ interface ColorProps {
 function Color({ label, value, onChange } : ColorProps) {
     return (
         <div>
-            <label>{label}</label>
+            <label>{label} : </label>
             <input type="color" value={value} onChange={(e) => onChange(e.target.value)}/>
         </div>
     );
