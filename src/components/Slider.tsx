@@ -10,7 +10,7 @@ interface SliderProps {
 function Slider({ label, value, onChange, min, max } : SliderProps) {
     return (
         <div>
-            <label>{label}</label>
+            <label>{label} : </label>
             <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(parseInt(e.target.value))}/>
         </div>
     );
