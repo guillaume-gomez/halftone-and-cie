@@ -5,7 +5,7 @@ import frida from '/frida.jpg';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import './App.css';
-import { halftone, loadImage } from "./utils";
+import { halftone, loadImage, halftoneDuatone } from "./utils";
 
 function App() {
   const imageRef = useRef<HTMLCanvasElement>(null);
@@ -13,17 +13,18 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [angle, setAngle] = useState<number>(0);
-  const [dotSize, setDotSize] = useState<number>(10);
-  const [dotResolution, setDotResolution] = useState<number>(10);
-  const [dotColor, setDotColor] = useState<string>("red");
+  const [dotSize, setDotSize] = useState<number>(5);
+  const [dotResolution, setDotResolution] = useState<number>(3);
+  const [dotColorOne, setDotColorOne] = useState<string>("#FF0000");
+  const [dotColorTwo, setDotColorTwo] = useState<string>("#0000FF");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
-  const [maxSize, setMaxSize] = useState<number>(300);
+  const [maxSize, setMaxSize] = useState<number>(500);
 
   useEffect(() => {
     if(canvasBufferRef.current) {
       loadImage(frida, canvasBufferRef.current, maxSize);
     }
-  }, [canvasBufferRef]);
+  }, [canvasBufferRef, maxSize]);
 
   return (
     <>
@@ -40,9 +41,10 @@ function App() {
       <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
       <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
       <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
-      <ColorInput value={dotColor} onChange={(value) => setDotColor(value)} label="Dot Color" />
+      <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
+      <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
       <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
-      <button onClick={() => halftone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, dotColor, backgroundColor, maxSize } )}>Generate</button>
+      <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate</button>
       <canvas ref={canvasBufferRef} style={{display: "none"}} />
       <canvas ref={canvasRef} />
       <div className="card">
