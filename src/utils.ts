@@ -53,6 +53,7 @@ function resizeWithRatio(width: number, height: number, maxSize: number) : [numb
 }
 
 function duatone(canvasSource: HTMLCanvasElement) : [HTMLCanvasElement, HTMLCanvasElement] {
+  const duotoneThreshold = 127;
   const canvasLayerOne = document.createElement('canvas');
   const canvasLayerTwo = document.createElement('canvas');
 
@@ -104,18 +105,19 @@ function duatone(canvasSource: HTMLCanvasElement) : [HTMLCanvasElement, HTMLCanv
         dataLayerTwo.data[index + 2] = adjustedValue;
         dataLayerTwo.data[index + 3] = 255;
       }
-      contextLayerOne.data[index + 0] = value;
-      contextLayerOne.data[index + 1] = value;
-      contextLayerOne.data[index + 2] = value;
-      contextLayerOne.data[index + 3] = 255;
+      dataLayerOne.data[index + 0] = value;
+      dataLayerOne.data[index + 1] = value;
+      dataLayerOne.data[index + 2] = value;
+      dataLayerOne.data[index + 3] = 255;
     }
   }
-  contextLayerOne.putImageData(contextLayerOne, 0, 0);
+  contextLayerOne.putImageData(dataLayerOne, 0, 0);
   contextLayerTwo.putImageData(dataLayerTwo, 0, 0);
 
   return [canvasLayerOne, canvasLayerTwo];
-
 }
+
+
 
 interface HalftoneParams {
   dotSize: number;
@@ -123,29 +125,55 @@ interface HalftoneParams {
   dotResolution: number;
   backgroundColor: string;
   dotColor: string;
+  clear: boolean;
 }
 
-export function halftone(
-  canvasSource: HTMLCanvasElement,
-  canvasTarget: HTMLCanvasElement,
-  { dotSize, angle, dotResolution, backgroundColor ="transparent", dotColor="red" } : HalftoneParams
-) : void {
+interface HalftoneDuatoneParams extends HalftoneParams {
+  colorLayer1: string;
+  colorLayer2: string;
+}
+
+export function halftoneDuatone(canvasSource: HTMLCanvasElement,
+  canvasTarget: HTMLCanvasElement, halftoneDuatoneParams: HalftoneDuatoneParams) {
+  const [canvasLayerOne, canvasLayerTwo] = duatone(canvasSource);
+
+  const { colorLayer1, colorLayer2, ...rest } = halftoneDuatoneParams;
+
   const width = canvasSource.width;
   const height = canvasSource.height;
 
   canvasTarget.width = width;
   canvasTarget.height = height;
 
-  const contextSource = getContext(canvasSource);
-  const contextTarget = getContext(canvasTarget);
 
+  const contextTarget = getContext(canvasTarget);
+  const contextTargetLayerOne = getContext(canvasLayerOne);
+  const contextTargetLayerTwo = getContext(canvasLayerTwo);
+
+  contextTarget.globalAlpha = 0.8;
+
+  contextTarget.fillStyle = halftoneDuatoneParams.backgroundColor;
+  contextTarget.fillRect(0, 0, canvasTarget.width, canvasTarget.height);
+
+  halftone(contextTargetLayerOne, contextTarget, width, height, { ...rest, dotColor: colorLayer1 });
+  halftone(contextTargetLayerTwo, contextTarget, width, height, { ...rest, dotColor: colorLayer2 });
+}
+
+function halftone(
+  contextSource: CanvasRenderingContext2D,
+  contextTarget: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  { dotSize, angle, dotResolution, backgroundColor ="transparent", dotColor="red" } : HalftoneParams
+) : void {
 
   const sourceImageData = contextSource.getImageData(0, 0, width, height);
 
   const angleInRadian = (angle * Math.PI) / 180;
-  contextTarget.fillStyle = backgroundColor;
-  contextTarget.fillRect(0, 0, width, height);
+
   contextTarget.fillStyle = dotColor;
+
+
 
   const boundaries = computeBoundaries(width, height, angleInRadian);
   const minX = Math.min(...boundaries.map((point) => point[0])) | 0;
