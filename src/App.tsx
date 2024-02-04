@@ -20,6 +20,10 @@ function App() {
   const [dotColorTwo, setDotColorTwo] = useState<string>("#0000FF");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [maxSize, setMaxSize] = useState<number>(500);
+  const [cyanAngle, setCyanAngle] = useState<number>(15);
+  const [yellowAngle, setYellowAngle] = useState<number>(2);
+  const [magentaAngle, setMagentaAngle] = useState<number>(75);
+  const [keyAngle, setKeyAngle] = useState<number>(45);
 
   useEffect(() => {
     if(canvasBufferRef.current) {
@@ -47,22 +51,40 @@ function App() {
             <a
               role="tab"
               className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
-              onClick={(e) => setImageProcessingMode(e.target.value)}
+              onClick={(e) => setImageProcessingMode(mode)}
             >
               {mode}
             </a>
           )
         }
       </div>
-      <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
-      <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
-      <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
-      <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
-      <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
-      <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
-      <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
-      <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate Duatone</button>
-      <button onClick={() => fromRGBToCMYK(canvasBufferRef.current, canvasRef.current)}>Generate CMYK</button>
+      <div className="Options">
+        <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
+        <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
+        <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
+
+        {
+          imageProcessingMode === "Duatone" ?
+          <>
+            <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
+            <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
+            <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
+            <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
+          </>
+          :
+          <>
+            <Slider min={0} max={90} value={cyanAngle} onChange={(value) => setCyanAngle(value)} label="Cyan Angle" />
+            <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
+            <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
+            <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+          </>
+        }
+        { imageProcessingMode === "Duatone" ?
+          <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate Duatone</button>
+          :
+          <button onClick={() => fromRGBToCMYK(canvasBufferRef.current, canvasRef.current)}>Generate CMYK</button>
+        }
+      </div>
       <canvas ref={canvasBufferRef} style={{display: "none"}} />
       <canvas ref={canvasRef} />
       <div className="card">
