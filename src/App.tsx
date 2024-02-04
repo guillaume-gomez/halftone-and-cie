@@ -5,13 +5,14 @@ import frida from '/frida.jpg';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import './App.css';
-import { halftone, loadImage, halftoneDuatone } from "./utils";
+import { halftone, loadImage, halftoneDuatone, fromRGBToCMYK } from "./utils";
 
 function App() {
   const imageRef = useRef<HTMLCanvasElement>(null);
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const [imageProcessingMode, setImageProcessingMode] = useState<string>("Duatone");
   const [angle, setAngle] = useState<number>(0);
   const [dotSize, setDotSize] = useState<number>(5);
   const [dotResolution, setDotResolution] = useState<number>(3);
@@ -37,6 +38,22 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <div
+        role="tablist"
+        className="tabs tabs-bordered"
+      >
+        {
+          ["Duatone", "CMYK"].map(mode =>
+            <a
+              role="tab"
+              className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
+              onClick={(e) => setImageProcessingMode(e.target.value)}
+            >
+              {mode}
+            </a>
+          )
+        }
+      </div>
       <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
       <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
       <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
@@ -44,7 +61,8 @@ function App() {
       <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
       <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
       <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
-      <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate</button>
+      <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate Duatone</button>
+      <button onClick={() => fromRGBToCMYK(canvasBufferRef.current, canvasRef.current)}>Generate CMYK</button>
       <canvas ref={canvasBufferRef} style={{display: "none"}} />
       <canvas ref={canvasRef} />
       <div className="card">
