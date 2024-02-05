@@ -133,18 +133,20 @@ interface HalftoneDuatoneParams extends HalftoneParams {
   colorLayer2: string;
 }
 
-export function halftoneDuatone(canvasSource: HTMLCanvasElement,
-  canvasTarget: HTMLCanvasElement, halftoneDuatoneParams: HalftoneDuatoneParams) {
+export function halftoneDuatone(
+  canvasSource: HTMLCanvasElement,
+  canvasTarget: HTMLCanvasElement,
+  halftoneDuatoneParams: HalftoneDuatoneParams
+) {
   const [canvasLayerOne, canvasLayerTwo] = duatone(canvasSource);
 
-  const { colorLayer1, colorLayer2, ...rest } = halftoneDuatoneParams;
+  const { colorLayer1, colorLayer2, angle, ...rest } = halftoneDuatoneParams;
 
   const width = canvasSource.width;
   const height = canvasSource.height;
 
   canvasTarget.width = width;
   canvasTarget.height = height;
-
 
   const contextTarget = getContext(canvasTarget);
   const contextTargetLayerOne = getContext(canvasLayerOne);
@@ -155,8 +157,8 @@ export function halftoneDuatone(canvasSource: HTMLCanvasElement,
   contextTarget.fillStyle = halftoneDuatoneParams.backgroundColor;
   contextTarget.fillRect(0, 0, canvasTarget.width, canvasTarget.height);
 
-  halftone(contextTargetLayerOne, contextTarget, width, height, { ...rest, dotColor: colorLayer1 });
-  halftone(contextTargetLayerTwo, contextTarget, width, height, { ...rest, dotColor: colorLayer2 });
+  halftone(contextTargetLayerOne, contextTarget, width, height, { ...rest, angle: 0, dotColor: colorLayer1 });
+  halftone(contextTargetLayerTwo, contextTarget, width, height, { ...rest, angle, dotColor: colorLayer2 });
 }
 
 function halftone(
@@ -164,7 +166,12 @@ function halftone(
   contextTarget: CanvasRenderingContext2D,
   width: number,
   height: number,
-  { dotSize, angle, dotResolution, backgroundColor ="transparent", dotColor="red" } : HalftoneParams
+  { dotSize,
+    angle,
+    dotResolution,
+    backgroundColor = "transparent",
+    dotColor = "red"
+  } : HalftoneParams
 ) : void {
 
   const sourceImageData = contextSource.getImageData(0, 0, width, height);
@@ -172,8 +179,6 @@ function halftone(
   const angleInRadian = (angle * Math.PI) / 180;
 
   contextTarget.fillStyle = dotColor;
-
-
 
   const boundaries = computeBoundaries(width, height, angleInRadian);
   const minX = Math.min(...boundaries.map((point) => point[0])) | 0;
@@ -215,6 +220,110 @@ function halftone(
   }
 }
 
+interface FromRGBToCMYKParams {
+  dotSize: number;
+  dotResolution: number;
+  cyanAngle: number;
+  magentaAngle: number;
+  yellowAngle: number;
+  keyAngle: number;
+}
+
+export function fromRGBToCMYK(
+  originCanvas : HTMLCanvasElement,
+  targetCanvas: HTMLCanvasElement,
+  {
+    dotSize,
+    dotResolution,
+    cyanAngle,
+    magentaAngle,
+    yellowAngle,
+    keyAngle
+  }: FromRGBToCMYKParams
+) {
+  const targetContext = targetCanvas.getContext("2d");
+  const width = originCanvas.width;
+  const height = originCanvas.height;
+
+  targetCanvas.width = width;
+  targetCanvas.height = height;
+  targetContext.globalCompositeOperation = "darken";
+
+  let cyanCanvas       = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
+  let magentaCanvas    = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
+  let yellowCanvas     = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
+  let blackCanvas     = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
+  let grayscaleCanvas  = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
+
+
+  const cyanContext    = cyanCanvas.getContext("2d");
+  cyanContext.fillStyle = "cyan";
+
+  const magentaContext = magentaCanvas.getContext("2d");
+  magentaContext.fillStyle = "magenta";
+
+  const yellowContext  = yellowCanvas.getContext("2d");
+  yellowContext.fillStyle = "yellow";
+
+  const blackContext  = blackCanvas.getContext("2d");
+  blackContext.fillStyle = "black";
+
+  const grayscaleContext = grayscaleCanvas.getContext("2d");
+
+  const originCanvasContext = originCanvas.getContext("2d");
+  const originCanvasImageData = originCanvasContext.getImageData(
+    0,
+    0,
+    originCanvas.width,
+    originCanvas.height
+  );
+
+
+  [
+    {context: cyanContext, angle: cyanAngle },
+    {context: magentaContext , angle: magentaAngle},
+    {context: yellowContext, angle: yellowAngle }
+    ].forEach(({context, angle}, i) => {
+    const grayscaleImageData = grayscaleContext.getImageData(
+      0,
+      0,
+      grayscaleCanvas.width,
+      grayscaleCanvas.height
+    );
+    for (let y = 0; y < originCanvas.height; y++) {
+      for (let x = 0; x < originCanvas.width; x++) {
+        const index = positionToDataIndex(x, y, originCanvas.width);
+        const complement = 255 - originCanvasImageData.data[index + i];
+        grayscaleImageData.data[index + 0] = 255 - complement;
+        grayscaleImageData.data[index + 1] = 255 - complement;
+        grayscaleImageData.data[index + 2] = 255 - complement;
+        grayscaleImageData.data[index + 3] = 255;
+      }
+    }
+    grayscaleContext.putImageData(grayscaleImageData, 0, 0);
+
+    halftone(
+      grayscaleContext,
+      targetContext,
+      originCanvas.width,
+      originCanvas.height,
+      {
+        angle,
+        dotSize,
+        dotResolution,
+        dotColor: context.fillStyle,
+        layer: false,
+      }
+    );
+  });
+
+  // freeing memory
+  cyanCanvas = null;
+  magentaCanvas = null;
+  yellowCanvas = null;
+  blackCanvas = null;
+  grayscaleCanvas = null;
+}
 
 export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize: number) {
   const context = canvas.getContext("2d");
