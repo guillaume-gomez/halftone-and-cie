@@ -247,27 +247,13 @@ export function fromRGBToCMYK(
 
   targetCanvas.width = width;
   targetCanvas.height = height;
+
+  targetContext.fillStyle = "white";
+  targetContext.globalCompositeOperation = "source-over";
+  targetContext.fillRect(0, 0, width, height);
   targetContext.globalCompositeOperation = "darken";
 
-  let cyanCanvas       = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
-  let magentaCanvas    = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
-  let yellowCanvas     = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
-  let blackCanvas     = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
   let grayscaleCanvas  = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
-
-
-  const cyanContext    = cyanCanvas.getContext("2d");
-  cyanContext.fillStyle = "cyan";
-
-  const magentaContext = magentaCanvas.getContext("2d");
-  magentaContext.fillStyle = "magenta";
-
-  const yellowContext  = yellowCanvas.getContext("2d");
-  yellowContext.fillStyle = "yellow";
-
-  const blackContext  = blackCanvas.getContext("2d");
-  blackContext.fillStyle = "black";
-
   const grayscaleContext = grayscaleCanvas.getContext("2d");
 
   const originCanvasContext = originCanvas.getContext("2d");
@@ -280,10 +266,10 @@ export function fromRGBToCMYK(
 
 
   [
-    {context: cyanContext, angle: cyanAngle },
-    {context: magentaContext , angle: magentaAngle},
-    {context: yellowContext, angle: yellowAngle }
-    ].forEach(({context, angle}, i) => {
+    {dotColor: 'cyan', angle: cyanAngle },
+    {dotColor: 'magenta' , angle: magentaAngle},
+    {dotColor: 'yellow', angle: yellowAngle }
+    ].forEach(({dotColor, angle}, i) => {
     const grayscaleImageData = grayscaleContext.getImageData(
       0,
       0,
@@ -311,17 +297,13 @@ export function fromRGBToCMYK(
         angle,
         dotSize,
         dotResolution,
-        dotColor: context.fillStyle,
+        dotColor,
         layer: false,
       }
     );
   });
 
   // freeing memory
-  cyanCanvas = null;
-  magentaCanvas = null;
-  yellowCanvas = null;
-  blackCanvas = null;
   grayscaleCanvas = null;
 }
 
