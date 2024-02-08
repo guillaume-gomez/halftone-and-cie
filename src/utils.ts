@@ -266,10 +266,11 @@ export function fromRGBToCMYK(
 
 
   [
-    {dotColor: 'cyan', angle: cyanAngle },
-    {dotColor: 'magenta' , angle: magentaAngle},
-    {dotColor: 'yellow', angle: yellowAngle }
-    ].forEach(({dotColor, angle}, i) => {
+    {dotColor: 'cyan', angle: cyanAngle, key: false },
+    {dotColor: 'magenta' , angle: magentaAngle, key: false },
+    {dotColor: 'yellow', angle: yellowAngle, key: false },
+    {dotColor: 'black', angle: keyAngle, key: true }
+    ].forEach(({ dotColor, angle, key }, i) => {
     const grayscaleImageData = grayscaleContext.getImageData(
       0,
       0,
@@ -278,12 +279,26 @@ export function fromRGBToCMYK(
     );
     for (let y = 0; y < originCanvas.height; y++) {
       for (let x = 0; x < originCanvas.width; x++) {
-        const index = positionToDataIndex(x, y, originCanvas.width);
-        const complement = 255 - originCanvasImageData.data[index + i];
-        grayscaleImageData.data[index + 0] = 255 - complement;
-        grayscaleImageData.data[index + 1] = 255 - complement;
-        grayscaleImageData.data[index + 2] = 255 - complement;
-        grayscaleImageData.data[index + 3] = 255;
+        const index = positionToDataIndex(x, y, originCanvasImageData.width);
+        const [r, g, b, a] = [
+          originCanvasImageData.data[index + 0],
+          originCanvasImageData.data[index + 1],
+          originCanvasImageData.data[index + 2],
+          originCanvasImageData.data[index + 3],
+        ];
+        const keyValue = 255 - Math.max(r, g, b);
+        if (key) {
+          grayscaleImageData.data[index + 0] = 255 - keyValue;
+          grayscaleImageData.data[index + 1] = 255 - keyValue;
+          grayscaleImageData.data[index + 2] = 255 - keyValue;
+          grayscaleImageData.data[index + 3] = 255;
+        } else {
+          const complement = 255 - originCanvasImageData.data[index + i];
+          grayscaleImageData.data[index + 0] = 255 - (complement - keyValue);
+          grayscaleImageData.data[index + 1] = 255 - (complement - keyValue);
+          grayscaleImageData.data[index + 2] = 255 - (complement - keyValue);
+          grayscaleImageData.data[index + 3] = 255;
+        }
       }
     }
     grayscaleContext.putImageData(grayscaleImageData, 0, 0);
