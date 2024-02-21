@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
-import frida from '/frida.jpg';
+import image from '/frida.jpg';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import './App.css';
-import { halftone, loadImage, halftoneDuatone, fromRGBToCMYK } from "./utils";
+import { loadImage } from "./utils";
+import { halftone, halftoneDuatone, fromRGBToCMYK } from "./halftone";
 
 function App() {
   const imageRef = useRef<HTMLCanvasElement>(null);
@@ -27,7 +28,7 @@ function App() {
 
   useEffect(() => {
     if(canvasBufferRef.current) {
-      loadImage(frida, canvasBufferRef.current, maxSize);
+      loadImage(image, canvasBufferRef.current, maxSize);
     }
   }, [canvasBufferRef, maxSize]);
 
@@ -82,10 +83,10 @@ function App() {
         { imageProcessingMode === "Duatone" ?
           <button onClick={() => halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } )}>Generate Duatone</button>
           :
-          <button onClick={() => fromRGBToCMYK(canvasBufferRef.current, canvasRef.current)}>Generate CMYK</button>
+          <button onClick={() => fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle})}>Generate CMYK</button>
         }
       </div>
-      <canvas ref={canvasBufferRef} style={{display: "none"}} />
+      <canvas ref={canvasBufferRef} /*style={{display: "none"}}*/ />
       <canvas ref={canvasRef} />
       <div className="card">
         <p>
