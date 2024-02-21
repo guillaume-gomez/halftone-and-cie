@@ -5,11 +5,6 @@ function map(value: number, minA: number, maxA: number, minB: number, maxB: numb
   return ((value - minA) / (maxA - minA)) * (maxB - minB) + minB;
 }
 
-function positionToDataIndex(x: number, y: number, width: number) : number {
-  // data is arranged as [R, G, B, A, R, G, B, A, ...]
-  return (y * width + x) * 4;
-}
-
 function rotatePointAboutPosition([x, y]: Vector2, [rotX, rotY] : Vector2, angle: number) : Vector2 {
   return [
     (x - rotX) * Math.cos(angle) - (y - rotY) * Math.sin(angle) + rotX,
@@ -26,14 +21,6 @@ function computeBoundaries(width: number, height: number, angle: number): [Vecto
   return [tl, br, tr, bl].map(([x, y]) => {
     return rotatePointAboutPosition([x, y], [width / 2, height / 2], angle);
   });
-}
-
-function getContext(canvasSource: HTMLCanvasElement) : CanvasRenderingContext2D {
-   const context = canvasSource.getContext('2d');
-    if(!context) {
-      throw new Error("Cannot find context");
-    }
-    return context;
 }
 
 function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
@@ -333,4 +320,17 @@ export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize:
     context.drawImage(image, 0, 0, width, height);
   };
   image.src = imagepath;
+}
+
+export function getContext(canvasSource: HTMLCanvasElement) : CanvasRenderingContext2D {
+   const context = canvasSource.getContext('2d');
+    if(!context) {
+      throw new Error("Cannot find context");
+    }
+    return context;
+}
+
+export function positionToDataIndex(x: number, y: number, width: number) : number {
+  // data is arranged as [R, G, B, A, R, G, B, A, ...]
+  return (y * width + x) * 4;
 }

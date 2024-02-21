@@ -1,4 +1,4 @@
-import { Vector2 } from "./utils";
+import { Vector2, getContext } from "./utils";
 
 // re-maps a value from its original range [minA, maxA] to the range [minB, maxB]
 function map(value: number, minA: number, maxA: number, minB: number, maxB: number) : number {
@@ -28,13 +28,6 @@ function computeBoundaries(width: number, height: number, angle: number): [Vecto
   });
 }
 
-function getContext(canvasSource: HTMLCanvasElement) : CanvasRenderingContext2D {
-   const context = canvasSource.getContext('2d');
-    if(!context) {
-      throw new Error("Cannot find context");
-    }
-    return context;
-}
 
 function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
   if(width > maxSize) {
