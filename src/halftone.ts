@@ -1,8 +1,13 @@
-import { Vector2 } from "./utils";
+import { Vector2, getContext } from "./utils";
 
 // re-maps a value from its original range [minA, maxA] to the range [minB, maxB]
 function map(value: number, minA: number, maxA: number, minB: number, maxB: number) : number {
   return ((value - minA) / (maxA - minA)) * (maxB - minB) + minB;
+}
+
+function positionToDataIndex(x: number, y: number, width: number) : number {
+  // data is arranged as [R, G, B, A, R, G, B, A, ...]
+  return (y * width + x) * 4;
 }
 
 function rotatePointAboutPosition([x, y]: Vector2, [rotX, rotY] : Vector2, angle: number) : Vector2 {
@@ -22,6 +27,7 @@ function computeBoundaries(width: number, height: number, angle: number): [Vecto
     return rotatePointAboutPosition([x, y], [width / 2, height / 2], angle);
   });
 }
+
 
 function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
   if(width > maxSize) {
@@ -307,30 +313,4 @@ export function fromRGBToCMYK(
 
   // freeing memory
   grayscaleCanvas = null;
-}
-
-export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize: number) {
-  const context = canvas.getContext("2d");
-  const image = new Image();
-  image.onload = () => {
-    const [width, height] = resizeWithRatio(image.width, image.height, maxSize)
-
-    canvas.width = width;
-    canvas.height = height;
-    context.drawImage(image, 0, 0, width, height);
-  };
-  image.src = imagepath;
-}
-
-export function getContext(canvasSource: HTMLCanvasElement) : CanvasRenderingContext2D {
-   const context = canvasSource.getContext('2d');
-    if(!context) {
-      throw new Error("Cannot find context");
-    }
-    return context;
-}
-
-export function positionToDataIndex(x: number, y: number, width: number) : number {
-  // data is arranged as [R, G, B, A, R, G, B, A, ...]
-  return (y * width + x) * 4;
 }
