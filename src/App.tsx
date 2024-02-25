@@ -21,7 +21,7 @@ function App() {
   const [dotColorOne, setDotColorOne] = useState<string>("#FF0000");
   const [dotColorTwo, setDotColorTwo] = useState<string>("#0000FF");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
-  const [maxSize, setMaxSize] = useState<number>(500);
+  const [maxSize, setMaxSize] = useState<number>(1000);
   const [cyanAngle, setCyanAngle] = useState<number>(15);
   const [yellowAngle, setYellowAngle] = useState<number>(2);
   const [magentaAngle, setMagentaAngle] = useState<number>(75);
@@ -42,7 +42,14 @@ function App() {
         return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
       case "Noise":
         return addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+      case "CMYK+Noise":
+        return CMYKNoise();
     };
+  }
+
+  function CMYKNoise() {
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+          addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
   return (
@@ -61,7 +68,7 @@ function App() {
         className="tabs tabs-bordered"
       >
         {
-          ["Duatone", "CMYK", "Noise"].map(mode =>
+          ["Duatone", "CMYK", "Noise", "CMYK+Noise"].map(mode =>
             <a
               role="tab"
               className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
