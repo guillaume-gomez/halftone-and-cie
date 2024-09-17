@@ -11,10 +11,17 @@ function Slider({ label, value, onChange, min, max } : SliderProps) {
     return (
         <div>
             <label>
-                <span class="text-bold">{label} : </span>
-                {value}
+                <span className="text-bold text-base-content">{label} : </span>
+                <span className="text-bold text-base-content">{value}</span>
             </label>
-            <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(parseInt(e.target.value))}/>
+            <input
+                className="range range-secondary"
+                type="range"
+                min={min}
+                max={max}
+                value={value}
+                onChange={(e) => onChange(parseInt(e.target.value))}
+            />
         </div>
     );
 }
