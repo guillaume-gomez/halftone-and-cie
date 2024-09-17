@@ -1,16 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import viteLogo from '/vite.svg';
-import imageFrida from '/frida.jpg';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
-import './App.css';
-import { loadImage, reloadCanvasPreview } from "./utils";
-import { halftone, halftoneDuatone, fromRGBToCMYK } from "./halftone";
+import { reloadCanvasPreview } from "./utils";
+import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
 
 function App() {
-  const imageRef = useRef<HTMLCanvasElement>(null);
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

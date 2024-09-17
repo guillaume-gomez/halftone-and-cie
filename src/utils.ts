@@ -1,26 +1,10 @@
-import { Vector2 } from "./utils";
-
-// re-maps a value from its original range [minA, maxA] to the range [minB, maxB]
-function map(value: number, minA: number, maxA: number, minB: number, maxB: number) : number {
-  return ((value - minA) / (maxA - minA)) * (maxB - minB) + minB;
-}
+import { Vector2 } from "./interfaces";
 
 function rotatePointAboutPosition([x, y]: Vector2, [rotX, rotY] : Vector2, angle: number) : Vector2 {
   return [
     (x - rotX) * Math.cos(angle) - (y - rotY) * Math.sin(angle) + rotX,
     (x - rotX) * Math.sin(angle) + (y - rotY) * Math.cos(angle) + rotY,
   ];
-}
-
-function computeBoundaries(width: number, height: number, angle: number): [Vector2, Vector2, Vector2, Vector2] {
-  const tl = [0, 0];
-  const tr = [width, 0];
-  const br = [width, height];
-  const bl = [0, height];
-  // rotate the screen, then find the minimum and maximum of the values.
-  return [tl, br, tr, bl].map(([x, y]) => {
-    return rotatePointAboutPosition([x, y], [width / 2, height / 2], angle);
-  });
 }
 
 function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
@@ -44,12 +28,21 @@ export function reloadCanvasPreview(image: HTMLImageElement, canvas: HTMLCanvasE
   canvas.width = width;
   canvas.height = height;
   const context = canvas.getContext("2d");
+  if(!context) {
+    throw new Error("Cannot find the context");
+    return;
+  }
+
   context.drawImage(image, 0, 0, width, height);
 }
 
 
 export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize: number) {
   const context = canvas.getContext("2d");
+  if(!context) {
+    throw new Error("Cannot find the context");
+    return;
+  }
   const image = new Image();
   image.onload = () => {
     const [width, height] = resizeWithRatio(image.width, image.height, maxSize)
