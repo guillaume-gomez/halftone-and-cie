@@ -39,6 +39,15 @@ function resizeWithRatio(width: number, height: number, maxSize: number) : [numb
   }
 }
 
+export function reloadCanvasPreview(image: HTMLImageElement, canvas: HTMLCanvasElement, maxSize: number) {
+  const [width, height] = resizeWithRatio(image.width, image.height, maxSize)
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  context.drawImage(image, 0, 0, width, height);
+}
+
+
 export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize: number) {
   const context = canvas.getContext("2d");
   const image = new Image();
@@ -48,6 +57,7 @@ export function loadImage(imagepath: string, canvas: HTMLCanvasElement, maxSize:
     canvas.width = width;
     canvas.height = height;
     context.drawImage(image, 0, 0, width, height);
+    console.log("image loaded");
   };
   image.src = imagepath;
 }

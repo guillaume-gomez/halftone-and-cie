@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import viteLogo from '/vite.svg';
-import image from '/frida.jpg';
+import imageFrida from '/frida.jpg';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
+import InputFileWithPreview from "./components/InputFileWithPreview";
 import './App.css';
-import { loadImage } from "./utils";
+import { loadImage, reloadCanvasPreview } from "./utils";
 import { halftone, halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
 
@@ -12,6 +13,8 @@ function App() {
   const imageRef = useRef<HTMLCanvasElement>(null);
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const [image, setImage] = useState<HTMLImageElement>();
 
   const [imageProcessingMode, setImageProcessingMode] = useState<string>("Duatone");
   const [angle, setAngle] = useState<number>(0);
@@ -27,10 +30,10 @@ function App() {
   const [keyAngle, setKeyAngle] = useState<number>(45);
 
   useEffect(() => {
-    if(canvasBufferRef.current) {
-      loadImage(image, canvasBufferRef.current, maxSize);
+    if(canvasBufferRef.current && image) {
+      reloadCanvasPreview(image, canvasBufferRef.current, maxSize);
     }
-  }, [canvasBufferRef, maxSize]);
+  }, [canvasBufferRef, maxSize, image]);
 
   function generateButton() {
     switch(imageProcessingMode) {
@@ -49,6 +52,10 @@ function App() {
   function CMYKNoise() {
     fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
           addNoise(canvasRef.current, canvasRef.current, 0.20);
+  }
+
+  function uploadImage(newImage: HTMLImageElement) {
+    setImage(newImage);
   }
 
   return (
@@ -98,7 +105,9 @@ function App() {
         }
         <button onClick={generateButton}>Generate</button>
       </div>
+      <InputFileWithPreview onChange={uploadImage} value={image} />
       <canvas ref={canvasBufferRef} /*style={{display: "none"}}*/ />
+      <p>Result</p>
       <canvas ref={canvasRef} />
       <div className="card">
         <p>
