@@ -65,7 +65,7 @@ function App() {
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1 className="text-3xl font-bold underline">Vite + React</h1>
       <div
         role="tablist"
         className="tabs tabs-bordered"
