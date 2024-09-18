@@ -63,6 +63,7 @@ function App() {
       <div className="card bg-base-200">
         <div className="card-body">
           <h2 className="card-title">Settings</h2>
+          <InputFileWithPreview onChange={uploadImage} value={image} />
           <div
             role="tablist"
             className="tabs tabs-bordered"
@@ -101,7 +102,7 @@ function App() {
               </>
             }
             <button
-              className="btn btn-primary"
+              className="btn btn-primary w-full"
               onClick={generateButton}
             >
               Generate
@@ -109,8 +110,7 @@ function App() {
           </div>
         </div>
       </div>
-      <InputFileWithPreview onChange={uploadImage} value={image} />
-      <canvas ref={canvasBufferRef} /*style={{display: "none"}}*/ />
+      <canvas ref={canvasBufferRef} style={{display: "none"}} />
       <p>Result</p>
       <canvas ref={canvasRef} />
       <div className="card">
