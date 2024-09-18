@@ -32,6 +32,9 @@ function App() {
   }, [canvasBufferRef, maxSize, image]);
 
   function generateButton() {
+    if(!canvasBufferRef.current || !canvasRef.current) {
+      return;
+    }
     switch(imageProcessingMode) {
       case "Duatone":
       default:
