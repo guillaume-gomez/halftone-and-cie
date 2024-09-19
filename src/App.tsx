@@ -12,7 +12,7 @@ function App() {
 
   const [image, setImage] = useState<HTMLImageElement>();
 
-  const [imageProcessingMode, setImageProcessingMode] = useState<string>("Duatone");
+  const [imageProcessingMode, setImageProcessingMode] = useState<string>("CMYK+Noise");
   const [angle, setAngle] = useState<number>(0);
   const [dotSize, setDotSize] = useState<number>(5);
   const [dotResolution, setDotResolution] = useState<number>(3);
@@ -63,13 +63,19 @@ function App() {
       <div className="card bg-base-200">
         <div className="card-body">
           <h2 className="card-title">Settings</h2>
+          <ul className="steps steps-vertical">
+            <li className="step step-primary">Register</li>
+            <li className="step step-primary">Choose plan</li>
+            <li className="step">Purchase</li>
+            <li className="step">Receive Product</li>
+          </ul>
           <InputFileWithPreview onChange={uploadImage} value={image} />
           <div
             role="tablist"
             className="tabs tabs-bordered"
           >
             {
-              ["Duatone", "CMYK", "Noise", "CMYK+Noise"].map(mode =>
+              ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
                 <a
                   role="tab"
                   className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
