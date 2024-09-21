@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
+import Card from "./components/Card";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -60,73 +61,59 @@ function App() {
   return (
     <div className="bg-base-300">
       <h1 className="text-3xl font-bold underline">Halftone and Cie</h1>
-      <div className="card bg-base-200">
-        <div className="card-body">
-          <h2 className="card-title">Settings</h2>
-          <ul className="steps steps-vertical">
-            <li className="step step-primary">Register</li>
-            <li className="step step-primary">Choose plan</li>
-            <li className="step">Purchase</li>
-            <li className="step">Receive Product</li>
-          </ul>
+      <div className="flex md:flex-row flex-col gap-4">
+        <Card title="Settings">
           <InputFileWithPreview onChange={uploadImage} value={image} />
-          <div
-            role="tablist"
-            className="tabs tabs-bordered"
-          >
-            {
-              ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
-                <a
-                  role="tab"
-                  className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
-                  onClick={(e) => setImageProcessingMode(mode)}
-                >
-                  {mode}
-                </a>
-              )
-            }
-          </div>
-          <div className="Options">
-            <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
-            <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
-            <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
-
-            {
-              imageProcessingMode === "Duatone" ?
-              <>
-                <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
-                <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
-                <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
-                <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
-              </>
-              :
-              <>
-                <Slider min={0} max={90} value={cyanAngle} onChange={(value) => setCyanAngle(value)} label="Cyan Angle" />
-                <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
-                <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
-                <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
-              </>
-            }
-            <button
-              className="btn btn-primary w-full"
-              onClick={generateButton}
+            <div
+              role="tablist"
+              className="tabs tabs-bordered tabs-lg"
             >
-              Generate
-            </button>
-          </div>
-        </div>
+              {
+                ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
+                  <a
+                    role="tab"
+                    className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
+                    onClick={(e) => setImageProcessingMode(mode)}
+                  >
+                    {mode}
+                  </a>
+                )
+              }
+            </div>
+            <div className="Options">
+              <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
+              <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
+              <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
+
+              {
+                imageProcessingMode === "Duatone" ?
+                <>
+                  <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
+                  <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
+                  <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
+                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
+                </>
+                :
+                <>
+                  <Slider min={0} max={90} value={cyanAngle} onChange={(value) => setCyanAngle(value)} label="Cyan Angle" />
+                  <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
+                  <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
+                  <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+                </>
+              }
+              </div>
+              <button
+                className="btn btn-primary w-full"
+                onClick={generateButton}
+              >
+                Generate
+              </button>
+        </Card>
+        <Card title="Result" className="bg-base-200 w-full">
+          <canvas ref={canvasBufferRef} style={{display: "none"}} />
+          <canvas ref={canvasRef} />
+        </Card>
       </div>
-      <canvas ref={canvasBufferRef} style={{display: "none"}} />
-      <p>Result</p>
-      <canvas ref={canvasRef} />
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
