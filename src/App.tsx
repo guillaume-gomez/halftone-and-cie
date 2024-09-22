@@ -3,6 +3,8 @@ import Slider from "./components/Slider";
 import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
+import SaveImageButton from "./components/SaveImageButton";
+import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -39,7 +41,7 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, maxSize, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
+        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
       case "CMYK":
         return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
       case "Noise":
@@ -50,6 +52,9 @@ function App() {
   }
 
   function CMYKNoise() {
+    if(!canvasBufferRef.current || !canvasRef.current) {
+      return;
+    }
     fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
           addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
@@ -59,8 +64,8 @@ function App() {
   }
 
   return (
-    <div className="bg-base-300">
-      <h1 className="text-3xl font-bold underline">Halftone and Cie</h1>
+    <div className="bg-base-300 flex flex-col gap-4">
+      <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
         <Card title="Settings">
           <InputFileWithPreview onChange={uploadImage} value={image} />
@@ -73,7 +78,7 @@ function App() {
                   <a
                     role="tab"
                     className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
-                    onClick={(e) => setImageProcessingMode(mode)}
+                    onClick={() => setImageProcessingMode(mode)}
                   >
                     {mode}
                   </a>
@@ -112,6 +117,12 @@ function App() {
         <Card title="Result" className="bg-base-200 w-full">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
           <canvas ref={canvasRef} />
+          <SaveImageButton
+           label={"Save"}
+           canvasRef={canvasRef}
+           filename={"halftone-and-cie"}
+           disabled={!canvasRef.current}
+          />
         </Card>
       </div>
     </div>

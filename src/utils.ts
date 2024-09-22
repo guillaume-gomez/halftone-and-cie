@@ -1,12 +1,3 @@
-import { Vector2 } from "./interfaces";
-
-function rotatePointAboutPosition([x, y]: Vector2, [rotX, rotY] : Vector2, angle: number) : Vector2 {
-  return [
-    (x - rotX) * Math.cos(angle) - (y - rotY) * Math.sin(angle) + rotX,
-    (x - rotX) * Math.sin(angle) + (y - rotY) * Math.cos(angle) + rotY,
-  ];
-}
-
 function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
   if(width > maxSize) {
     const aspectRatio = height / width;

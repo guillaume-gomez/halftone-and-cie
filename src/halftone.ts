@@ -1,4 +1,5 @@
-import { Vector2, getContext } from "./utils";
+import { getContext } from "./utils";
+import { Vector2 } from "./interfaces";
 
 // re-maps a value from its original range [minA, maxA] to the range [minB, maxB]
 function map(value: number, minA: number, maxA: number, minB: number, maxB: number) : number {
@@ -23,27 +24,12 @@ function computeBoundaries(width: number, height: number, angle: number): [Vecto
   const br = [width, height];
   const bl = [0, height];
   // rotate the screen, then find the minimum and maximum of the values.
-  return [tl, br, tr, bl].map(([x, y]) => {
+  const rotations = [tl, br, tr, bl].map(([x, y]) => {
     return rotatePointAboutPosition([x, y], [width / 2, height / 2], angle);
   });
+  return rotations as [Vector2, Vector2, Vector2, Vector2];
 }
 
-
-function resizeWithRatio(width: number, height: number, maxSize: number) : [number, number] {
-  if(width > maxSize) {
-    const aspectRatio = height / width;
-    const newWidth = Math.min(width, maxSize);
-
-    return [newWidth, newWidth * aspectRatio];
-  } else if(height > maxSize) {
-    const aspectRatio = width / height;
-    const newHeight = Math.min(height, maxSize);
-
-    return [newHeight * aspectRatio, newHeight];
-  } else {
-    return [width, height];
-  }
-}
 
 function duatone(canvasSource: HTMLCanvasElement) : [HTMLCanvasElement, HTMLCanvasElement] {
   const duotoneThreshold = 127;
@@ -84,7 +70,7 @@ function duatone(canvasSource: HTMLCanvasElement) : [HTMLCanvasElement, HTMLCanv
   for (let y = 0; y < canvasSource.height; y++) {
     for (let x = 0; x < canvasSource.width; x++) {
       const index = positionToDataIndex(x, y, canvasSource.width);
-      const [r, g, b, a] = [
+      const [r, g, b, _a] = [
         dataCanvasSource.data[index + 0],
         dataCanvasSource.data[index + 1],
         dataCanvasSource.data[index + 2],
@@ -118,10 +104,10 @@ interface HalftoneParams {
   dotResolution: number;
   backgroundColor: string;
   dotColor: string;
-  clear: boolean;
 }
 
-interface HalftoneDuatoneParams extends HalftoneParams {
+
+interface HalftoneDuatoneParams extends Omit<HalftoneParams, 'dotColor'> {
   colorLayer1: string;
   colorLayer2: string;
 }
@@ -235,6 +221,9 @@ export function fromRGBToCMYK(
   }: FromRGBToCMYKParams
 ) {
   const targetContext = targetCanvas.getContext("2d");
+  if(!targetContext) {
+    throw new Error("Cannot find the context for targetCanvas");
+  }
   const width = originCanvas.width;
   const height = originCanvas.height;
 
@@ -248,8 +237,15 @@ export function fromRGBToCMYK(
 
   let grayscaleCanvas  = new  OffscreenCanvas(originCanvas.width, originCanvas.height);
   const grayscaleContext = grayscaleCanvas.getContext("2d");
+  if(!grayscaleContext) {
+    throw new Error("Cannot find the context for grayscaleCanvas");
+  }
 
   const originCanvasContext = originCanvas.getContext("2d");
+  if(!originCanvasContext) {
+    throw new Error("Cannot find the context for originCanvas");
+  }
+
   const originCanvasImageData = originCanvasContext.getImageData(
     0,
     0,
@@ -273,7 +269,7 @@ export function fromRGBToCMYK(
     for (let y = 0; y < originCanvas.height; y++) {
       for (let x = 0; x < originCanvas.width; x++) {
         const index = positionToDataIndex(x, y, originCanvasImageData.width);
-        const [r, g, b, a] = [
+        const [r, g, b, _a] = [
           originCanvasImageData.data[index + 0],
           originCanvasImageData.data[index + 1],
           originCanvasImageData.data[index + 2],
@@ -297,8 +293,8 @@ export function fromRGBToCMYK(
     grayscaleContext.putImageData(grayscaleImageData, 0, 0);
 
     halftone(
-      grayscaleContext,
-      targetContext,
+      grayscaleContext as unknown as CanvasRenderingContext2D,
+      targetContext!,
       originCanvas.width,
       originCanvas.height,
       {
@@ -312,5 +308,5 @@ export function fromRGBToCMYK(
   });
 
   // freeing memory
-  grayscaleCanvas = null;
+  //grayscaleCanvas = null;
 }

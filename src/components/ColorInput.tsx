@@ -2,7 +2,7 @@
 interface ColorProps {
     label: string
     value: string;
-    onChange: (value: number) => void;
+    onChange: (value: string) => void;
 }
 
 function Color({ label, value, onChange } : ColorProps) {
