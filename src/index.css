@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: "UraniaCzech";
+  src: local("UraniaCzech"),
+    url("./assets/fonts/URANIA_CZECH.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "Dm-Mono";
+  src: local("Dm-Mono"),
+    url("./assets/fonts/DMMono-Regular.ttf") format("truetype");
+}
+
+
+@layer base {
+  html {
+    font-family: 'Dm-Mono', sans-serif;
+  }
+}
+
+.title {
+    font-family: 'UraniaCzech', sans-serif;
+}
