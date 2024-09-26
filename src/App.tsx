@@ -67,7 +67,7 @@ function App() {
     <div className="bg-base-300 flex flex-col gap-4">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings">
+        <Card title="Settings" className="border-primary">
           <InputFileWithPreview onChange={uploadImage} value={image} />
             <div
               role="tablist"
@@ -108,21 +108,23 @@ function App() {
               }
               </div>
               <button
-                className="btn btn-primary w-full"
+                className="btn btn-primary w-full text-xl"
                 onClick={generateButton}
               >
                 Generate
               </button>
         </Card>
-        <Card title="Result" className="bg-base-200 w-full">
+        <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
           <canvas ref={canvasRef} />
-          <SaveImageButton
-           label={"Save"}
-           canvasRef={canvasRef}
-           filename={"halftone-and-cie"}
-           disabled={!canvasRef.current}
-          />
+          <div className="flex flex-row justify-end">
+            <SaveImageButton
+             label={"Save"}
+             canvasRef={canvasRef}
+             filename={"halftone-and-cie"}
+             disabled={!canvasRef.current}
+            />
+          </div>
         </Card>
       </div>
     </div>
