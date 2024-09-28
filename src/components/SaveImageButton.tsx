@@ -27,7 +27,7 @@ function SaveImageButton({ label, filename, canvasRef,  disabled = false } : Sav
     <div className="flex gap-1" data-tip="Allow multiple download if you want to save more than one image">
        <a
         ref={anchorRef}
-        className={`btn btn-primary ${disabled ? "btn-disabled" : "" }`}
+        className={`btn btn-primary text-xl ${disabled ? "btn-disabled" : "" }`}
         onClick={ () => saveImage()}
       >
         {label}
