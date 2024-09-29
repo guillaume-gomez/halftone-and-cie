@@ -116,7 +116,7 @@ function App() {
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          <canvas ref={canvasRef} />
+          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
