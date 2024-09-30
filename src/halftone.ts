@@ -148,7 +148,7 @@ function halftone(
   { dotSize,
     angle,
     dotResolution,
-    backgroundColor = "transparent",
+    //backgroundColor = "transparent",
     dotColor = "red"
   } : HalftoneParams
 ) : void {
@@ -302,7 +302,8 @@ export function fromRGBToCMYK(
         dotSize,
         dotResolution,
         dotColor,
-        layer: false,
+        backgroundColor: "transparent"
+        //layer: false,
       }
     );
   });
