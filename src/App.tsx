@@ -4,6 +4,7 @@ import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
+import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
@@ -41,9 +42,24 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
+        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, {
+          angle,
+          dotSize,
+          dotResolution,
+          backgroundColor,
+          colorLayer1: dotColorOne,
+          colorLayer2: dotColorTwo
+        });
       case "CMYK":
-        return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+        return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+          dotSize,
+          dotResolution,
+          cyanAngle,
+          magentaAngle,
+          yellowAngle,
+          keyAngle,
+          backgroundColor
+        });
       case "Noise":
         return addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
       case "CMYK+Noise":
@@ -55,8 +71,16 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
-    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
-          addNoise(canvasRef.current, canvasRef.current, 0.20);
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+        dotSize,
+        dotResolution,
+        cyanAngle,
+        magentaAngle,
+        yellowAngle,
+        keyAngle,
+        backgroundColor
+    });
+    addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
   function uploadImage(newImage: HTMLImageElement) {
@@ -78,7 +102,14 @@ function App() {
                   <a
                     role="tab"
                     className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
-                    onClick={() => setImageProcessingMode(mode)}
+                    onClick={() => {
+                      if(mode === "Duatone") {
+                        setBackgroundColor("#000000");
+                      } else {
+                        setBackgroundColor("#FFFFFF");
+                      }
+                      setImageProcessingMode(mode);
+                    }}
                   >
                     {mode}
                   </a>
@@ -104,6 +135,7 @@ function App() {
                   <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
                   <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
                   <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
                 </>
               }
               </div>
@@ -116,6 +148,7 @@ function App() {
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
+          <ThreeJsRenderer />
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
