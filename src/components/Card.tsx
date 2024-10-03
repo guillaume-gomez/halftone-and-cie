@@ -1,15 +1,16 @@
 import { ReactNode } from "react";
 
 interface CardProps {
-    title: string
+    title: ReactNode;
     children: ReactNode;
-    className?: string
+    className?: string;
+    bodyClassName?: string;
 }
 
-function Card({ title, children, className = "bg-base-200" } : CardProps) {
+function Card({ title, children, className = "bg-base-200", bodyClassName = "" } : CardProps) {
     return (
         <div className={`card ${className} border border-4`}>
-          <div className="card-body">
+          <div className={`card-body ${bodyClassName}`}>
             <div className="bg-neutral-300 p-2">
                 <h2 className="card-title text-2xl text-black">{title}</h2>
             </div>
