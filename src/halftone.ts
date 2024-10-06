@@ -206,6 +206,7 @@ interface FromRGBToCMYKParams {
   magentaAngle: number;
   yellowAngle: number;
   keyAngle: number;
+  backgroundColor?: string;
 }
 
 export function fromRGBToCMYK(
@@ -217,7 +218,8 @@ export function fromRGBToCMYK(
     cyanAngle,
     magentaAngle,
     yellowAngle,
-    keyAngle
+    keyAngle,
+    backgroundColor="white"
   }: FromRGBToCMYKParams
 ) {
   const targetContext = targetCanvas.getContext("2d");
@@ -230,7 +232,7 @@ export function fromRGBToCMYK(
   targetCanvas.width = width;
   targetCanvas.height = height;
 
-  targetContext.fillStyle = "white";
+  targetContext.fillStyle = backgroundColor;
   targetContext.globalCompositeOperation = "source-over";
   targetContext.fillRect(0, 0, width, height);
   targetContext.globalCompositeOperation = "darken";

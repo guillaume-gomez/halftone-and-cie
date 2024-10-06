@@ -1,6 +1,6 @@
 import React, { useRef , useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, Grid } from '@react-three/drei';
+import { OrbitControls, Stage, Grid, Stats } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import MetroWall from "./MetroWall";
@@ -35,14 +35,17 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
         {/*<Grid />*/}
         <Stage environment={null} adjustCamera shadows="contact">
           <Ad base64Texture={texture}/>
-          <MetroWall position={[0,1.1,0]} />
+          <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
+        <MetroWall position={[0,0,0]} />
+        <Stats showPanel={0} className="stats"/>
       </Canvas>
       <ul className="text-xs">
         <li>Double click to switch to fullscreen</li>
         <li>Use your mouse or finger to move the camera</li>
       </ul>
     </div>
+
   );
 }
 

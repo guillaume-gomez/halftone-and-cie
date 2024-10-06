@@ -5,9 +5,11 @@ import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
 import ThreeJsRenderer from "./components/ThreeJsRenderer";
+import CustomSettingsCard from "./components/CustomSettingsCard";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
+
 import { addNoise } from "./noise";
 
 function App() {
@@ -116,6 +118,7 @@ function App() {
                 )
               }
             </div>
+            <CustomSettingsCard>
             <div className="Options">
               <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
               <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
@@ -139,6 +142,8 @@ function App() {
                 </>
               }
               </div>
+              </CustomSettingsCard>
+
               <button
                 className="btn btn-primary w-full text-xl"
                 onClick={generateButton}

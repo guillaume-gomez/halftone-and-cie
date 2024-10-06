@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
+
 import { MeshStandardMaterial, BoxGeometry } from 'three';
 
 interface MetroWallProps {
@@ -8,6 +9,18 @@ interface MetroWallProps {
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
+const depth = 5;
+
+function generateWallParams(width: number, height: number, depth: number) {
+  const coordinates =  Array.from(Array(width)).map((_x, x) => {
+    return Array.from(Array(height)).map((_y, y) => {
+      return [x,y, depth];
+    });
+  });
+
+  return coordinates.flat();
+}
+
 
 
 function MetroWall({ position }: MetroWallProps) {
@@ -28,11 +41,11 @@ function MetroWall({ position }: MetroWallProps) {
       aoMap })
   , []);
 
-  const walls = Array.from(Array(10)).map((x, index) => {
+  const wallsLeft = generateWallParams(10,3, -2).map((position, index) => {
       return (
         <mesh
-          key={index}
-          position={[index, 0, 0]}
+          key={`${index}-left`}
+          position={position}
           material={material}
           geometry={boxGeometry}
         >
@@ -40,9 +53,59 @@ function MetroWall({ position }: MetroWallProps) {
       );
   });
 
+  const wallsRight = generateWallParams(10,3, 2).map((position, index) => {
+      return (
+        <mesh
+          key={`${index}-right`}
+          position={position}
+          material={material}
+          geometry={boxGeometry}
+        >
+        </mesh>
+      );
+  });
+
+  const wallsForward = generateWallParams(4,3, 0).map((position, index) => {
+      return (
+        <mesh
+          key={`${index}-forward`}
+          position={position}
+          material={material}
+          geometry={boxGeometry}
+        >
+        </mesh>
+      );
+  });
+
+  const wallsBackward = generateWallParams(4,3, 10).map((position, index) => {
+      return (
+        <mesh
+          key={`${index}-backward`}
+          position={position}
+          material={material}
+          geometry={boxGeometry}
+        >
+        </mesh>
+      );
+  });
+
+
+
+
   return (
     <group position={position as any}>
-      {walls}
+      <group rotation={[0,Math.PI/2,0]}>
+        {wallsLeft}
+      </group>
+      <group rotation={[0,Math.PI/2,0]}>
+        {wallsRight}
+      </group>
+      <group position={[-1.5,0,0.5]} rotation={[0,0,0]}>
+        {wallsForward}
+      </group>
+      <group position={[-1.5,0,-19.5]} rotation={[0,0,0]}>
+        {wallsBackward}
+      </group>
     </group>
   );
 
