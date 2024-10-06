@@ -4,6 +4,7 @@ import { OrbitControls, Stage, Grid, Stats } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import MetroWall from "./MetroWall";
+import MetroCeil from "./MetroCeil";
 
 
 
@@ -31,13 +32,17 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
         style={{width, height}}
       >
         <color attach="background" args={[backgroundColor]} />
+        <ambientLight intensity={0.5} />
+        <spotLight position={[0, 10, 0]} intensity={0.3} />
+        <directionalLight position={[-50, 0, -40]} intensity={0.7} />
         <OrbitControls makeDefault />
         {/*<Grid />*/}
         <Stage environment={null} adjustCamera shadows="contact">
           <Ad base64Texture={texture}/>
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroWall position={[0,0,0]} />
+        <MetroWall position={[-2,0,10]} width={20} />
+        <MetroCeil position={[0,3-0.5,2]} />
         <Stats showPanel={0} className="stats"/>
       </Canvas>
       <ul className="text-xs">

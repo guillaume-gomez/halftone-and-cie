@@ -5,11 +5,13 @@ import { useLoader } from '@react-three/fiber';
 import { MeshStandardMaterial, BoxGeometry } from 'three';
 
 interface MetroWallProps {
-  position: [number, number, number]
+  position: [number, number, number];
+  width: number;
+  height: number;
+  depth: number;
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
-const depth = 5;
 
 function generateWallParams(width: number, height: number, depth: number) {
   const coordinates =  Array.from(Array(width)).map((_x, x) => {
@@ -23,7 +25,7 @@ function generateWallParams(width: number, height: number, depth: number) {
 
 
 
-function MetroWall({ position }: MetroWallProps) {
+function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
     'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
@@ -41,7 +43,7 @@ function MetroWall({ position }: MetroWallProps) {
       aoMap })
   , []);
 
-  const wallsLeft = generateWallParams(10,3, -2).map((position, index) => {
+  const wallsLeft = generateWallParams(width, height, depth).map((position, index) => {
       return (
         <mesh
           key={`${index}-left`}
@@ -53,7 +55,7 @@ function MetroWall({ position }: MetroWallProps) {
       );
   });
 
-  const wallsRight = generateWallParams(10,3, 2).map((position, index) => {
+  const wallsRight = generateWallParams(width, height, depth).map((position, index) => {
       return (
         <mesh
           key={`${index}-right`}
@@ -65,7 +67,7 @@ function MetroWall({ position }: MetroWallProps) {
       );
   });
 
-  const wallsForward = generateWallParams(4,3, 0).map((position, index) => {
+  const wallsForward = generateWallParams(2*depth, height, 0).map((position, index) => {
       return (
         <mesh
           key={`${index}-forward`}
@@ -77,7 +79,7 @@ function MetroWall({ position }: MetroWallProps) {
       );
   });
 
-  const wallsBackward = generateWallParams(4,3, 10).map((position, index) => {
+  const wallsBackward = generateWallParams(2*depth, height, 0).map((position, index) => {
       return (
         <mesh
           key={`${index}-backward`}
@@ -94,16 +96,28 @@ function MetroWall({ position }: MetroWallProps) {
 
   return (
     <group position={position as any}>
-      <group rotation={[0,Math.PI/2,0]}>
+      <group
+        rotation={[0,Math.PI/2,0]}
+        position={[depth,0,0]}
+      >
         {wallsLeft}
       </group>
-      <group rotation={[0,Math.PI/2,0]}>
+      <group
+        rotation={[0,Math.PI/2,0]}
+        position={[-depth,0,0]}
+      >
         {wallsRight}
       </group>
-      <group position={[-1.5,0,0.5]} rotation={[0,0,0]}>
+      <group
+        rotation={[0,0,0]}
+        position={[0.5,0,-width + 0.5]}
+      >
         {wallsForward}
       </group>
-      <group position={[-1.5,0,-19.5]} rotation={[0,0,0]}>
+      <group
+        rotation={[0,0,0]}
+        position={[0.5,0,0.5]}
+      >
         {wallsBackward}
       </group>
     </group>
