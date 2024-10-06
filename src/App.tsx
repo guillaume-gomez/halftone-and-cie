@@ -68,7 +68,7 @@ function App() {
   return (
     <div className="flex flex-col">
       <Navbar />
-      <div className="flex md:flex-row flex-col">
+      <div className="flex lg:flex-row lg:p-0 p-4 flex-col">
         <Card title="Settings" className="bg-primary">
           <InputFileWithPreview onChange={uploadImage} value={image} />
             <div
@@ -113,7 +113,7 @@ function App() {
               </CustomSettingsCard>
 
               <button
-                className="btn-custom btn btn-primary w-full text-xl custom-button"
+                className="btn-custom btn btn-secondary w-full text-xl custom-button"
                 onClick={generateButton}
               >
                 Generate
