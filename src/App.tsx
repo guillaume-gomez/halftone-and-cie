@@ -93,31 +93,22 @@ function App() {
     <div className="bg-base-300 flex flex-col gap-4">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings" className="border-primary">
+        <Card title="Settings" className="border-primary basis-1/4">
           <InputFileWithPreview onChange={uploadImage} value={image} />
-            <div
-              role="tablist"
-              className="tabs tabs-bordered tabs-lg"
+            <select
+              className="select"
+              onChange={(e)=> setImageProcessingMode(e.target.value)}
+              value={imageProcessingMode}
             >
+              <option disabled>Select the filter</option>
               {
                 ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
-                  <a
-                    role="tab"
-                    className={`tab ${mode === imageProcessingMode ? "tab-active" : "tab"}`}
-                    onClick={() => {
-                      if(mode === "Duatone") {
-                        setBackgroundColor("#000000");
-                      } else {
-                        setBackgroundColor("#FFFFFF");
-                      }
-                      setImageProcessingMode(mode);
-                    }}
-                  >
+                  <option value={mode}>
                     {mode}
-                  </a>
+                  </option>
                 )
               }
-            </div>
+            </select>
             <CustomSettingsCard>
             <div className="Options">
               <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
