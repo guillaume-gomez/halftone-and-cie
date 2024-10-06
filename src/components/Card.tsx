@@ -9,7 +9,7 @@ interface CardProps {
 
 function Card({ title, children, className = "bg-base-200", bodyClassName = "" } : CardProps) {
     return (
-        <div className={`card ${className} border border-4`}>
+        <div className={`card ${className} border border-4 border-black`}>
           <div className={`card-body ${bodyClassName}`}>
             <div className="bg-neutral-300 p-2">
                 <h2 className="card-title text-2xl text-black">{title}</h2>

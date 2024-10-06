@@ -26,3 +26,12 @@
 .title {
     font-family: 'UraniaCzech', sans-serif;
 }
+
+.btn-custom {
+  box-shadow: 6px 7px 2px 0px rgba(0, 0, 0, 1.0);
+  border: 2px solid black;
+}
+
+.btn-custom:hover {
+  border: 2px solid black;
+}

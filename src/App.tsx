@@ -66,10 +66,10 @@ function App() {
   }
 
   return (
-    <div className="bg-base-300 flex flex-col gap-4">
+    <div className="flex flex-col">
       <Navbar />
-      <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings" className="border-primary">
+      <div className="flex md:flex-row flex-col">
+        <Card title="Settings" className="bg-primary">
           <InputFileWithPreview onChange={uploadImage} value={image} />
             <div
               role="tablist"
@@ -113,15 +113,15 @@ function App() {
               </CustomSettingsCard>
 
               <button
-                className="btn btn-primary w-full text-xl"
+                className="btn-custom btn btn-primary w-full text-xl custom-button"
                 onClick={generateButton}
               >
                 Generate
               </button>
         </Card>
-        <Card title="Result" className="bg-base-200 w-full border-secondary">
+        <Card title="Result" className="bg-secondary w-full">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
+          <canvas ref={canvasRef} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}

@@ -11,7 +11,7 @@ export default {
     themes: [
       {
         mytheme: {
-          ...require("daisyui/src/theming/themes")["dark"],
+          ...require("daisyui/src/theming/themes")["light"],
           "primary": "#4AC3E8",
           "secondary": "#E75CA2",
           "accent": "#FCDD1B",
