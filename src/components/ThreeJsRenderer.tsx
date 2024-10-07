@@ -42,7 +42,7 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
         <MetroWall position={[-2,0,10]} width={20} />
-        <MetroCeil position={[0,3-0.5,2]} />
+        <MetroCeil position={[-1.5,2.5,-9]} width={20} />
         <Stats showPanel={0} className="stats"/>
       </Canvas>
       <ul className="text-xs">

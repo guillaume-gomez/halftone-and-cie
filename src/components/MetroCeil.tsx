@@ -5,13 +5,26 @@ import { useLoader } from '@react-three/fiber';
 import { MeshStandardMaterial, BoxGeometry } from 'three';
 
 interface MetroCeilProps {
-  position: [number, number, number]
+  position: [number, number, number];
+  width: number;
+  height: number;
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
 
 
-function MetroCeil({ position }: MetroCeilProps) {
+function generateCeilParams(width: number, height: number, depth: number) {
+  const coordinates =  Array.from(Array(width)).map((_x, x) => {
+    return Array.from(Array(height)).map((_y, y) => {
+      return [y, depth, x];
+    });
+  });
+
+  return coordinates.flat();
+}
+
+
+function MetroCeil({ position, width=10, height=4 }: MetroCeilProps) {
   const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_basecolor.jpg',
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_height.png',
@@ -30,14 +43,30 @@ function MetroCeil({ position }: MetroCeilProps) {
       aoMap })
   , []);
 
+  /*return ( <mesh
+              key={`-ceil`}
+              position={position}
+              material={material}
+              geometry={boxGeometry}
+            ></mesh>);*/
+
   return (
-    <mesh
-      position={position as any}
-      material={material}
-      geometry={boxGeometry}
-      rotation={[Math.PI/2,0,0]}
-    >
-    </mesh>
+    <group position={position} rotation={[0,0,0]}>
+      {
+        generateCeilParams(width, height, 0).map((position, index) => {
+          return (
+            <mesh
+              key={`${index}-ceil`}
+              position={position}
+              material={material}
+              rotation={[Math.PI/2,0,0]}
+              geometry={boxGeometry}
+            >
+            </mesh>
+          )
+        })
+      }
+    </group>
   )
 }
 
