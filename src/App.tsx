@@ -8,7 +8,6 @@ import CustomSettingsCard from "./components/CustomSettingsCard";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
-
 import { addNoise } from "./noise";
 
 function App() {
