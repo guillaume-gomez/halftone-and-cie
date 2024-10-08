@@ -1,5 +1,6 @@
 import MetroWall from "./MetroWall";
 import MetroCeil from "./MetroCeil";
+import MetroFloor from "./MetroFloor";
 import { Box } from '@react-three/drei';
 
 interface MetroHallwayProps {
@@ -20,6 +21,12 @@ function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
       />
       <MetroCeil
         position={[0,height,0]}
+        width={width}
+        height={height}
+        depth={depth}
+      />
+      <MetroFloor
+        position={[0,0,0]}
         width={width}
         height={height}
         depth={depth}
