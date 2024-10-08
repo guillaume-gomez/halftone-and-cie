@@ -40,7 +40,7 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
           <Ad base64Texture={texture}/>
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,0]} width={4} depth={20} height={3} />
+        <MetroHallway position={[0,0,0]} width={10} depth={20} height={4} />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />

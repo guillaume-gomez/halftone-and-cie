@@ -24,7 +24,7 @@ function generateCeilParams(width: number, height: number, depth: number) {
 }
 
 
-function MetroCeil({ position, width=10, height=4 }: MetroCeilProps) {
+function MetroCeil({ position, depth, width, height }: MetroCeilProps) {
   const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_basecolor.jpg',
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_height.png',
@@ -43,6 +43,8 @@ function MetroCeil({ position, width=10, height=4 }: MetroCeilProps) {
       aoMap })
   , []);
 
+  console.log(width)
+
   /*return ( <mesh
               key={`-ceil`}
               position={position}
@@ -53,11 +55,11 @@ function MetroCeil({ position, width=10, height=4 }: MetroCeilProps) {
   return (
     <group position={position} rotation={[0,0,0]}>
       {
-        generateCeilParams(width, height, 0).map((position, index) => {
+        generateCeilParams(depth, width, 0).map(([x,y,z], index) => {
           return (
             <mesh
               key={`${index}-ceil`}
-              position={position}
+              position={[x-(width/2) + 0.5,y -0.5,z - depth/2 + 0.5]}
               material={material}
               rotation={[Math.PI/2,0,0]}
               geometry={boxGeometry}
