@@ -25,7 +25,8 @@ function generateWallParams(width: number, height: number, depth: number) {
 
 
 
-function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
+function MetroWall({ position, width, height, depth }: MetroWallProps) {
+  console.log(width, " ", height, " ", depth)
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
     'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
@@ -43,7 +44,7 @@ function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
       aoMap })
   , []);
 
-  const wallsLeft = generateWallParams(width, height, depth).map((position, index) => {
+  const wallsLeft = generateWallParams(depth, height, 0).map((position, index) => {
       return (
         <mesh
           key={`${index}-left`}
@@ -55,7 +56,7 @@ function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
       );
   });
 
-  const wallsRight = generateWallParams(width, height, depth).map((position, index) => {
+  const wallsRight = generateWallParams(depth, height, 0).map((position, index) => {
       return (
         <mesh
           key={`${index}-right`}
@@ -67,7 +68,7 @@ function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
       );
   });
 
-  const wallsForward = generateWallParams(2*depth, height, 0).map((position, index) => {
+  const wallsForward = generateWallParams(width, height, depth).map((position, index) => {
       return (
         <mesh
           key={`${index}-forward`}
@@ -79,7 +80,7 @@ function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
       );
   });
 
-  const wallsBackward = generateWallParams(2*depth, height, 0).map((position, index) => {
+  const wallsBackward = generateWallParams(width, height, depth).map((position, index) => {
       return (
         <mesh
           key={`${index}-backward`}
@@ -98,25 +99,25 @@ function MetroWall({ position, width=10, height=3, depth=2 }: MetroWallProps) {
     <group position={position as any}>
       <group
         rotation={[0,Math.PI/2,0]}
-        position={[depth,0,0]}
+        position={[-width/2,0,depth/2-0.5]}
       >
         {wallsLeft}
       </group>
       <group
         rotation={[0,Math.PI/2,0]}
-        position={[-depth,0,0]}
+        position={[width/2,0,depth/2 -0.5]}
       >
         {wallsRight}
       </group>
       <group
         rotation={[0,0,0]}
-        position={[0.5,0,-width + 0.5]}
+        position={[-width/2 + 0.5,0,-depth/2]}
       >
         {wallsForward}
       </group>
       <group
         rotation={[0,0,0]}
-        position={[0.5,0,0.5]}
+        position={[-width/2 + 0.5,0,-depth - depth/2]}
       >
         {wallsBackward}
       </group>

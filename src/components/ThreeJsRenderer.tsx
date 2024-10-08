@@ -1,10 +1,9 @@
 import React, { useRef , useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, Grid, Stats } from '@react-three/drei';
+import { OrbitControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
-import MetroWall from "./MetroWall";
-import MetroCeil from "./MetroCeil";
+import MetroHallway from "./Metro/MetroHallway";
 
 
 
@@ -41,9 +40,11 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
           <Ad base64Texture={texture}/>
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroWall position={[-2,0,10]} width={20} />
-        <MetroCeil position={[-1.5,2.5,-9]} width={20} />
+        <MetroHallway position={[0,0,0]} width={4} depth={20} height={3} />
         <Stats showPanel={0} className="stats"/>
+         <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
+            <GizmoViewport labelColor="white" axisHeadScale={1} />
+        </GizmoHelper>
       </Canvas>
       <ul className="text-xs">
         <li>Double click to switch to fullscreen</li>
