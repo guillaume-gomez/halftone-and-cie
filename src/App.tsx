@@ -33,6 +33,8 @@ function App() {
   const [keyAngle, setKeyAngle] = useState<number>(45);
 
   const [display2DView, setDisplay2DView] = useState<boolean>(false);
+  const [widthTexture, setWidthTexture] = useState<number>(100);
+  const [heightTexture, setHeightTexture] = useState<number>(100);
 
   useEffect(() => {
     if(canvasBufferRef.current && image) {
@@ -75,6 +77,8 @@ function App() {
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
+    setWidthTexture(canvasRef.current.width);
+    setHeightTexture(canvasRef.current.height);
     setTexture(base64Image);
   }
 
@@ -112,7 +116,7 @@ function App() {
               <option disabled>Select the filter</option>
               {
                 ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
-                  <option value={mode}>
+                  <option key={mode} value={mode}>
                     {mode}
                   </option>
                 )
@@ -155,7 +159,13 @@ function App() {
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          { !display2DView && <ThreeJsRenderer /> }
+          { !display2DView &&
+            <ThreeJsRenderer
+              texture={texture}
+              widthTexture={widthTexture}
+              heightTexture={heightTexture}
+            />
+          }
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
