@@ -15,13 +15,14 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [image, setImage] = useState<HTMLImageElement>();
+  const [texture, setTexture] = useState<string>();
 
   const [imageProcessingMode, setImageProcessingMode] = useState<string>("CMYK+Noise");
   const [angle, setAngle] = useState<number>(0);
   const [dotSize, setDotSize] = useState<number>(5);
   const [dotResolution, setDotResolution] = useState<number>(3);
-  const [dotColorOne, setDotColorOne] = useState<string>("#FF0000");
-  const [dotColorTwo, setDotColorTwo] = useState<string>("#0000FF");
+  const [dotColorOne, setDotColorOne] = useState<string>("#4AC3E8");
+  const [dotColorTwo, setDotColorTwo] = useState<string>("#E75CA2");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [maxSize, setMaxSize] = useState<number>(1000);
   const [cyanAngle, setCyanAngle] = useState<number>(15);
@@ -42,14 +43,20 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
+        halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
+        break;
       case "CMYK":
-        return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+        break;
       case "Noise":
-        return addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        break;
       case "CMYK+Noise":
-        return CMYKNoise();
+        CMYKNoise();
+        break;
     };
+    const base64Image = canvasRef.current.toDataURL();
+    setTexture(base64Image);
   }
 
   function CMYKNoise() {
