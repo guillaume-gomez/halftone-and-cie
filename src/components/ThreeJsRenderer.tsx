@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
+import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
 
 
@@ -35,12 +36,13 @@ function ThreejsRendering({ texture=exampleTexture } : ThreejsRenderingProps) {
         <spotLight position={[0, 10, 0]} intensity={0.3} />
         <directionalLight position={[-50, 0, -40]} intensity={0.7} />
         <OrbitControls makeDefault />
-        {/*<Grid />*/}
         <Stage environment={null} adjustCamera shadows="contact">
-          <Ad base64Texture={texture}/>
+          <Frame position={[0,1, -14.5]}>
+            <Ad base64Texture={texture}/>
+          </Frame>
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,0]} width={10} depth={20} height={4} />
+        <MetroHallway position={[0,0,0]} width={6} depth={20} height={4} />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />

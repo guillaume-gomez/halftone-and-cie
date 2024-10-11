@@ -3,10 +3,10 @@ import { useLoader } from '@react-three/fiber';
 
 interface AdProps {
   base64Texture: string;
-  position: [number, number, number]
+  position?: [number, number, number]
 }
 
-function Ad({ base64Texture, position }: AdProps) {
+function Ad({ base64Texture, position = [0,0,0] }: AdProps) {
   const [texture] = useLoader(TextureLoader, [
     base64Texture
   ]);
