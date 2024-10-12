@@ -117,7 +117,7 @@ function App() {
               </CustomSettingsCard>
 
               <button
-                className="btn btn-primary w-full text-xl"
+                className="btn btn-primary w-full button-lg text-xl"
                 onClick={generateButton}
               >
                 Generate
