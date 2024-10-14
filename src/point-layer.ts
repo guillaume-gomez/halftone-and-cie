@@ -20,3 +20,22 @@ function newShade(hexColor: string, magnitude: number) : string {
         return hexColor;
     }
 }
+
+function createMaskPoints(canvasSource: HTMLCanvasElement, pointRadius: number) : void {
+    const { width, height } = canvasSource;
+
+    const pointDiameterAndPadding = 2*(pointRadius) + 2*(pointRadius); // diameter + the padding
+    const originX = width % pointDiameterAndPadding;
+    const originY = height % pointDiameterAndPadding;
+
+    const context = canvasSource.getContext("2d");
+
+    for(let x=0; x < width; x += pointDiameterAndPadding) {
+        for(let y=0; y < height; y += pointDiameterAndPadding) {
+            context.beginPath();
+            context.arc(originX + x , originY + y ,pointRadius, 0, 2*Math.PI);
+            context.fillStyle = "red";
+            context.fill();
+        }
+    }
+}
