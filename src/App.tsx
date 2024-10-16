@@ -9,7 +9,7 @@ import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
-
+import { createMaskPoints } from "./point-layer";
 function App() {
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,9 +37,11 @@ function App() {
   }, [canvasBufferRef, maxSize, image]);
 
   function generateButton() {
+    return;
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
+
     switch(imageProcessingMode) {
       case "Duatone":
       default:
@@ -54,6 +56,9 @@ function App() {
       case "CMYK+Noise":
         CMYKNoise();
         break;
+      case "maskPoints":
+        //createMaskPoints(canvasBufferRef.current, 1);
+        break;
     };
     const base64Image = canvasRef.current.toDataURL();
     setTexture(base64Image);
@@ -64,7 +69,7 @@ function App() {
       return;
     }
     fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
-          addNoise(canvasRef.current, canvasRef.current, 0.20);
+    addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
   function uploadImage(newImage: HTMLImageElement) {
@@ -124,7 +129,7 @@ function App() {
               </button>
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
-          <canvas ref={canvasBufferRef} style={{display: "none"}} />
+          <canvas ref={canvasBufferRef} style={{display: "alice"}} />
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
