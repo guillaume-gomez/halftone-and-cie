@@ -37,7 +37,6 @@ function App() {
   }, [canvasBufferRef, maxSize, image]);
 
   function generateButton() {
-    return;
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
@@ -57,7 +56,11 @@ function App() {
         CMYKNoise();
         break;
       case "maskPoints":
-        //createMaskPoints(canvasBufferRef.current, 1);
+        createMaskPoints(
+          canvasBufferRef.current,
+          canvasRef.current,
+          2
+        );
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
@@ -89,8 +92,11 @@ function App() {
             >
               <option disabled>Select the filter</option>
               {
-                ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
-                  <option value={mode}>
+                ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
+                  <option
+                    key={mode}
+                    value={mode}
+                  >
                     {mode}
                   </option>
                 )
@@ -129,7 +135,7 @@ function App() {
               </button>
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
-          <canvas ref={canvasBufferRef} style={{display: "alice"}} />
+          <canvas ref={canvasBufferRef} style={{display: "none"}} />
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
