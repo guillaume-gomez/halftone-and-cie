@@ -22,7 +22,7 @@ function newShade(hexColor: string, magnitude: number) : string {
     }
 }
 
-function componentToHex(c: string) : string {
+function componentToHex(c: number) : string {
   const hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
@@ -31,12 +31,17 @@ function rgbToHex(r: number, g: number, b: number) : string {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-export function createMaskPoints(canvasSource: HTMLCanvasElement, pointRadius: number) : void {
-    console.log("myColor, ", newShade(`#ffffff`, -50))
-    console.log("myColor, ", newShade(`#000000`, -50))
+export function createMaskPoints(
+    canvasSource: HTMLCanvasElement,
+    canvasTarget: HTMLCanvasElement,
+    pointRadius: number,
+    padding: number = 1,
+    opacity: string = "AA",
+    shading: number = -50
+) : void {
     const { width, height } = canvasSource;
 
-    const pointDiameterAndPadding = 2*(pointRadius) + 2*(pointRadius); // diameter + the padding
+    const pointDiameterAndPadding = 2*(pointRadius) + 2*(padding); // diameter + the padding
     const originX = width % pointDiameterAndPadding;
     const originY = height % pointDiameterAndPadding;
 
@@ -49,6 +54,11 @@ export function createMaskPoints(canvasSource: HTMLCanvasElement, pointRadius: n
         height
       );
 
+    canvasTarget.width = width;
+    canvasTarget.height = height;
+    const contextTarget = getContext(canvasTarget);
+    contextTarget.putImageData(image, 0, 0);
+
     for(let x = originX; x < width; x += pointDiameterAndPadding) {
         for(let y = originY; y < height; y += pointDiameterAndPadding) {
             const index = positionToDataIndex(x + pointRadius, y + pointRadius, width);
@@ -58,12 +68,11 @@ export function createMaskPoints(canvasSource: HTMLCanvasElement, pointRadius: n
                 image.data[index + 2],
             ];
 
-            context.beginPath();
-            context.arc(x ,y ,pointRadius, 0, 2 * Math.PI);
-            const color = newShade(rgbToHex(r,g,b), -10);
-            //console.log("myColor, ", color)
-            context.fillStyle = color + "AA"; //"#00000010";
-            context.fill();
+            contextTarget.beginPath();
+            contextTarget.arc(x ,y ,pointRadius, 0, 2 * Math.PI);
+            const color = newShade(rgbToHex(r,g,b), shading);
+            contextTarget.fillStyle = color + opacity;
+            contextTarget.fill();
         }
     }
 }
