@@ -29,6 +29,7 @@ function App() {
   const [yellowAngle, setYellowAngle] = useState<number>(2);
   const [magentaAngle, setMagentaAngle] = useState<number>(75);
   const [keyAngle, setKeyAngle] = useState<number>(45);
+  const [noise, setNoise] = useState<number>(0.15);
 
   useEffect(() => {
     if(canvasBufferRef.current && image) {
@@ -75,7 +76,7 @@ function App() {
         addNoise(
           canvasBufferRef.current,
           canvasRef.current,
-          0.15
+          noise
         );
         break;
       case "CMYK+Noise":
@@ -108,6 +109,34 @@ function App() {
     setImage(newImage);
   }
 
+  function form() {
+    switch(imageProcessingMode) {
+      case "Noise":
+        return (
+              <Slider float step={0.01} min={0} max={1.0} value={noise} onChange={(value) => setNoise(value)} label="Noise" />
+        );
+      case "CMYK":
+      case "CMYK+Noise":
+        return (<>
+                <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
+                <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
+                <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
+                <Slider min={0} max={90} value={cyanAngle} onChange={(value) => setCyanAngle(value)} label="Cyan Angle" />
+                <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
+                <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
+                <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+              </>);
+      case "Duatone":
+      default:
+        return (<>
+                <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
+                <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
+                <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
+                <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
+              </>);
+    }
+  }
+
   return (
     <div className="bg-base-300 flex flex-col gap-4">
       <Navbar />
@@ -133,35 +162,16 @@ function App() {
             </select>
             <CustomSettingsCard>
             <div className="Options">
-              <Slider min={1} max={20} value={dotSize} onChange={(value) => setDotSize(value)} label="Dot size" />
-              <Slider min={1} max={20} value={dotResolution} onChange={(value) => setDotResolution(value)} label="Dot resolution" />
-              <Slider min={1} max={1920} value={maxSize} onChange={(value) => setMaxSize(value)} label="Max size" />
+              {form()}
+            </div>
+            </CustomSettingsCard>
 
-              {
-                imageProcessingMode === "Duatone" ?
-                <>
-                  <Slider min={0} max={180} value={angle} onChange={(value) => setAngle(value)} label="Angle" />
-                  <ColorInput value={dotColorOne} onChange={(value) => setDotColorOne(value)} label="Dot Color 1" />
-                  <ColorInput value={dotColorTwo} onChange={(value) => setDotColorTwo(value)} label="Dot Color 2" />
-                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
-                </>
-                :
-                <>
-                  <Slider min={0} max={90} value={cyanAngle} onChange={(value) => setCyanAngle(value)} label="Cyan Angle" />
-                  <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
-                  <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
-                  <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
-                </>
-              }
-              </div>
-              </CustomSettingsCard>
-
-              <button
-                className="btn btn-primary w-full button-lg text-xl"
-                onClick={generateButton}
-              >
-                Generate
-              </button>
+            <button
+              className="btn btn-primary w-full button-lg text-xl"
+              onClick={generateButton}
+            >
+              Generate
+            </button>
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
