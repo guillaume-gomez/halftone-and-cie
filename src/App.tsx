@@ -44,13 +44,39 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
+        halftoneDuatone(
+          canvasBufferRef.current,
+          canvasRef.current,
+          {
+            angle,
+            dotSize,
+            dotResolution,
+            backgroundColor,
+            colorLayer1: dotColorOne,
+            colorLayer2: dotColorTwo
+          }
+        );
         break;
       case "CMYK":
-        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+        fromRGBToCMYK(
+          canvasBufferRef.current,
+          canvasRef.current,
+          {
+            dotSize,
+            dotResolution,
+            cyanAngle,
+            magentaAngle,
+            yellowAngle,
+            keyAngle
+          }
+        );
         break;
       case "Noise":
-        addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        addNoise(
+          canvasBufferRef.current,
+          canvasRef.current,
+          0.15
+        );
         break;
       case "CMYK+Noise":
         CMYKNoise();
@@ -59,7 +85,10 @@ function App() {
         createMaskPoints(
           canvasBufferRef.current,
           canvasRef.current,
-          2
+          {
+            pointRadius: 1,
+            padding: 2
+          }
         );
         break;
     };

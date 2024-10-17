@@ -31,13 +31,22 @@ function rgbToHex(r: number, g: number, b: number) : string {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
+interface maskPointParams {
+    pointRadius: number;
+    padding?: number;
+    opacity?: string;
+    shading?: number;
+}
+
 export function createMaskPoints(
     canvasSource: HTMLCanvasElement,
     canvasTarget: HTMLCanvasElement,
-    pointRadius: number,
-    padding: number = 1,
-    opacity: string = "AA",
-    shading: number = -50
+    {
+        pointRadius,
+        padding = 1,
+        opacity = "AA",
+        shading = -50
+    }: maskPointParams
 ) : void {
     const { width, height } = canvasSource;
 
