@@ -28,30 +28,29 @@ function ThreejsRendering({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
   const cameraControllerRef = useRef<CameraControls|null>(null);
+  const frameRef = useRef(null);
   const backgroundColor = "purple";
+
 
   useEffect(() => {
     recenter()
   },[texture, widthTexture, heightTexture]);
 
   async function recenter() {
-    /*await cameraControllerRef.current.setLookAt(
-        0, 0, 1,
-        0,0, 0,
-        false
-      );
-
-    const box = new Box3(new Vector3(0,1,4.0), new Vector3(0.1,5.0));
-    await cameraControllerRef.current.fitToBox(mesh, true,
-      { paddingLeft: 2, paddingRight: 2, paddingBottom: 3, paddingTop: 3 }
-    );*/
-
+    if(!frameRef.current || !cameraControllerRef.current) {
+      return;
+    }
 
     await cameraControllerRef.current.setLookAt(
         0, 0, 1,
         0,0, 0,
         false
       );
+
+
+    await cameraControllerRef.current.fitToBox(frameRef.current, true,
+      { paddingLeft: 1, paddingRight: 1, paddingBottom: 1, paddingTop: 1 }
+    );
   }
   
   return (
@@ -71,11 +70,12 @@ function ThreejsRendering({
           makeDefault
           ref={cameraControllerRef}
         />
-        <Stage environment={null} adjustCamera shadows="contact">
+        <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
             position={[0,1, -4.5]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
+            ref={frameRef}
           >
             <Ad
               base64Texture={texture}

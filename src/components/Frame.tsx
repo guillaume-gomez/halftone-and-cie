@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { forwardRef, ReactNode } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
 
@@ -10,16 +10,19 @@ interface FrameProps {
   padding? : number;
 }
 
-function Frame({
+const Frame = forwardRef<{}, FrameProps>(({
     children,
     position,
     widthTexture,
     heightTexture,
     padding = 0.5
-  }: FrameProps) {
+  }: FrameProps,
+  ref
+  ) =>  {
   return (
     <mesh
       position={position as any}
+      ref={ref}
     >
       <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.1]} />
       <meshStandardMaterial color="brown" />
@@ -28,6 +31,7 @@ function Frame({
         </group>
     </mesh>
   )
-}
+});
+
 
 export default Frame;
