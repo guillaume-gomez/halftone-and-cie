@@ -2,6 +2,7 @@ import { forwardRef, ReactNode } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
+import { MeshPhysicalMaterial } from "three";
 
 interface FrameProps {
   position: [number, number, number];
@@ -11,19 +12,19 @@ interface FrameProps {
   padding? : number;
 }
 
-const HEIGHT_FRAME= 0.4
+const materialFrame = new MeshPhysicalMaterial({
+  thickness:0.1,roughness:0.35, metalness: 0.6,reflectivity: 0.4, color: 0x060f14, emissive: 0x000000
+});
 
 const Frame = forwardRef<{}, FrameProps>(({
     children,
     position,
     widthTexture,
     heightTexture,
-    padding = 0.7
+    padding = 0.4
   }: FrameProps,
   ref
   ) =>  {
-  console.log(widthTexture/heightTexture)
-  console.log(heightTexture/widthTexture)
   return (
     <group
       position={position as any}
@@ -32,21 +33,30 @@ const Frame = forwardRef<{}, FrameProps>(({
 
     >
       <group>
-        <mesh position={[0,(0.5*heightTexture/widthTexture) + HEIGHT_FRAME/2,0]}>
-          <boxGeometry args={[1+padding, HEIGHT_FRAME, 0.3]} />
-          <meshStandardMaterial color="brown" wireframe={false}/>
+        <mesh
+          position={[0,(0.5*heightTexture/widthTexture) + padding/4,0]}
+          material={materialFrame}
+        >
+          <boxGeometry args={[1+padding, padding/2, 0.3]} />
         </mesh>
-        <mesh position={[0,-(0.5*heightTexture/widthTexture) - HEIGHT_FRAME/2,0]}>
-          <boxGeometry args={[1+padding, HEIGHT_FRAME, 0.3]} />
-          <meshStandardMaterial color="brown" wireframe={false} />
+        <mesh
+          position={[0,-(0.5*heightTexture/widthTexture) - padding/4,0]}
+          material={materialFrame}
+        >
+          <boxGeometry args={[1+padding, padding/2, 0.3]} />
         </mesh>
-        <mesh position={[-padding+0.025, 0,0]}>
+        <mesh
+          position={[0.5 + padding/4, 0,0]}
+          material={materialFrame}
+          >
           <boxGeometry args={[padding/2, heightTexture/widthTexture, 0.3]} />
-          <meshStandardMaterial color="brown" wireframe={false} />
         </mesh>
-        <mesh position={[+padding-0.025, 0,0]}>
+        <mesh
+          position={[-0.5 -padding/4,0,0]}
+          material={materialFrame}
+        >
           <boxGeometry args={[padding/2, heightTexture/widthTexture, 0.3]} />
-          <meshStandardMaterial color="brown" wireframe={false} />
+
         </mesh>
       </group>
           <group position={[0, 0, -0.05]}>
@@ -58,12 +68,12 @@ const Frame = forwardRef<{}, FrameProps>(({
               anchorY="bottom"
               anchorX="center"
               lineHeight={0.8}
-              position={[0, -heightTexture/widthTexture + 0.1, 0.1]}>
+              position={[0, -0.8, 0.23]}>
               powered by ads
             </Text>
             {children}
-            <mesh position={[0,0,0.225]} >
-              <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding + 0.1, 0.05]} />
+            <mesh position={[0,0,0.215]} >
+              <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.025]} />
               {/*<meshStandardMaterial color="blue" wireframe={true} />*/}
               <meshPhysicalMaterial
                 transmission={1}
