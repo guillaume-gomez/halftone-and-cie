@@ -11,7 +11,7 @@ import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
-
+import { createMaskPoints } from "./point-layer";
 function App() {
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,6 +46,7 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
+
     switch(imageProcessingMode) {
       case "Duatone":
       default:
@@ -70,10 +71,24 @@ function App() {
         });
         break;
       case "Noise":
-        addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        addNoise(
+          canvasBufferRef.current,
+          canvasRef.current,
+          0.15
+        );
         break;
       case "CMYK+Noise":
         CMYKNoise();
+        break;
+      case "maskPoints":
+        createMaskPoints(
+          canvasBufferRef.current,
+          canvasRef.current,
+          {
+            pointRadius: 1,
+            padding: 2
+          }
+        );
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
@@ -115,8 +130,11 @@ function App() {
             >
               <option disabled>Select the filter</option>
               {
-                ["CMYK+Noise", "Duatone", "CMYK", "Noise"].map(mode =>
-                  <option key={mode} value={mode}>
+                ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
+                  <option
+                    key={mode}
+                    value={mode}
+                  >
                     {mode}
                   </option>
                 )
@@ -151,7 +169,7 @@ function App() {
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
-                className="btn btn-primary btn-lg w-full text-2xl"
+                className="btn btn-primary w-full button-lg text-xl"
                 onClick={generateButton}
               >
                 Generate
@@ -167,6 +185,7 @@ function App() {
             />
           }
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
+
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
