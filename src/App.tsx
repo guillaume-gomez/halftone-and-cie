@@ -4,7 +4,9 @@ import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
+import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
+import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
@@ -29,6 +31,8 @@ function App() {
   const [yellowAngle, setYellowAngle] = useState<number>(2);
   const [magentaAngle, setMagentaAngle] = useState<number>(75);
   const [keyAngle, setKeyAngle] = useState<number>(45);
+
+  const [display2DView, setDisplay2DView] = useState<boolean>(false);
 
   useEffect(() => {
     if(canvasBufferRef.current && image) {
@@ -100,7 +104,15 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
-    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+        dotSize,
+        dotResolution,
+        cyanAngle,
+        magentaAngle,
+        yellowAngle,
+        keyAngle,
+        backgroundColor
+    });
     addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
@@ -151,10 +163,13 @@ function App() {
                   <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
                   <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
                   <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
                 </>
               }
               </div>
               </CustomSettingsCard>
+
+              <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
                 className="btn btn-primary w-full button-lg text-xl"
@@ -165,7 +180,9 @@ function App() {
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
+          { !display2DView && <ThreeJsRenderer /> }
+          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
+
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
