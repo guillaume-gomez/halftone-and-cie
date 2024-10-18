@@ -10,21 +10,21 @@ import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
-
 import { addNoise } from "./noise";
-
+import { createMaskPoints } from "./point-layer";
 function App() {
   const canvasBufferRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [image, setImage] = useState<HTMLImageElement>();
+  const [texture, setTexture] = useState<string>();
 
   const [imageProcessingMode, setImageProcessingMode] = useState<string>("CMYK+Noise");
   const [angle, setAngle] = useState<number>(0);
   const [dotSize, setDotSize] = useState<number>(5);
   const [dotResolution, setDotResolution] = useState<number>(3);
-  const [dotColorOne, setDotColorOne] = useState<string>("#FF0000");
-  const [dotColorTwo, setDotColorTwo] = useState<string>("#0000FF");
+  const [dotColorOne, setDotColorOne] = useState<string>("#4AC3E8");
+  const [dotColorTwo, setDotColorTwo] = useState<string>("#E75CA2");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [maxSize, setMaxSize] = useState<number>(1000);
   const [cyanAngle, setCyanAngle] = useState<number>(15);
@@ -41,9 +41,11 @@ function App() {
   }, [canvasBufferRef, maxSize, image]);
 
   function generateButton() {
+    return;
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
+
     switch(imageProcessingMode) {
       case "Duatone":
       default:
@@ -66,10 +68,17 @@ function App() {
           backgroundColor
         });
       case "Noise":
-        return addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
+        break;
       case "CMYK+Noise":
-        return CMYKNoise();
+        CMYKNoise();
+        break;
+      case "maskPoints":
+        //createMaskPoints(canvasBufferRef.current, 1);
+        break;
     };
+    const base64Image = canvasRef.current.toDataURL();
+    setTexture(base64Image);
   }
 
   function CMYKNoise() {
@@ -141,7 +150,7 @@ function App() {
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
-                className="btn btn-primary btn-lg w-full text-2xl"
+                className="btn btn-primary w-full button-lg text-xl"
                 onClick={generateButton}
               >
                 Generate
