@@ -32,7 +32,9 @@ function ThreejsRendering({
 
 
   useEffect(() => {
-    recenter()
+    setTimeout(() => {
+      recenter();
+    }, 1000);
   },[texture, widthTexture, heightTexture]);
 
   async function recenter() {
@@ -67,6 +69,7 @@ function ThreejsRendering({
         <directionalLight position={[-50, 0, -40]} intensity={0.7} />
         <CameraControls
           makeDefault
+          smoothTime={0.50}
           ref={cameraControllerRef}
         />
         <Stage environment={null} adjustCamera={false} shadows="contact">
