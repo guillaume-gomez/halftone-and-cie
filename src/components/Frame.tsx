@@ -3,6 +3,8 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { MeshPhysicalMaterial } from "three";
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+
 
 interface FrameProps {
   position: [number, number, number];
@@ -56,21 +58,20 @@ const Frame = forwardRef<{}, FrameProps>(({
           material={materialFrame}
         >
           <boxGeometry args={[padding/2, heightTexture/widthTexture, 0.3]} />
-
         </mesh>
+        <Text
+          //font={'/azonix.woff'}
+          color={0xFFFFFF}
+          fontSize={0.05}
+          letterSpacing={0}
+          anchorY="bottom"
+          anchorX="center"
+          lineHeight={0.8}
+          position={[0, -(0.5*heightTexture/widthTexture) - padding/4, 0.23]}>
+          powered by ads
+        </Text>
       </group>
           <group position={[0, 0, -0.05]}>
-            <Text
-              //font={'/azonix.woff'}
-              color={0xFFFFFF}
-              fontSize={0.05}
-              letterSpacing={0}
-              anchorY="bottom"
-              anchorX="center"
-              lineHeight={0.8}
-              position={[0, -0.8, 0.23]}>
-              powered by ads
-            </Text>
             {children}
             <mesh position={[0,0,0.215]} >
               <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.025]} />
