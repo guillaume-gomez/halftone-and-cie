@@ -4,7 +4,9 @@ import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
+import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
+import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
@@ -30,6 +32,8 @@ function App() {
   const [magentaAngle, setMagentaAngle] = useState<number>(75);
   const [keyAngle, setKeyAngle] = useState<number>(45);
 
+  const [display2DView, setDisplay2DView] = useState<boolean>(false);
+
   useEffect(() => {
     if(canvasBufferRef.current && image) {
       reloadCanvasPreview(image, canvasBufferRef.current, maxSize);
@@ -45,11 +49,24 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        halftoneDuatone(canvasBufferRef.current, canvasRef.current, { angle, dotSize, dotResolution, backgroundColor, colorLayer1: dotColorOne, colorLayer2: dotColorTwo } );
-        break;
+        return halftoneDuatone(canvasBufferRef.current, canvasRef.current, {
+          angle,
+          dotSize,
+          dotResolution,
+          backgroundColor,
+          colorLayer1: dotColorOne,
+          colorLayer2: dotColorTwo
+        });
       case "CMYK":
-        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
-        break;
+        return fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+          dotSize,
+          dotResolution,
+          cyanAngle,
+          magentaAngle,
+          yellowAngle,
+          keyAngle,
+          backgroundColor
+        });
       case "Noise":
         addNoise(canvasBufferRef.current, canvasRef.current, 0.15);
         break;
@@ -68,7 +85,15 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
-    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+        dotSize,
+        dotResolution,
+        cyanAngle,
+        magentaAngle,
+        yellowAngle,
+        keyAngle,
+        backgroundColor
+    });
     addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
@@ -116,10 +141,13 @@ function App() {
                   <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
                   <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
                   <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
                 </>
               }
               </div>
               </CustomSettingsCard>
+
+              <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
                 className="btn btn-primary w-full button-lg text-xl"
@@ -129,8 +157,9 @@ function App() {
               </button>
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
-          <canvas ref={canvasBufferRef} style={{display: "alice"}} />
-          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
+          <canvas ref={canvasBufferRef} style={{display: "none"}} />
+          { !display2DView && <ThreeJsRenderer /> }
+          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
