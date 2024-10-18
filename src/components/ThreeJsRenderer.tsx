@@ -2,7 +2,6 @@ import React, { useRef , useMemo, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
-import { Box3, Vector3 } from "three";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
@@ -42,7 +41,7 @@ function ThreejsRendering({
     }
 
     await cameraControllerRef.current.setLookAt(
-        0, 0, 1,
+        0, 0, 20,
         0,0, 0,
         false
       );
@@ -72,7 +71,7 @@ function ThreejsRendering({
         />
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
-            position={[0,1, -4.5]}
+            position={[0,1, -4.65]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
