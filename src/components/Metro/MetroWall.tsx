@@ -26,7 +26,6 @@ function generateWallParams(width: number, height: number, depth: number) {
 
 
 function MetroWall({ position, width, height, depth }: MetroWallProps) {
-  console.log(width, " ", height, " ", depth)
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
     'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
