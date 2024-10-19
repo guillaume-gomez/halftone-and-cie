@@ -33,6 +33,8 @@ function App() {
   const [keyAngle, setKeyAngle] = useState<number>(45);
 
   const [display2DView, setDisplay2DView] = useState<boolean>(false);
+  const [widthTexture, setWidthTexture] = useState<number>(100);
+  const [heightTexture, setHeightTexture] = useState<number>(100);
 
   useEffect(() => {
     if(canvasBufferRef.current && image) {
@@ -48,32 +50,25 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        halftoneDuatone(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            angle,
-            dotSize,
-            dotResolution,
-            backgroundColor,
-            colorLayer1: dotColorOne,
-            colorLayer2: dotColorTwo
-          }
-        );
+        halftoneDuatone(canvasBufferRef.current, canvasRef.current, {
+          angle,
+          dotSize,
+          dotResolution,
+          backgroundColor,
+          colorLayer1: dotColorOne,
+          colorLayer2: dotColorTwo
+        });
         break;
       case "CMYK":
-        fromRGBToCMYK(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            dotSize,
-            dotResolution,
-            cyanAngle,
-            magentaAngle,
-            yellowAngle,
-            keyAngle
-          }
-        );
+        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+          dotSize,
+          dotResolution,
+          cyanAngle,
+          magentaAngle,
+          yellowAngle,
+          keyAngle,
+          backgroundColor
+        });
         break;
       case "Noise":
         addNoise(
@@ -97,6 +92,8 @@ function App() {
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
+    setWidthTexture(canvasRef.current.width);
+    setHeightTexture(canvasRef.current.height);
     setTexture(base64Image);
   }
 
@@ -180,7 +177,13 @@ function App() {
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          { !display2DView && <ThreeJsRenderer /> }
+          { !display2DView &&
+            <ThreeJsRenderer
+              texture={texture}
+              widthTexture={widthTexture}
+              heightTexture={heightTexture}
+            />
+          }
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
 
           <div className="flex flex-row justify-end">

@@ -1,12 +1,20 @@
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
+import { FrontSide } from "three";
 
 interface AdProps {
   base64Texture: string;
+  widthTexture: number;
+  heightTexture: number;
   position?: [number, number, number]
 }
 
-function Ad({ base64Texture, position = [0,0,0] }: AdProps) {
+function Ad({
+  base64Texture,
+  position = [0,0,0],
+  widthTexture,
+  heightTexture
+}: AdProps) {
   const [texture] = useLoader(TextureLoader, [
     base64Texture
   ]);
@@ -21,8 +29,8 @@ function Ad({ base64Texture, position = [0,0,0] }: AdProps) {
     <mesh
       position={position as any}
     >
-      <boxGeometry args={[1, 1, 0.1]} />
-      <meshStandardMaterial map={texture} />
+      <planeGeometry args={[1, heightTexture/widthTexture]} />
+      <meshStandardMaterial map={texture} side={FrontSide} />
     </mesh>
   )
 }
