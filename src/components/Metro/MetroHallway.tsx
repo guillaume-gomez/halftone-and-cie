@@ -1,9 +1,9 @@
 import MetroWall from "./MetroWall";
 import MetroCeil from "./MetroCeil";
 import MetroFloor from "./MetroFloor";
-import { Box, useHelper } from '@react-three/drei';
+import { Box, useHelper, Lightformer } from '@react-three/drei';
 import { useRef } from "react";
-import { SpotLightHelper } from "three";
+import { SpotLightHelper, directionalLight } from "three";
 
 interface MetroHallwayProps {
   position: [number, number, number];
@@ -13,20 +13,30 @@ interface MetroHallwayProps {
 }
 
 function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
-  const light = useRef()
-  useHelper(light, SpotLightHelper, 'cyan')
+  const light = useRef();
+  const rectLight = useRef();
+
+  useHelper(light, SpotLightHelper, 'cyan');
+
   return(
     <group position={position}>
-      {/*<Lightformer
-        form="rect" // circle | ring | rect (optional, default = rect)
-        intensity={1} // power level (optional = 1)
-        color="red" // (optional = white)
-        scale={[4, 1]} // Scale it any way you prefer (optional = [1, 1])
-        position={[0,height - 1,-10]}
-        target={[0, 0,-5]} // Target position (optional = undefined)
-      />*/}
-      <spotLight ref={light} position={[0,2, 2]}/>
-
+          <Lightformer
+            castShadow={true}
+            form="rect" // circle | ring | rect (optional, default = rect)
+            intensity={1} // power level (optional = 1)
+            color="red" // (optional = white)
+            scale={[4, 1]} // Scale it any way you prefer (optional = [1, 1])
+            position={[0,height - 1,-10]}
+            target={[0, 0,-5]} // Target position (optional = undefined)
+          />
+        <spotLight
+          ref={light}
+          /*distance={2}
+          instancity={0.5}*/
+          direction={[0,0,0]}
+          position={[0,2, 5]}
+          castShadow={true}
+        />
       <MetroWall
         position={[0,0,0]}
         width={width}
