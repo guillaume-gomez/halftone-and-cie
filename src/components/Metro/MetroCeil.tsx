@@ -43,8 +43,6 @@ function MetroCeil({ position, depth, width, height }: MetroCeilProps) {
       aoMap })
   , []);
 
-  console.log(width)
-
   /*return ( <mesh
               key={`-ceil`}
               position={position}

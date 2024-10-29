@@ -172,7 +172,7 @@ function App() {
                 className="btn btn-primary w-full button-lg text-xl"
                 onClick={generateButton}
               >
-                Generate
+                Generate !
               </button>
         </Card>
         <Card title="Result" className="bg-base-200 w-full border-secondary">
