@@ -62,7 +62,7 @@ function ThreejsRendering({
         style={{width, height}}
       >
         <color attach="background" args={[backgroundColor]} />
-        <ambientLight intensity={0.75} />
+        <ambientLight intensity={0.30} />
         <CameraControls
           makeDefault
           ref={cameraControllerRef}
