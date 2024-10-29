@@ -1,9 +1,10 @@
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode, useRef } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import { Text, useHelper } from '@react-three/drei';
 import { MeshPhysicalMaterial } from "three";
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 
 interface FrameProps {
@@ -26,7 +27,11 @@ const Frame = forwardRef<{}, FrameProps>(({
     padding = 0.4
   }: FrameProps,
   ref
-  ) =>  {
+  ) => {
+  /*const light = useRef();
+  useHelper(light, RectAreaLightHelper, 'green');*/
+
+
   return (
     <group
       position={position as any}
@@ -60,15 +65,15 @@ const Frame = forwardRef<{}, FrameProps>(({
           <boxGeometry args={[padding/2, heightTexture/widthTexture, 0.3]} />
         </mesh>
         <Text
-          //font={'/azonix.woff'}
+          font={'Playfulist_1.woff'}
           color={0xFFFFFF}
-          fontSize={0.05}
+          fontSize={0.04}
           letterSpacing={0}
           anchorY="bottom"
           anchorX="center"
           lineHeight={0.8}
           position={[0, -(0.5*heightTexture/widthTexture) - padding/4, 0.23]}>
-          powered by ads
+          You're better than ads ™
         </Text>
       </group>
           <group position={[0, 0, -0.05]}>
@@ -82,6 +87,13 @@ const Frame = forwardRef<{}, FrameProps>(({
                 roughness={0.1}
               />
             </mesh>
+            <rectAreaLight
+              /*ref={light}*/
+              position={[0,0,0.225]}
+              lookAt={[0,0,-1]}
+              castShadow={true}
+              args={[ 0xffffff, 1.2, 1, heightTexture/widthTexture]}
+            />
           </group>
 
     </group>
