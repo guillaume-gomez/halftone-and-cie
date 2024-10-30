@@ -118,7 +118,7 @@ function App() {
   }
 
   return (
-    <div className="bg-base-300 flex flex-col gap-4">
+    <div className="flex flex-col">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
         <Card title="Settings" className="border-primary basis-1/4">
@@ -169,13 +169,13 @@ function App() {
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
-                className="btn btn-primary w-full button-lg text-xl"
+                className="btn-custom btn btn-secondary w-full text-xl custom-button"
                 onClick={generateButton}
               >
                 Generate !
               </button>
         </Card>
-        <Card title="Result" className="bg-base-200 w-full border-secondary">
+        <Card title="Result" className="bg-secondary w-full">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
           { !display2DView &&
             <ThreeJsRenderer
@@ -185,7 +185,6 @@ function App() {
             />
           }
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
-
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
