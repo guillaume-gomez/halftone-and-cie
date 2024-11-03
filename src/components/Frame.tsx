@@ -28,8 +28,8 @@ const Frame = forwardRef<{}, FrameProps>(({
   }: FrameProps,
   ref
   ) => {
-  /*const light = useRef();
-  useHelper(light, RectAreaLightHelper, 'green');*/
+  const light = useRef();
+  useHelper(light, RectAreaLightHelper, 'green');
 
 
   return (
@@ -88,11 +88,11 @@ const Frame = forwardRef<{}, FrameProps>(({
               />
             </mesh>
             <rectAreaLight
-              /*ref={light}*/
-              position={[0,0,0.225]}
+              ref={light}
+              position={[0, 0,0.225]}
               lookAt={[0,0,-1]}
               castShadow={true}
-              args={[ 0xffffff, 1.2, 1, heightTexture/widthTexture]}
+              args={[ 0xffffff, 0.4, 1, heightTexture/widthTexture]}
             />
           </group>
 
