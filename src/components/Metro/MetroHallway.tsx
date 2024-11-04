@@ -1,9 +1,9 @@
 import MetroWall from "./MetroWall";
 import MetroCeil from "./MetroCeil";
 import MetroFloor from "./MetroFloor";
-import { Box, useHelper, Lightformer } from '@react-three/drei';
+import { useHelper } from '@react-three/drei';
 import { useRef } from "react";
-import { SpotLightHelper, directionalLight, PointLightHelper } from "three";
+import { SpotLightHelper } from "three";
 
 interface MetroHallwayProps {
   position: [number, number, number];

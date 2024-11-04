@@ -8,6 +8,7 @@ import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
 import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -197,6 +198,7 @@ function App() {
           </div>
         </Card>
       </div>
+      <Footer />
     </div>
   )
 }
