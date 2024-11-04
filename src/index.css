@@ -27,11 +27,11 @@
     font-family: 'UraniaCzech', sans-serif;
 }
 
-.btn-custom {
+.custom-shadow {
   box-shadow: 6px 7px 2px 0px rgba(0, 0, 0, 1.0);
   border: 2px solid black;
 }
 
-.btn-custom:hover {
+.custom-shadow:hover {
   border: 2px solid black;
 }
