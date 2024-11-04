@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
+import Panel from "./Panel";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
 
@@ -83,6 +84,7 @@ function ThreejsRendering({
           <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
         <MetroHallway position={[0,0,7.5]} width={6} depth={20} height={4} />
+        <Panel path="paris-metro-map.png" />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
