@@ -65,7 +65,7 @@ function ThreejsRendering({
   
   return (
     <div className="flex flex-col gap-5 w-full">
-      <Canvas
+      <Canvas.
         camera={{ position: [0, 0, 35], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
@@ -73,9 +73,7 @@ function ThreejsRendering({
         style={{width, height}}
       >
         <color attach="background" args={[backgroundColor]} />
-        <ambientLight intensity={0.5} />
-        <spotLight position={[0, 10, 0]} intensity={0.3} />
-        <directionalLight position={[-50, 0, -40]} intensity={0.7} />
+        <ambientLight intensity={0.30} />
         <CameraControls
           makeDefault
           smoothTime={0.50}

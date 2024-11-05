@@ -43,8 +43,6 @@ function MetroFloor({ position, depth, width, height }: MetroFloorProps) {
       aoMap })
   , []);
 
-  console.log(width)
-
   /*return ( <mesh
               key={`-ceil`}
               position={position}

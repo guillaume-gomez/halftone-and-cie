@@ -1,6 +1,5 @@
 import { forwardRef, ReactNode } from 'react';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
-import { useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 
 interface FrameProps {
