@@ -65,7 +65,7 @@ function ThreejsRendering({
   
   return (
     <div className="flex flex-col gap-5 w-full">
-      <Canvas.
+      <Canvas
         camera={{ position: [0, 0, 35], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
