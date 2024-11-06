@@ -1,4 +1,4 @@
-import { useRef , useEffect } from 'react';
+import { useRef , useMemo, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
@@ -32,7 +32,18 @@ function ThreejsRendering({
 
 
   useEffect(() => {
-    recenter()
+    if(!cameraControllerRef.current) {
+      return;
+    }
+
+    cameraControllerRef.current.setLookAt(
+      0, 0, 35,
+      0,0, 0,
+      false
+    );
+    setTimeout(() => {
+      recenter();
+    }, 1000);
   },[texture, widthTexture, heightTexture]);
 
   async function recenter() {
@@ -41,10 +52,10 @@ function ThreejsRendering({
     }
 
     await cameraControllerRef.current.setLookAt(
-        0, 0, 20,
-        0,0, 0,
-        false
-      );
+      0, 0, 35,
+      0,0, 0,
+      false
+    );
 
 
     await cameraControllerRef.current.fitToBox(frameRef.current, true,
@@ -55,7 +66,7 @@ function ThreejsRendering({
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [0, 0.0, 1], fov: 75, far: 1000 }}
+        camera={{ position: [0, 0, 35], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -65,11 +76,12 @@ function ThreejsRendering({
         <ambientLight intensity={0.30} />
         <CameraControls
           makeDefault
+          smoothTime={0.50}
           ref={cameraControllerRef}
         />
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
-            position={[0,1, -4.65]}
+            position={[0,1, -25]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
@@ -80,9 +92,9 @@ function ThreejsRendering({
               heightTexture={heightTexture}
             />
           </Frame>
-          <Grid  args={[20, 20]} position={[0,-0.5,0]} cellColor='white' />
+          <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,7.5]} width={6} depth={20} height={4} />
+        <MetroHallway position={[0,0,12.5]} width={6} depth={50} height={4} />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />

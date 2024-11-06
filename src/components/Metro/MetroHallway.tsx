@@ -17,19 +17,17 @@ function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
  
   return(
     <group position={position}>
-        
-      <LightBulb
-        position={[0, 3.25, 5]}
-      />
-      <LightBulb
-        position={[0, 3.25, 0]}
-      />
-      <LightBulb
-        position={[0, 3.25, -5]}
-      />
-      <LightBulb
-        position={[0, 3.25, -9]}
-      />
+      {
+        [-23, -20, -15, -10, -5, 0, 5, 10, 15, 20].map(z => {
+          return (
+            <LightBulb
+              key={z}
+              position={[0, 3.25, z]}
+            />);
+        })
+      
+      }
+      
       <MetroWall
         position={[0,0,0]}
         width={width}
