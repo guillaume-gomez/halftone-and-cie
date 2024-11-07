@@ -43,6 +43,14 @@ function App() {
     }
   }, [canvasBufferRef, maxSize, image]);
 
+  useEffect(() => {
+    if(imageProcessingMode === "CMYK+Noise") {
+      setBackgroundColor("#FFFFFF");
+    } else {
+      setBackgroundColor("transparent");
+    }
+  }, [imageProcessingMode]);
+
   function generateButton() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
