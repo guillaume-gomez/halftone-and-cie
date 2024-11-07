@@ -4,8 +4,11 @@ import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
+import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
+import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -30,6 +33,10 @@ function App() {
   const [magentaAngle, setMagentaAngle] = useState<number>(75);
   const [keyAngle, setKeyAngle] = useState<number>(45);
 
+  const [display2DView, setDisplay2DView] = useState<boolean>(false);
+  const [widthTexture, setWidthTexture] = useState<number>(100);
+  const [heightTexture, setHeightTexture] = useState<number>(100);
+
   useEffect(() => {
     if(canvasBufferRef.current && image) {
       reloadCanvasPreview(image, canvasBufferRef.current, maxSize);
@@ -44,32 +51,25 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        halftoneDuatone(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            angle,
-            dotSize,
-            dotResolution,
-            backgroundColor,
-            colorLayer1: dotColorOne,
-            colorLayer2: dotColorTwo
-          }
-        );
+        halftoneDuatone(canvasBufferRef.current, canvasRef.current, {
+          angle,
+          dotSize,
+          dotResolution,
+          backgroundColor,
+          colorLayer1: dotColorOne,
+          colorLayer2: dotColorTwo
+        });
         break;
       case "CMYK":
-        fromRGBToCMYK(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            dotSize,
-            dotResolution,
-            cyanAngle,
-            magentaAngle,
-            yellowAngle,
-            keyAngle
-          }
-        );
+        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+          dotSize,
+          dotResolution,
+          cyanAngle,
+          magentaAngle,
+          yellowAngle,
+          keyAngle,
+          backgroundColor
+        });
         break;
       case "Noise":
         addNoise(
@@ -93,6 +93,8 @@ function App() {
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
+    setWidthTexture(canvasRef.current.width);
+    setHeightTexture(canvasRef.current.height);
     setTexture(base64Image);
   }
 
@@ -100,7 +102,15 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
-    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+        dotSize,
+        dotResolution,
+        cyanAngle,
+        magentaAngle,
+        yellowAngle,
+        keyAngle,
+        backgroundColor
+    });
     addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
@@ -109,27 +119,29 @@ function App() {
   }
 
   return (
-    <div className="bg-base-300 flex flex-col gap-4">
+    <div className="flex flex-col">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings" className="border-primary basis-1/4">
-          <InputFileWithPreview onChange={uploadImage} value={image} />
-            <select
-              className="select"
-              onChange={(e)=> setImageProcessingMode(e.target.value)}
-              value={imageProcessingMode}
-            >
-              <option disabled>Select the filter</option>
-              {
-                ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
-                  <option
-                    key={mode}
-                    value={mode}
-                  >
-                    {mode}
-                  </option>
-                )
-              }
+        <Card title="Settings" className="bg-primary basis-1/4">
+          <div className="py-2">
+            <InputFileWithPreview onChange={uploadImage} value={image} />
+          </div>
+          <select
+            className="select"
+            onChange={(e)=> setImageProcessingMode(e.target.value)}
+            value={imageProcessingMode}
+          >
+            <option disabled>Select the filter</option>
+            {
+              ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
+                <option
+                  key={mode}
+                  value={mode}
+                >
+                  {mode}
+                </option>
+              )
+            }
             </select>
             <CustomSettingsCard>
             <div className="Options">
@@ -151,21 +163,31 @@ function App() {
                   <Slider min={0} max={90} value={yellowAngle} onChange={(value) => setYellowAngle(value)} label="Yellow Angle" />
                   <Slider min={0} max={90} value={magentaAngle} onChange={(value) => setMagentaAngle(value)} label="Magenta Angle" />
                   <Slider min={0} max={90} value={keyAngle} onChange={(value) => setKeyAngle(value)} label="Key Angle" />
+                  <ColorInput value={backgroundColor} onChange={(value) => setBackgroundColor(value)} label="Background Color" />
                 </>
               }
               </div>
               </CustomSettingsCard>
 
+              <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
+
               <button
-                className="btn btn-primary w-full button-lg text-xl"
+                className="btn-custom btn btn-secondary w-full text-xl custom-button"
                 onClick={generateButton}
               >
-                Generate
+                Generate !
               </button>
         </Card>
-        <Card title="Result" className="bg-base-200 w-full border-secondary">
+        <Card title="Result" className="bg-secondary w-full">
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
+          { !display2DView &&
+            <ThreeJsRenderer
+              texture={texture}
+              widthTexture={widthTexture}
+              heightTexture={heightTexture}
+            />
+          }
+          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
@@ -176,6 +198,7 @@ function App() {
           </div>
         </Card>
       </div>
+      <Footer />
     </div>
   )
 }
