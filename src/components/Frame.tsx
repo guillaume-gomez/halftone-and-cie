@@ -6,7 +6,6 @@ import { MeshPhysicalMaterial } from "three";
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
-
 interface FrameProps {
   position: [number, number, number];
   children: ReactNode;

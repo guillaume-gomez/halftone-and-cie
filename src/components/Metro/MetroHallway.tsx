@@ -1,9 +1,9 @@
 import MetroWall from "./MetroWall";
 import MetroCeil from "./MetroCeil";
 import MetroFloor from "./MetroFloor";
-import { Box, useHelper, Lightformer } from '@react-three/drei';
+import { useHelper } from '@react-three/drei';
 import { useRef } from "react";
-import { SpotLightHelper, directionalLight, PointLightHelper } from "three";
+import { SpotLightHelper } from "three";
 
 interface MetroHallwayProps {
   position: [number, number, number];
@@ -29,20 +29,45 @@ function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
       <spotLight
         position={[0,3.5, 0]}
         castShadow={true}
-        args={[ 0xffff00, 7, 1000, Math.PI/2, 0.1, 0.9]}
+        args={[ 0xffff00, 7, 1, Math.PI/2, 0.1, 0.9]}
       />
 
       <spotLight
         position={[0,3.5, 5]}
         castShadow={true}
-        args={[ 0xff0000, 5, 1000, Math.PI/2, 0.5, 0.9]}
+        args={[ 0xff0000, 5, 1, Math.PI/2, 0.5, 0.9]}
       />
 
       <spotLight
         position={[0,3.5, 10]}
         castShadow={true}
-        args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
+        args={[ 0x0000ff, 5, 1, Math.PI/2, 0.5, 0.9]}
       />
+
+        <spotLight
+          position={[0,3.5, 15]}
+          castShadow={true}
+          args={[ 0x0000ff, 5, 1, Math.PI/2, 0.5, 0.9]}
+        />
+
+        <spotLight
+          position={[0,3.5, 20]}
+          castShadow={true}
+          args={[ 0x0000ff, 5, 10, Math.PI/2, 0.5, 0.9]}
+        />
+
+        <spotLight
+          position={[0,3.5, 25]}
+          castShadow={true}
+          args={[ 0x0000ff, 5, 10, Math.PI/2, 0.5, 0.9]}
+        />
+
+        <spotLight
+          position={[0,3.5, 30]}
+          castShadow={true}
+          args={[ 0x0000ff, 5, 10, Math.PI/2, 0.5, 0.9]}
+        />
+
 
       <MetroWall
         position={[0,0,0]}
