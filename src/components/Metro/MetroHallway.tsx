@@ -51,31 +51,6 @@ function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
           args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
         />
 
-        <spotLight
-          position={[0,3.5, 15]}
-          castShadow={true}
-          args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
-        />
-
-        <spotLight
-          position={[0,3.5, 20]}
-          castShadow={true}
-          args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
-        />
-
-        <spotLight
-          position={[0,3.5, 25]}
-          castShadow={true}
-          args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
-        />
-
-        <spotLight
-          position={[0,3.5, 30]}
-          castShadow={true}
-          args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
-        />
-
-
       <MetroWall
         position={[0,0,0]}
         width={width}

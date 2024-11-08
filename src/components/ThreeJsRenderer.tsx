@@ -29,6 +29,7 @@ function ThreejsRendering({
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
   const backgroundColor = "purple";
+  const originalCameraPosition = 17;
 
 
   useEffect(() => {
@@ -37,7 +38,7 @@ function ThreejsRendering({
     }
 
     cameraControllerRef.current.setLookAt(
-      0, 0, 35,
+      0, 0, originalCameraPosition,
       0,0, 0,
       false
     );
@@ -52,7 +53,7 @@ function ThreejsRendering({
     }
 
     await cameraControllerRef.current.setLookAt(
-      0, 0, 35,
+      0, 0, originalCameraPosition,
       0,0, 0,
       false
     );
@@ -66,7 +67,7 @@ function ThreejsRendering({
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [0, 0, 35], fov: 75, far: 1000 }}
+        camera={{ position: [0, 1.5, originalCameraPosition], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -94,7 +95,7 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,12.5]} width={6} depth={50} height={4} />
+        <MetroHallway position={[0,0,2.4]} width={6} depth={30} height={4} />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
