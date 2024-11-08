@@ -95,7 +95,30 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,2.4]} width={6} depth={30} height={4} />
+
+        <MetroHallway
+          position={[0,0,2.4]}
+          width={6}
+          depth={30}
+          height={4}
+          hideFaces={["front"]}
+        />
+        <MetroHallway
+          position={[8,0,20.4]}
+          width={6}
+          depth={10}
+          height={4}
+          rotation={[0, Math.PI/2, 0]}
+          hideFaces={[ "back",]}
+        />
+        <MetroHallway
+          position={[0,0,20.4]}
+          width={6}
+          depth={6}
+          height={4}
+          hideFaces={["right", "back"]}
+        />
+
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
