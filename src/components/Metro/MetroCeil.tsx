@@ -7,7 +7,7 @@ import { MeshStandardMaterial, BoxGeometry } from 'three';
 interface MetroCeilProps {
   position: [number, number, number];
   width: number;
-  height: number;
+  depth: number;
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
@@ -24,7 +24,7 @@ function generateCeilParams(width: number, height: number, depth: number) {
 }
 
 
-function MetroCeil({ position, depth, width, height }: MetroCeilProps) {
+function MetroCeil({ position, depth, width }: MetroCeilProps) {
   const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_basecolor.jpg',
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_height.png',
