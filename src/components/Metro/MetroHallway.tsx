@@ -4,6 +4,8 @@ import MetroFloor from "./MetroFloor";
 import { useHelper } from '@react-three/drei';
 import { useRef } from "react";
 import { SpotLightHelper } from "three";
+import Panel from "../Panel";
+
 
 interface MetroHallwayProps {
   position: [number, number, number];
@@ -75,6 +77,7 @@ function MetroHallway({ position, width, height, depth }: MetroHallwayProps) {
           args={[ 0x0000ff, 5, 1000, Math.PI/2, 0.5, 0.9]}
         />
 
+      <Panel path="paris-metro-map.png" />
 
       <MetroWall
         position={[0,0,0]}
