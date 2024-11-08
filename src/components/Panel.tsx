@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
 import { FrontSide } from "three";
@@ -15,6 +16,7 @@ function Panel({
     path
   ]);
 
+  const imageRatio = useMemo(() => texture.image.width / texture.image.height, [path]);
 
   if(!texture) {
     return <></>;
@@ -25,7 +27,7 @@ function Panel({
     <mesh
       position={position as any}
     >
-      <planeGeometry args={[1, 1]} />
+      <planeGeometry args={[imageRatio, 1]} />
       <meshStandardMaterial map={texture} side={FrontSide} />
     </mesh>
   )
