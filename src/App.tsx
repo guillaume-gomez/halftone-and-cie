@@ -8,6 +8,7 @@ import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
 import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -41,6 +42,14 @@ function App() {
       reloadCanvasPreview(image, canvasBufferRef.current, maxSize);
     }
   }, [canvasBufferRef, maxSize, image]);
+
+  useEffect(() => {
+    if(imageProcessingMode === "CMYK+Noise") {
+      setBackgroundColor("#FFFFFF");
+    } else {
+      setBackgroundColor("transparent");
+    }
+  }, [imageProcessingMode]);
 
   function generateButton() {
     if(!canvasBufferRef.current || !canvasRef.current) {
@@ -121,24 +130,26 @@ function App() {
     <div className="flex flex-col">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings" className="border-primary basis-1/4">
-          <InputFileWithPreview onChange={uploadImage} value={image} />
-            <select
-              className="select"
-              onChange={(e)=> setImageProcessingMode(e.target.value)}
-              value={imageProcessingMode}
-            >
-              <option disabled>Select the filter</option>
-              {
-                ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
-                  <option
-                    key={mode}
-                    value={mode}
-                  >
-                    {mode}
-                  </option>
-                )
-              }
+        <Card title="Settings" className="bg-primary basis-1/4">
+          <div className="py-2">
+            <InputFileWithPreview onChange={uploadImage} value={image} />
+          </div>
+          <select
+            className="select"
+            onChange={(e)=> setImageProcessingMode(e.target.value)}
+            value={imageProcessingMode}
+          >
+            <option disabled>Select the filter</option>
+            {
+              ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
+                <option
+                  key={mode}
+                  value={mode}
+                >
+                  {mode}
+                </option>
+              )
+            }
             </select>
             <CustomSettingsCard>
             <div className="Options">
@@ -195,6 +206,7 @@ function App() {
           </div>
         </Card>
       </div>
+      <Footer />
     </div>
   )
 }
