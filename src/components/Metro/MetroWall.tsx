@@ -26,13 +26,20 @@ function generateWallParams(width: number, height: number, depth: number) {
 }
 
 
-
 function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWallProps) {
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
-    'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
-    'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
-    'Subway_Tiles_002_SD/Subway_Tiles_002_roughness.jpg',
-    'Subway_Tiles_002_SD/Subway_Tiles_002_ambientOcclusion.jpg',
+    'Subway_Tiles_basic_SD/Subway_Tiles_002_height.png',
+    'Subway_Tiles_basic_SD/Subway_Tiles_002_normal.jpg',
+    'Subway_Tiles_basic_SD/Subway_Tiles_002_roughness.jpg',
+    'Subway_Tiles_basic_SD/Subway_Tiles_002_ambientOcclusion.jpg',
+  ]);
+
+
+  const [displacementMapFrieze, normalMapFrieze, roughnessMapFrieze, aoMapFrieze] = useLoader(TextureLoader, [
+    'Subway_Tiles_frieze_SD/Subway_Tiles_002_height.png',
+    'Subway_Tiles_frieze_SD/Subway_Tiles_002_normal.jpg',
+    'Subway_Tiles_frieze_SD/Subway_Tiles_002_roughness.jpg',
+    'Subway_Tiles_frieze_SD/Subway_Tiles_002_ambientOcclusion.jpg',
   ]);
 
   const material = useCallback(
@@ -45,12 +52,24 @@ function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWall
       aoMap })
   , []);
 
+  const materialFrieze = useCallback(
+    new MeshStandardMaterial({
+      displacementScale: 0,
+      map: aoMapFrieze,
+      displacementMap: displacementMapFrieze,
+      normalMap: normalMapFrieze,
+      roughnessMap : roughnessMapFrieze,
+      aoMap: aoMapFrieze })
+  , []);
+
+
+
   const wallsLeft = generateWallParams(depth, height, 0).map((position, index) => {
       return (
         <mesh
           key={`${index}-left`}
           position={position}
-          material={material}
+          material={position[1] === (height-2) ? materialFrieze : material}
           geometry={boxGeometry}
         >
         </mesh>
@@ -62,7 +81,7 @@ function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWall
         <mesh
           key={`${index}-right`}
           position={position}
-          material={material}
+          material={position[1] === (height-2) ? materialFrieze : material}
           geometry={boxGeometry}
         >
         </mesh>
@@ -74,7 +93,7 @@ function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWall
         <mesh
           key={`${index}-forward`}
           position={position}
-          material={material}
+          material={position[1] === (height-2) ? materialFrieze : material}
           geometry={boxGeometry}
         >
         </mesh>
@@ -86,7 +105,7 @@ function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWall
         <mesh
           key={`${index}-backward`}
           position={position}
-          material={material}
+          material={position[1] === (height-2) ? materialFrieze : material}
           geometry={boxGeometry}
         >
         </mesh>

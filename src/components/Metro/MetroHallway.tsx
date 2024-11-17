@@ -1,5 +1,4 @@
 import MetroWall, { FaceType } from "./MetroWall";
-import MetroWallBrown from "./MetroWallBrown";
 import MetroCeil from "./MetroCeil";
 import MetroFloor from "./MetroFloor";
 import { useHelper } from '@react-three/drei';
@@ -57,13 +56,6 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
         />
 
         <MetroWall
-          position={[0,0,0]}
-          width={width}
-          height={height}
-          depth={depth}
-          hideFaces={hideFaces}
-        />
-        <MetroWallBrown
           position={[0,0,0]}
           width={width}
           height={height}
