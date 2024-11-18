@@ -127,7 +127,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
         <Card title="Settings" className="bg-primary basis-1/4">
