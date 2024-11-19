@@ -38,19 +38,17 @@ function ThreejsRendering({
     cameraControllerRef.current.setTarget(-1000,0,0, false);
     cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
 
-
     setTimeout(() => {
       recenter();
     }, 1000);
 
   },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
+
   async function recenter() {
     if(!frameRef.current || !cameraControllerRef.current) {
       return;
     }
-
-    //cameraControllerRef.current.minDistance = cameraControllerRef.current.maxDistance = 1;
 
     await cameraControllerRef.current.setTarget(-1000,0,0, false);
     await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
@@ -67,10 +65,12 @@ function ThreejsRendering({
     );
   }
 
+
+
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [0, 0, originalCameraPosition], fov: 75, far: 1000 }}
+        camera={{ position: [10, 2, originalCameraPosition], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
