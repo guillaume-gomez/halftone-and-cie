@@ -12,6 +12,8 @@ interface FrameProps {
   widthTexture: number;
   heightTexture: number;
   padding? : number;
+  hasBackLight?: number;
+  hasWindow?: number;
 }
 
 const materialFrame = new MeshPhysicalMaterial({
@@ -23,7 +25,9 @@ const Frame = forwardRef<{}, FrameProps>(({
     position,
     widthTexture,
     heightTexture,
-    padding = 0.4
+    padding = 0.4,
+    hasBackLight = true,
+    hasWindow = true
   }: FrameProps,
   ref
   ) => {
@@ -71,28 +75,29 @@ const Frame = forwardRef<{}, FrameProps>(({
           anchorY="bottom"
           anchorX="center"
           lineHeight={0.8}
-          position={[0, -(0.5*heightTexture/widthTexture) - padding/4, 0.23]}>
+          position={[0, -(0.5*heightTexture/widthTexture) - padding/4, 0.16]}>
           You're better than ads ™
         </Text>
       </group>
           <group position={[0, 0, -0.05]}>
             {children}
-            <mesh position={[0,0,0.215]} >
-              <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.025]} />
-              {/*<meshStandardMaterial color="blue" wireframe={true} />*/}
-              <meshPhysicalMaterial
-                transmission={1}
-                thickness={0.1}
-                roughness={0.1}
-              />
-            </mesh>
-            <rectAreaLight
+            { hasWindow && <mesh position={[0,0,0.215]} >
+                <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.025]} />
+                {/*<meshStandardMaterial color="blue" wireframe={true} />*/}
+                <meshPhysicalMaterial
+                  transmission={1}
+                  thickness={0.1}
+                  roughness={0.1}
+                />
+              </mesh>
+            }
+            {hasBackLight && <rectAreaLight
               ref={light}
               position={[0, 0,0.225]}
               lookAt={[0,0,-1]}
               castShadow={true}
               args={[ 0xffffff, 0.4, 1, heightTexture/widthTexture]}
-            />
+            />}
           </group>
 
     </group>

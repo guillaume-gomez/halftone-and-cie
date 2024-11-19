@@ -90,6 +90,8 @@ function ThreejsRendering({
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
+            hasWindow={false}
+            hasBackLight={false}
           >
             <Ad
               base64Texture={texture}
