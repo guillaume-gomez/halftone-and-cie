@@ -1,14 +1,16 @@
 import { useCallback } from "react";
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
-
 import { MeshStandardMaterial, BoxGeometry } from 'three';
+
+export type FaceType = "front" | "back" | "left" | "right";
 
 interface MetroWallProps {
   position: [number, number, number];
   width: number;
   height: number;
   depth: number;
+  hideFaces?: FaceType[];
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
@@ -25,7 +27,7 @@ function generateWallParams(width: number, height: number, depth: number) {
 
 
 
-function MetroWall({ position, width, height, depth }: MetroWallProps) {
+function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWallProps) {
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
     'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
@@ -91,35 +93,44 @@ function MetroWall({ position, width, height, depth }: MetroWallProps) {
       );
   });
 
-
-
-
   return (
     <group position={position as any}>
-      <group
-        rotation={[0,Math.PI/2,0]}
-        position={[-width/2,0,depth/2-0.5]}
-      >
-        {wallsLeft}
-      </group>
-      <group
-        rotation={[0,Math.PI/2,0]}
-        position={[width/2,0,depth/2 -0.5]}
-      >
-        {wallsRight}
-      </group>
-      <group
-        rotation={[0,0,0]}
-        position={[-width/2 + 0.5,0,-depth/2]}
-      >
-        {wallsForward}
-      </group>
-      <group
-        rotation={[0,0,0]}
-        position={[-width/2 + 0.5,0,-depth - depth/2]}
-      >
-        {wallsBackward}
-      </group>
+      {
+        !hideFaces.includes("left") &&
+        <group
+          rotation={[0,Math.PI/2,0]}
+          position={[-width/2,0,depth/2-0.5]}
+        >
+          {wallsLeft}
+        </group>
+      }
+      {
+        !hideFaces.includes("right") &&
+        <group
+          rotation={[0,Math.PI/2,0]}
+          position={[width/2,0,depth/2 -0.5]}
+        >
+          {wallsRight}
+        </group>
+      }
+      {
+        !hideFaces.includes("front") &&
+        <group
+          rotation={[0,0,0]}
+          position={[-width/2 + 0.5,0,-depth/2]}
+        >
+          {wallsForward}
+        </group>
+      }
+      {
+        !hideFaces.includes("back") &&
+        <group
+          rotation={[0,0,0]}
+          position={[-width/2 + 0.5,0,-depth - depth/2]}
+        >
+          {wallsBackward}
+        </group>
+      }
     </group>
   );
 

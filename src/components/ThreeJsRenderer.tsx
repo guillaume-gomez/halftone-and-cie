@@ -1,12 +1,10 @@
-import { useRef , useMemo, useEffect } from 'react';
+import { useRef , useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
-
-
 
 interface ThreejsRenderingProps {
   texture?: string;
@@ -29,6 +27,7 @@ function ThreejsRendering({
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
   const backgroundColor = "purple";
+  const originalCameraPosition = 20;
 
 
   useEffect(() => {
@@ -36,37 +35,42 @@ function ThreejsRendering({
       return;
     }
 
-    cameraControllerRef.current.setLookAt(
-      0, 0, 35,
-      0,0, 0,
-      false
-    );
+    cameraControllerRef.current.setTarget(-1000,0,0, false);
+    cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
+
     setTimeout(() => {
       recenter();
     }, 1000);
-  },[texture, widthTexture, heightTexture]);
+
+  },[texture, widthTexture, heightTexture, cameraControllerRef]);
+
 
   async function recenter() {
     if(!frameRef.current || !cameraControllerRef.current) {
       return;
     }
 
-    await cameraControllerRef.current.setLookAt(
-      0, 0, 35,
-      0,0, 0,
-      false
-    );
+    await cameraControllerRef.current.setTarget(-1000,0,0, false);
+    await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
+    await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
 
+    const position = cameraControllerRef.current._camera.position
+    await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
 
+    await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
+
+    await cameraControllerRef.current.setTarget(0,0,0,false)
     await cameraControllerRef.current.fitToBox(frameRef.current, true,
-      { paddingLeft: 1, paddingRight: 1, paddingBottom: 1, paddingTop: 1 }
+      { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
     );
   }
-  
+
+
+
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [0, 0, 35], fov: 75, far: 1000 }}
+        camera={{ position: [10, 2, originalCameraPosition], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -76,7 +80,8 @@ function ThreejsRendering({
         <ambientLight intensity={0.30} />
         <CameraControls
           makeDefault
-          smoothTime={0.50}
+          smoothTime={0.25}
+          restThreshold={0.1}
           ref={cameraControllerRef}
         />
         <Stage environment={null} adjustCamera={false} shadows="contact">
@@ -94,7 +99,30 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
-        <MetroHallway position={[0,0,12.5]} width={6} depth={50} height={4} />
+
+        <MetroHallway
+          position={[0,0,2.4]}
+          width={6}
+          depth={30}
+          height={4}
+          hideFaces={["front"]}
+        />
+        <MetroHallway
+          position={[8,0,20.4]}
+          width={6}
+          depth={10}
+          height={4}
+          rotation={[0, Math.PI/2, 0]}
+          hideFaces={["back"]}
+        />
+        <MetroHallway
+          position={[0,0,20.4]}
+          width={6}
+          depth={6}
+          height={4}
+          hideFaces={["right", "back"]}
+        />
+
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
