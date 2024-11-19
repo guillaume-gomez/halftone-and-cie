@@ -113,7 +113,7 @@ function ThreejsRendering({
           depth={10}
           height={4}
           rotation={[0, Math.PI/2, 0]}
-          hideFaces={[ "back",]}
+          hideFaces={["back"]}
         />
         <MetroHallway
           position={[0,0,20.4]}
