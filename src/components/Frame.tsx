@@ -75,7 +75,7 @@ const Frame = forwardRef<{}, FrameProps>(({
           anchorY="bottom"
           anchorX="center"
           lineHeight={0.8}
-          position={[0, -(0.5*heightTexture/widthTexture) - padding/4, 0.16]}>
+          position={[0, -(0.5*heightTexture/widthTexture) - padding/4, hasWindow ? 0.18 : 0.16]}>
           You're better than ads ™
         </Text>
       </group>
