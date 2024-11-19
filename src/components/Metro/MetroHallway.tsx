@@ -4,6 +4,8 @@ import MetroFloor from "./MetroFloor";
 import { useHelper } from '@react-three/drei';
 import { useRef } from "react";
 import { SpotLightHelper } from "three";
+import PanelFrame from "../PanelFrame";
+
 
 
 
@@ -74,6 +76,7 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
           height={height}
           depth={depth}
         />
+        {/*<PanelFrame position={[0,0,0.5]} ratio={1} />*/}
     </group>
   );
 }
