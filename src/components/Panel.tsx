@@ -6,10 +6,12 @@ import { FrontSide } from "three";
 interface PanelProps {
   path: string
   position?: [number, number, number]
+  rotation?: [number, number, number]
 }
 
 function Panel({
   position = [0,0,0],
+  rotation = [0,0,0],
   path
 }: PanelProps) {
   const [texture] = useLoader(TextureLoader, [
@@ -21,14 +23,14 @@ function Panel({
   if(!texture) {
     return <></>;
   }
-
   
   return (
     <mesh
       position={position as any}
+      rotation={rotation as any}
     >
       <planeGeometry args={[imageRatio, 1]} />
-      <meshStandardMaterial map={texture} side={FrontSide} />
+      <meshBasicMaterial map={texture} />
     </mesh>
   )
 }

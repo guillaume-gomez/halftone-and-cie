@@ -5,6 +5,7 @@ import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+import Panel from "./Panel";
 
 
 
@@ -117,6 +118,11 @@ function ThreejsRendering({
           depth={6}
           height={4}
           hideFaces={["right", "back"]}
+        />
+        <Panel
+          path="paris-metro-map.png"
+          position={[-2.93,1.75,20]}
+          rotation={[0,Math.PI/2,0]}
         />
 
         <Stats showPanel={0} className="stats"/>
