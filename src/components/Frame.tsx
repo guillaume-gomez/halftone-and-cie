@@ -4,6 +4,7 @@ import { Text } from '@react-three/drei';
 
 interface FrameProps {
   position: [number, number, number];
+  rotation?: [number, number, number];
   children: ReactNode;
   widthTexture: number;
   heightTexture: number;
@@ -13,6 +14,7 @@ interface FrameProps {
 const Frame = forwardRef<{}, FrameProps>(({
     children,
     position,
+    rotation=[0,0,0],
     widthTexture,
     heightTexture,
     padding = 0.5
@@ -22,6 +24,7 @@ const Frame = forwardRef<{}, FrameProps>(({
   return (
     <mesh
       position={position as any}
+      rotation={rotation as any}
       ref={ref}
     >
       <boxGeometry args={[1 + padding, heightTexture/widthTexture + padding, 0.1]} />

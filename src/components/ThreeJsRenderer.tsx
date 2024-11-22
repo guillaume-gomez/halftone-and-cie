@@ -86,7 +86,7 @@ function ThreejsRendering({
         />
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
-            position={[0,1, -25]}
+            position={[0,1.5, -25]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
@@ -99,6 +99,23 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
+
+
+        {[5,0,-5].map(zPosition =>
+            <Frame
+              rotation={[0,Math.PI/2,0]}
+              position={[-2.9,1.5,zPosition]}
+              widthTexture={widthTexture}
+              heightTexture={heightTexture}
+            >
+              <Ad
+                base64Texture={texture}
+                widthTexture={widthTexture}
+                heightTexture={heightTexture}
+              />
+            </Frame>
+          )
+        }
 
         <MetroHallway
           position={[0,0,2.4]}
