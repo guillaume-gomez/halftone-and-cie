@@ -32,7 +32,7 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
           return (
             <LightBulb
               key={z}
-              position={[0, 3.25, z]}
+              position={[0, 3.45, z]}
             />);
         })
 
