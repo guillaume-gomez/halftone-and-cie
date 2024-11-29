@@ -29,7 +29,7 @@ function Ad({
     <mesh
       position={position as any}
     >
-      <planeGeometry args={[1, heightTexture/widthTexture]} />
+      <boxGeometry args={[1, heightTexture/widthTexture, 0.2]} />
       <meshStandardMaterial map={texture} side={FrontSide} />
     </mesh>
   )
