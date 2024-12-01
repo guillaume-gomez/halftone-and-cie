@@ -11,7 +11,7 @@ function CustomSettingsCard({ children } : CustomSettingsCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   return (
     <CardBase
-      className="border-neutral"
+      className="border-neutral custom-shadow"
       bodyClassName={"px-2 pt-2 py-0"}
       title={
         <div className="flex flex-row items-center justify-between">

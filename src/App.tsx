@@ -180,7 +180,7 @@ function App() {
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
               <button
-                className="btn-custom btn btn-secondary w-full text-xl custom-button"
+                className="custom-shadow btn btn-secondary w-full text-xl"
                 onClick={generateButton}
               >
                 Generate !
