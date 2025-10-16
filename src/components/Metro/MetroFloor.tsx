@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { TextureLoader } from 'three';
 import { useLoader } from '@react-three/fiber';
 
 import { MeshStandardMaterial, BoxGeometry } from 'three';
@@ -7,7 +7,7 @@ import { MeshStandardMaterial, BoxGeometry } from 'three';
 interface MetroFloorProps {
   position: [number, number, number];
   width: number;
-  height: number;
+  depth: number;
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
@@ -24,7 +24,7 @@ function generateCeilParams(width: number, height: number, depth: number) {
 }
 
 
-function MetroFloor({ position, depth, width, height }: MetroFloorProps) {
+function MetroFloor({ position, depth, width }: MetroFloorProps) {
   const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Concrete_019_SD/Concrete_019_BaseColor.jpg',
     'Concrete_019_SD/Concrete_019_Height.png',

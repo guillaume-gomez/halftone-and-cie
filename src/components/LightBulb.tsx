@@ -1,7 +1,4 @@
-import { useRef } from "react";
-import { Gltf, useHelper } from '@react-three/drei';
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { Gltf } from '@react-three/drei';
 
 interface LightBulbProps {
   position?: [number, number, number]

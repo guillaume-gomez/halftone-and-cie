@@ -1,9 +1,8 @@
 import MetroWall, { FaceType } from "./MetroWall";
 import MetroCeil from "./MetroCeil";
 import MetroFloor from "./MetroFloor";
-import { useHelper } from '@react-three/drei';
-import { useRef } from "react";
-import { SpotLightHelper } from "three";
+//import { useHelper } from '@react-three/drei';
+//import { SpotLightHelper } from "three";
 import LightBulb from "../LightBulb";
 
 
@@ -54,7 +53,6 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
         <MetroFloor
           position={[0,0,0]}
           width={width}
-          height={height}
           depth={depth}
         />
     </group>

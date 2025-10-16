@@ -1,7 +1,6 @@
-import { useCallback } from "react";
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useMemo } from "react";
 import { useLoader } from '@react-three/fiber';
-import { MeshStandardMaterial, BoxGeometry } from 'three';
+import { MeshStandardMaterial, BoxGeometry, TextureLoader } from 'three';
 
 export type FaceType = "front" | "back" | "left" | "right";
 
@@ -35,7 +34,7 @@ function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWall
     'Subway_Tiles_002_SD/Subway_Tiles_002_ambientOcclusion.jpg',
   ]);
 
-  const material = useCallback(
+  const material : MeshStandardMaterial = useMemo(() =>
     new MeshStandardMaterial({
       displacementScale: 0,
       map: aoMap,

@@ -1,6 +1,5 @@
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
-import { FrontSide } from "three";
+import { FrontSide, TextureLoader } from "three";
 
 interface AdProps {
   base64Texture: string;

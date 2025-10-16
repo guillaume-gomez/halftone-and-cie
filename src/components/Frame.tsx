@@ -1,9 +1,6 @@
 import { forwardRef, ReactNode, useRef } from 'react';
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
-import { useLoader } from '@react-three/fiber';
 import { Text, useHelper } from '@react-three/drei';
 import { MeshPhysicalMaterial } from "three";
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 interface FrameProps {
@@ -12,8 +9,8 @@ interface FrameProps {
   widthTexture: number;
   heightTexture: number;
   padding? : number;
-  hasBackLight?: number;
-  hasWindow?: number;
+  hasBackLight?: boolean;
+  hasWindow?: boolean;
 }
 
 const materialFrame = new MeshPhysicalMaterial({
@@ -31,14 +28,14 @@ const Frame = forwardRef<{}, FrameProps>(({
   }: FrameProps,
   ref
   ) => {
-  const light = useRef();
+  const light = useRef<any>();
   useHelper(light, RectAreaLightHelper, 'green');
 
 
   return (
     <group
       position={position as any}
-      ref={ref}
+      ref={ref as any}
       castShadow
 
     >
