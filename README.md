@@ -14,3 +14,5 @@ font : https://www.dafont.com/fr/playfulist.font
 
 https://poly.pizza/m/b8WqiJ--0Dy -> train
 https://poly.pizza/m/f2ZQl-lX0gM -> train station
+https://poly.pizza/m/0OKxctiaBw --> connector
+https://poly.pizza/m/7ssfH3zzjuk --> rails
