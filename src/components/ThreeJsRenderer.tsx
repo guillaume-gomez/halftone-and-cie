@@ -75,6 +75,7 @@ function ThreejsRendering({
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
         style={{width, height}}
+        className={"hover:cursor-grab"}
       >
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
