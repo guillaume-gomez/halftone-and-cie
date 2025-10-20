@@ -107,6 +107,11 @@ function ThreejsRendering({
         <Gltf src={`${BASE_URL}/train.glb`} scale={0.005} position={[0,0,0]}  rotation={[ 0, -Math.PI/28, 0]}/>
         <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={4} position={[0,3,0]}  rotation={[ 0, 0, 0]}/>
         <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[34,-6,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
         {/*<MetroHallway
           position={[0,0,2.4]}
           width={6}
