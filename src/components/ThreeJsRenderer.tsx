@@ -1,10 +1,12 @@
 import { useRef , useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport, Gltf } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+
+const { BASE_URL, MODE } = import.meta.env;
 
 interface ThreejsRenderingProps {
   texture?: string;
@@ -35,34 +37,34 @@ function ThreejsRendering({
       return;
     }
 
-    cameraControllerRef.current.setTarget(-1000,0,0, false);
-    cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
+    // cameraControllerRef.current.setTarget(-1000,0,0, false);
+    // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
 
-    setTimeout(() => {
-      recenter();
-    }, 1000);
+    // setTimeout(() => {
+    //   recenter();
+    //}, 1000);
 
   },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
 
   async function recenter() {
-    if(!frameRef.current || !cameraControllerRef.current) {
-      return;
-    }
+    // if(!frameRef.current || !cameraControllerRef.current) {
+    //   return;
+    // }
 
-    await cameraControllerRef.current.setTarget(-1000,0,0, false);
-    await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
-    await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
+    // await cameraControllerRef.current.setTarget(-1000,0,0, false);
+    // await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
+    // await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
 
-    const position = cameraControllerRef.current._camera.position
-    await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
+    // const position = cameraControllerRef.current._camera.position
+    // await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
 
-    await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
+    // await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
 
-    await cameraControllerRef.current.setTarget(0,0,0,false)
-    await cameraControllerRef.current.fitToBox(frameRef.current, true,
-      { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
-    );
+    // await cameraControllerRef.current.setTarget(0,0,0,false)
+    // await cameraControllerRef.current.fitToBox(frameRef.current, true,
+    //   { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
+    // );
   }
 
 
@@ -102,7 +104,10 @@ function ThreejsRendering({
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         </Stage>
 
-        <MetroHallway
+        <Gltf src={`${BASE_URL}/train.glb`} scale={0.005} position={[0,0,0]}  rotation={[ 0, -Math.PI/28, 0]}/>
+        <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={4} position={[0,3,0]}  rotation={[ 0, 0, 0]}/>
+        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
+        {/*<MetroHallway
           position={[0,0,2.4]}
           width={6}
           depth={30}
@@ -123,7 +128,7 @@ function ThreejsRendering({
           depth={6}
           height={4}
           hideFaces={["right", "back"]}
-        />
+        />*/}
 
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
