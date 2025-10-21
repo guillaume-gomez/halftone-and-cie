@@ -1,6 +1,15 @@
 import { useRef , useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport, Gltf } from '@react-three/drei';
+import { 
+  CameraControls,
+  PerspectiveCamera,
+  Stage,
+  Grid,
+  Stats,
+  GizmoHelper,
+  GizmoViewport,
+  Gltf
+} from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import { 
   animated, 
@@ -21,6 +30,7 @@ interface ThreejsRenderingProps {
 const exampleTexture="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=";
 
 const AnimatedGltf = animated(Gltf);
+const AnimatedCamera = animated(PerspectiveCamera);
 
 function ThreejsRendering({
     texture = exampleTexture,
@@ -31,22 +41,35 @@ function ThreejsRendering({
   const height = 750;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
-  const cameraControllerRef = useRef<CameraControls|null>(null);
+  const cameraControllerRef = useRef<PerspectiveCamera|null>(null);
   const frameRef = useRef(null);
   const backgroundColor = "purple";
   const originalCameraPosition = 20;
 
   const propsTrain = useSpring({
-    from: { x: 70 },
+    from: { x: -70 },
     to: [
-      { x: 10 },
-      { x: 5 },
-      { x: 2 },
+      { x: -10 },
+      { x: -5 },
+      { x: 4.55 },
     ],
     config: {
-      duration: 1000,
+      duration: 2000,
     },
     loop: true
+  });
+
+  const propsCamera = useSpring({
+    from: { x: -70 },
+    to: [
+      { x: -10 },
+      { x: -2 },
+      { x: 0.75 },
+    ],
+    config: {
+      duration: 2000,
+    },
+    loop: false
   });
 
 
@@ -90,7 +113,7 @@ function ThreejsRendering({
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [10, 2, originalCameraPosition], fov: 75, far: 1000 }}
+        camera={{ position: [10, 2, originalCameraPosition], target:[0,10,-10], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -98,15 +121,18 @@ function ThreejsRendering({
       >
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
-        <CameraControls
+        <AnimatedCamera
           makeDefault
-          smoothTime={0.25}
-          restThreshold={0.1}
           ref={cameraControllerRef}
+          position-x={propsCamera.x}
+          position-y={4}
+          position-z={-1.5}
+
         />
+        {/*<CameraControls makeDefault />*/}
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
-            position={[0,1, -25]}
+            position={[0.95,3.5, -16]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
@@ -120,23 +146,26 @@ function ThreejsRendering({
             />
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
-        </Stage>
 
-        <AnimatedGltf 
-          src={`${BASE_URL}/train.glb`}
-          scale={0.005}
-          position-x={propsTrain.x}
-          position-y={0}
-          position-z={0}
-          rotation={[ 0, -Math.PI/28, 0]}
-        />
-        <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={4} position={[0,3,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[34,-6,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
-        <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
+
+          <group rotation={[0, Math.PI, 0]}>
+            <AnimatedGltf 
+            src={`${BASE_URL}/train.glb`}
+            scale={0.005}
+            position-x={propsTrain.x}
+            position-y={0}
+            position-z={.5}
+            rotation={[ 0, -Math.PI/28, 0]}
+          />
+          <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[34,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
+          </group>
+        </Stage>
         {/*<MetroHallway
           position={[0,0,2.4]}
           width={6}
