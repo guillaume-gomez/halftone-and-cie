@@ -47,7 +47,6 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
         <MetroCeil
           position={[0,height,0]}
           width={width}
-          height={height}
           depth={depth}
         />
         <MetroFloor
