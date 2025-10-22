@@ -8,7 +8,8 @@ import {
   Stats,
   GizmoHelper,
   GizmoViewport,
-  Gltf
+  Gltf,
+  Sky
 } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import { 
@@ -47,10 +48,10 @@ function ThreejsRendering({
   const originalCameraPosition = 20;
 
   const propsTrain = useSpring({
-    from: { x: -70 },
+    from: { x: 70 },
     to: [
-      { x: -10 },
-      { x: -5 },
+      { x: 10 },
+      { x: 5 },
       { x: 4.55 },
     ],
     config: {
@@ -60,16 +61,16 @@ function ThreejsRendering({
   });
 
   const propsCamera = useSpring({
-    from: { x: -70 },
+    from: { x: 70 - 6 },
     to: [
-      { x: -10 },
-      { x: -2 },
-      { x: 0.75 },
+      { x: 10 - 6 },
+      { x: 5 - 6 },
+      { x: 4.55 - 6 },
     ],
     config: {
       duration: 2000,
     },
-    loop: false
+    loop: true
   });
 
 
@@ -121,18 +122,10 @@ function ThreejsRendering({
       >
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
-        <AnimatedCamera
-          makeDefault
-          ref={cameraControllerRef}
-          position-x={propsCamera.x}
-          position-y={4}
-          position-z={-1.5}
-
-        />
-        {/*<CameraControls makeDefault />*/}
+        <Sky distance={4500} sunPosition={[0, 10, 0]} inclination={0} azimuth={0.25} />
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
-            position={[0.95,3.5, -16]}
+            position={[0.95,3.5, -8.5]}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}
@@ -149,10 +142,25 @@ function ThreejsRendering({
 
 
           <group rotation={[0, Math.PI, 0]}>
+            <AnimatedCamera
+              makeDefault
+              ref={cameraControllerRef}
+              position-x={propsCamera.x}
+              position-y={3.5}
+              position-z={-1.5}
+              rotation={[0, Math.PI, 0]}
+            />
+            {/*<>
+              <CameraControls makeDefault />
+              <animated.mesh position-x={4.55 - 6} position-y={4} position-z={-1.5}>
+                <meshStandardMaterial color="blue" />
+                <boxGeometry args={[1,1,1]} />
+              </animated.mesh>
+            </>*/}
             <AnimatedGltf 
             src={`${BASE_URL}/train.glb`}
             scale={0.005}
-            position-x={propsTrain.x}
+            position-x={4.55}
             position-y={0}
             position-z={.5}
             rotation={[ 0, -Math.PI/28, 0]}
