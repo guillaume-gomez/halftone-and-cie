@@ -53,8 +53,7 @@ function ThreejsRendering({
     await cameraControllerRef.current.setTarget(-1000,0,0, false);
     await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
     await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
-
-    const position = cameraControllerRef.current._camera.position
+    const position = cameraControllerRef.current.camera.position
     await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
 
     await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
