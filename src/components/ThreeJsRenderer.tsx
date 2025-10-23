@@ -51,26 +51,28 @@ function ThreejsRendering({
     from: { x: 70 },
     to: [
       { x: 10 },
-      { x: 5 },
-      { x: 4.55 },
+      { x: 8 },
+      { x: 7 },
+      { x: 5.5 },
     ],
     config: {
       duration: 2000,
     },
-    loop: true
+    loop: false
   });
 
   const propsCamera = useSpring({
     from: { x: 70 - 6 },
     to: [
       { x: 10 - 6 },
-      { x: 5 - 6 },
-      { x: 4.55 - 6 },
+      { x: 8 - 6 },
+      { x: 7 - 6 },
+      { x: 5.5 - 6 },
     ],
     config: {
       duration: 2000,
     },
-    loop: true
+    loop: false
   });
 
 
@@ -146,23 +148,23 @@ function ThreejsRendering({
               makeDefault
               ref={cameraControllerRef}
               position-x={propsCamera.x}
-              position-y={3.5}
-              position-z={-1.5}
+              position-y={2}
+              position-z={2.5}
               rotation={[0, Math.PI, 0]}
             />
             {/*<>
               <CameraControls makeDefault />
-              <animated.mesh position-x={4.55 - 6} position-y={4} position-z={-1.5}>
+              <animated.mesh position-x={propsCamera.x} position-y={2} position-z={2.5}>
                 <meshStandardMaterial color="blue" />
                 <boxGeometry args={[1,1,1]} />
               </animated.mesh>
             </>*/}
             <AnimatedGltf 
             src={`${BASE_URL}/train.glb`}
-            scale={0.005}
-            position-x={4.55}
+            scale={0.0075}
+            position-x={propsTrain.x}
             position-y={0}
-            position-z={.5}
+            position-z={-0.5}
             rotation={[ 0, -Math.PI/28, 0]}
           />
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
@@ -174,29 +176,7 @@ function ThreejsRendering({
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
           </group>
         </Stage>
-        {/*<MetroHallway
-          position={[0,0,2.4]}
-          width={6}
-          depth={30}
-          height={4}
-          hideFaces={["front"]}
-        />
-        <MetroHallway
-          position={[8,0,20.4]}
-          width={6}
-          depth={10}
-          height={4}
-          rotation={[0, Math.PI/2, 0]}
-          hideFaces={["back"]}
-        />
-        <MetroHallway
-          position={[0,0,20.4]}
-          width={6}
-          depth={6}
-          height={4}
-          hideFaces={["right", "back"]}
-        />*/}
-
+        
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
