@@ -62,18 +62,32 @@ function ThreejsRendering({
   });
 
   const propsCamera = useSpring({
-    from: { x: 70 - 6 },
+    from: { x: 70 - 6, z: 2.5, y: 2 },
     to: [
-      { x: 10 - 6 },
-      { x: 8 - 6 },
-      { x: 7 - 6 },
-      { x: 5.5 - 6 },
+      { x: 10 - 6, },
+      { x: 8 - 6,  },
+      { x: 7 - 6,  },
+      { x: 5.5 - 6, },
     ],
     config: {
       duration: 2000,
     },
     loop: false
   });
+
+  const propsCameraMoveForward = useSpring({
+    from: { z: 2.5, y: 2 },
+    to: [
+      {z: 2.5, y: 3 },
+      { z: 2.5, y: 4 },
+      { z: 2.5, y: 5 },
+      {z: 2.5, y: 6 },
+    ],
+    config: {
+      duration: 2000,
+    },
+    loop: false
+  })
 
 
   useEffect(() => {
@@ -148,8 +162,8 @@ function ThreejsRendering({
               makeDefault
               ref={cameraControllerRef}
               position-x={propsCamera.x}
-              position-y={2}
-              position-z={2.5}
+              position-y={propsCamera.y}
+              position-z={propsCamera.z}
               rotation={[0, Math.PI, 0]}
             />
             {/*<>
