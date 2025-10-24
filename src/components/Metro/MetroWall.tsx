@@ -1,22 +1,23 @@
-import { useCallback } from "react";
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useMemo } from "react";
 import { useLoader } from '@react-three/fiber';
+import { MeshStandardMaterial, BoxGeometry, TextureLoader } from 'three';
 
-import { MeshStandardMaterial, BoxGeometry } from 'three';
+export type FaceType = "front" | "back" | "left" | "right";
 
 interface MetroWallProps {
-  position: [number, number, number];
+  position: [x: number, y: number, z: number];
   width: number;
   height: number;
   depth: number;
+  hideFaces?: FaceType[];
 }
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
 
-function generateWallParams(width: number, height: number, depth: number) {
+function generateWallParams(width: number, height: number, depth: number): Array<[x: number, y: number, z: number]> {
   const coordinates =  Array.from(Array(width)).map((_x, x) => {
     return Array.from(Array(height)).map((_y, y) => {
-      return [x,y, depth];
+      return [x,y, depth] as [x: number, y: number, z: number];
     });
   });
 
@@ -25,7 +26,7 @@ function generateWallParams(width: number, height: number, depth: number) {
 
 
 
-function MetroWall({ position, width, height, depth }: MetroWallProps) {
+function MetroWall({ position, width, height, depth, hideFaces = [] }: MetroWallProps) {
   const [displacementMap, normalMap, roughnessMap, aoMap] = useLoader(TextureLoader, [
     'Subway_Tiles_002_SD/Subway_Tiles_002_height.png',
     'Subway_Tiles_002_SD/Subway_Tiles_002_normal.jpg',
@@ -33,7 +34,7 @@ function MetroWall({ position, width, height, depth }: MetroWallProps) {
     'Subway_Tiles_002_SD/Subway_Tiles_002_ambientOcclusion.jpg',
   ]);
 
-  const material = useCallback(
+  const material : MeshStandardMaterial = useMemo(() =>
     new MeshStandardMaterial({
       displacementScale: 0,
       map: aoMap,
@@ -91,35 +92,44 @@ function MetroWall({ position, width, height, depth }: MetroWallProps) {
       );
   });
 
-
-
-
   return (
     <group position={position as any}>
-      <group
-        rotation={[0,Math.PI/2,0]}
-        position={[-width/2,0,depth/2-0.5]}
-      >
-        {wallsLeft}
-      </group>
-      <group
-        rotation={[0,Math.PI/2,0]}
-        position={[width/2,0,depth/2 -0.5]}
-      >
-        {wallsRight}
-      </group>
-      <group
-        rotation={[0,0,0]}
-        position={[-width/2 + 0.5,0,-depth/2]}
-      >
-        {wallsForward}
-      </group>
-      <group
-        rotation={[0,0,0]}
-        position={[-width/2 + 0.5,0,-depth - depth/2]}
-      >
-        {wallsBackward}
-      </group>
+      {
+        !hideFaces.includes("left") &&
+        <group
+          rotation={[0,Math.PI/2,0]}
+          position={[-width/2,0,depth/2-0.5]}
+        >
+          {wallsLeft}
+        </group>
+      }
+      {
+        !hideFaces.includes("right") &&
+        <group
+          rotation={[0,Math.PI/2,0]}
+          position={[width/2,0,depth/2 -0.5]}
+        >
+          {wallsRight}
+        </group>
+      }
+      {
+        !hideFaces.includes("front") &&
+        <group
+          rotation={[0,0,0]}
+          position={[-width/2 + 0.5,0,-depth/2]}
+        >
+          {wallsForward}
+        </group>
+      }
+      {
+        !hideFaces.includes("back") &&
+        <group
+          rotation={[0,0,0]}
+          position={[-width/2 + 0.5,0,-depth - depth/2]}
+        >
+          {wallsBackward}
+        </group>
+      }
     </group>
   );
 

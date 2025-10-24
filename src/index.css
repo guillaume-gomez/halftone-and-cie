@@ -30,8 +30,13 @@
 .custom-shadow {
   box-shadow: 6px 7px 2px 0px rgba(0, 0, 0, 1.0);
   border: 2px solid black;
+  transition: box-shadow .15s linear, transform .15s linear;
 }
 
 .custom-shadow:hover {
   border: 2px solid black;
+  box-shadow: 4px 4px 0 0 #202020;
+  text-decoration: none;
+  transform: translate(2px, 2px);
+  transform-origin: center;
 }
