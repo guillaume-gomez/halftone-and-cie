@@ -135,6 +135,7 @@ function ThreejsRendering({
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
         style={{width, height}}
+        className={"hover:cursor-grab"}
       >
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
@@ -142,6 +143,7 @@ function ThreejsRendering({
         <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
             position={[0.95,3.5, -8.5]}
+            scale={1.5}
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             ref={frameRef}

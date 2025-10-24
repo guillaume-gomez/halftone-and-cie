@@ -5,7 +5,7 @@ import { MeshStandardMaterial, BoxGeometry, TextureLoader } from 'three';
 export type FaceType = "front" | "back" | "left" | "right";
 
 interface MetroWallProps {
-  position: [number, number, number];
+  position: [x: number, y: number, z: number];
   width: number;
   height: number;
   depth: number;
@@ -14,10 +14,10 @@ interface MetroWallProps {
 
 const boxGeometry = new BoxGeometry(1.0, 1.0 , 0.1);
 
-function generateWallParams(width: number, height: number, depth: number) {
+function generateWallParams(width: number, height: number, depth: number): Array<[x: number, y: number, z: number]> {
   const coordinates =  Array.from(Array(width)).map((_x, x) => {
     return Array.from(Array(height)).map((_y, y) => {
-      return [x,y, depth];
+      return [x,y, depth] as [x: number, y: number, z: number];
     });
   });
 
