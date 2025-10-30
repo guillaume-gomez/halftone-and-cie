@@ -96,26 +96,42 @@ function ThreejsRendering({
 
 
   useEffect(() => {
+    apiTrain.start({
+      from: { x: 70 },
+      to: [
+        { x: 10 },
+        { x: 7 },
+        { x: 5.5 },
+      ],
+    });
     apiCamera.start({
       from: { x: 70 - 6, z: 2.5, y: 2 },
-        to: [
+      to: [
           { x: 10 - 6, },
           { x: 7 - 6,  },
           { x: 5.5 - 6, },
-        ],
-        config: {
-          duration: 2000,
-        },
-        loop: false
+      ],
+      config: {
+        duration: 2000,
+      },
+      loop: false,
+      onRest: () => {
+        apiCamera.start({
+          from: { y: 2, z: 2.5 },
+          to: [
+            { y: 3.5, z: 2.5 },
+            { y: 3.5, z: 3 },
+            { y: 3, z: 3.2 },
+            { y: 3.5, z: 4 },
+            { y: 3, z: 5, x: -1 }
+          ],
+          config: {
+            duration: 250
+          },
+          loop:false
+        })
+      }
     });
-    apiTrain.start({
-        from: { x: 70 },
-        to: [
-          { x: 10 },
-          { x: 7 },
-          { x: 5.5 },
-        ],
-      });
 
 
     // cameraControllerRef.current.setTarget(-1000,0,0, false);
