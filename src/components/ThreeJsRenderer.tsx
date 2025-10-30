@@ -47,33 +47,38 @@ function ThreejsRendering({
   const backgroundColor = "purple";
   const originalCameraPosition = 20;
 
-  const propsTrain = useSpring({
-    from: { x: 70 },
-    to: [
-      { x: 10 },
-      { x: 8 },
-      { x: 7 },
-      { x: 5.5 },
-    ],
-    config: {
-      duration: 2000,
-    },
-    loop: false
-  });
+  const [propsTrain, apiTrain] = useSpring(
+    () => (
+      {
+        from: { x: 70 },
+        to: [
+          { x: 10 },
+          { x: 7 },
+          { x: 5.5 },
+        ],
+        config: {
+          duration: 2000,
+        },
+        loop: false
+      }),
+      []
+    );
 
-  const propsCamera = useSpring({
-    from: { x: 70 - 6, z: 2.5, y: 2 },
-    to: [
-      { x: 10 - 6, },
-      { x: 8 - 6,  },
-      { x: 7 - 6,  },
-      { x: 5.5 - 6, },
-    ],
-    config: {
-      duration: 2000,
-    },
-    loop: false
-  });
+  const [propsCamera, apiCamera] = useSpring(
+     () => ({
+        from: { x: 70 - 6, z: 2.5, y: 2 },
+        to: [
+          { x: 10 - 6, },
+          { x: 7 - 6,  },
+          { x: 5.5 - 6, },
+        ],
+        config: {
+          duration: 2000,
+        },
+        loop: false
+      }),
+    []
+  );
 
   const propsCameraMoveForward = useSpring({
     from: { z: 2.5, y: 2 },
@@ -91,9 +96,27 @@ function ThreejsRendering({
 
 
   useEffect(() => {
-    if(!cameraControllerRef.current) {
-      return;
-    }
+    apiCamera.start({
+      from: { x: 70 - 6, z: 2.5, y: 2 },
+        to: [
+          { x: 10 - 6, },
+          { x: 7 - 6,  },
+          { x: 5.5 - 6, },
+        ],
+        config: {
+          duration: 2000,
+        },
+        loop: false
+    });
+    apiTrain.start({
+        from: { x: 70 },
+        to: [
+          { x: 10 },
+          { x: 7 },
+          { x: 5.5 },
+        ],
+      });
+
 
     // cameraControllerRef.current.setTarget(-1000,0,0, false);
     // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
