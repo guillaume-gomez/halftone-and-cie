@@ -53,8 +53,8 @@ function ThreejsRendering({
         from: { x: 70 },
         to: [
           { x: 10 },
-          { x: 7 },
-          { x: 5.5 },
+          { x: 8 },
+          { x: 7.55 },
         ],
         config: {
           duration: 2000,
@@ -66,11 +66,11 @@ function ThreejsRendering({
 
   const [propsCamera, apiCamera] = useSpring(
      () => ({
-        from: { x: 70 - 6, z: 2.5, y: 2 },
+        from: { x: 70 - 8, z: 2.5, y: 2.2 },
         to: [
-          { x: 10 - 6, },
-          { x: 7 - 6,  },
-          { x: 5.5 - 6, },
+            { x: 10 - 8, },
+            { x: 8 - 8,  },
+            { x: 7.55 - 8, },
         ],
         config: {
           duration: 2000,
@@ -84,8 +84,8 @@ function ThreejsRendering({
     from: { z: 2.5, y: 2 },
     to: [
       {z: 2.5, y: 3 },
-      { z: 2.5, y: 4 },
-      { z: 2.5, y: 5 },
+      {z: 2.5, y: 4 },
+      {z: 2.5, y: 5 },
       {z: 2.5, y: 6 },
     ],
     config: {
@@ -100,16 +100,16 @@ function ThreejsRendering({
       from: { x: 70 },
       to: [
         { x: 10 },
-        { x: 7 },
-        { x: 5.5 },
+        { x: 8 },
+        { x: 7.55 },
       ],
     });
     apiCamera.start({
-      from: { x: 70 - 6, z: 2.5, y: 2 },
+      from: { x: 70 - 8, z: 2.5, y: 2.2 },
       to: [
-          { x: 10 - 6, },
-          { x: 7 - 6,  },
-          { x: 5.5 - 6, },
+          { x: 10 - 8, },
+          { x: 8 - 8,  },
+          { x: 7.55 - 8, },
       ],
       config: {
         duration: 2000,
@@ -119,17 +119,18 @@ function ThreejsRendering({
         apiCamera.start({
           from: { y: 2, z: 2.5 },
           to: [
-            { y: 3.5, z: 2.5 },
-            { y: 3.5, z: 3 },
-            { y: 3, z: 3.2 },
-            { y: 3.5, z: 4 },
-            { y: 3, z: 5, x: -1 }
+            { y: 2.3, z: 2.5 },
+            { y: 2.1, z: 3 },
+            { y: 2.2, z: 3.2 },
+            { y: 2.1, z: 4 },
+            { y: 2.3, z: 5 }
           ],
           config: {
             duration: 250
           },
           loop:false
         })
+        //cameraControllerRef.focus model
       }
     });
 
@@ -205,11 +206,12 @@ function ThreejsRendering({
               position-x={propsCamera.x}
               position-y={propsCamera.y}
               position-z={propsCamera.z}
+              position={[-0.5, 2, 1]}
               rotation={[0, Math.PI, 0]}
             />
             {/*<>
-              <CameraControls makeDefault />
-              <animated.mesh position-x={propsCamera.x} position-y={2} position-z={2.5}>
+              <CameraControls makeDefault canPan />
+              <animated.mesh position-x={propsCamera.x} position-y={propsCamera.y} position-z={propsCamera.z}>
                 <meshStandardMaterial color="blue" />
                 <boxGeometry args={[1,1,1]} />
               </animated.mesh>
@@ -220,6 +222,7 @@ function ThreejsRendering({
             position-x={propsTrain.x}
             position-y={0}
             position-z={-0.5}
+            //position={[7.55, 0, -0.5]}
             rotation={[ 0, -Math.PI/28, 0]}
           />
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
