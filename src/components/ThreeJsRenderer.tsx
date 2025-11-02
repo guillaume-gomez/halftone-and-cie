@@ -64,6 +64,22 @@ function ThreejsRendering({
       []
     );
 
+  // animation infinite in the tunnel
+  // const [propsTrain, apiTrain] = useSpring(
+  //   () => (
+  //     {
+  //       from: { x: 70 },
+  //       to: [
+  //         { x: 25 },
+  //       ],
+  //       config: {
+  //         duration: 2000,
+  //       },
+  //       loop: true
+  //     }),
+  //     []
+  //   );
+
   const [propsCamera, apiCamera] = useSpring(
      () => ({
         from: { x: 70 - 8, z: 2.5, y: 2.2 },
@@ -97,19 +113,34 @@ function ThreejsRendering({
 
   useEffect(() => {
     apiTrain.start({
-      from: { x: 70 },
+      from: { x: 7.55 },
       to: [
-        { x: 10 },
-        { x: 8 },
-        { x: 7.55 },
+        { x: -70 },
       ],
+      config: {
+        duration: 2000,
+      },
+      loop: false,
+      onRest: () => {
+        apiTrain.start({
+         from: { x: 70 },
+          to: [
+            { x: 10 },
+            { x: 8 },
+            { x: 7.55 },
+          ],
+          config: {
+            duration: 2000,
+          },
+          loop: false,
+        });
+      }
     });
+
     apiCamera.start({
-      from: { x: 70 - 8, z: 2.5, y: 2.2 },
+      from: { x: 7.55 - 8, y: 2, z: 2.5 },
       to: [
-          { x: 10 - 8, },
-          { x: 8 - 8,  },
-          { x: 7.55 - 8, },
+        { x: -70 -8, y: 2, z: 2.5 },
       ],
       config: {
         duration: 2000,
@@ -117,23 +148,36 @@ function ThreejsRendering({
       loop: false,
       onRest: () => {
         apiCamera.start({
-          from: { y: 2, z: 2.5 },
+          from: { x: 70 - 8, z: 2.5, y: 2.2 },
           to: [
-            { y: 2.3, z: 2.5 },
-            { y: 2.1, z: 3 },
-            { y: 2.2, z: 3.2 },
-            { y: 2.1, z: 4 },
-            { y: 2.3, z: 5 }
+              { x: 10 - 8, },
+              { x: 8 - 8,  },
+              { x: 7.55 - 8, },
           ],
           config: {
-            duration: 250
+            duration: 2000,
           },
-          loop:false
-        })
-        //cameraControllerRef.focus model
+          loop: false,
+          onRest: () => {
+            apiCamera.start({
+              from: { y: 2, z: 2.5 },
+              to: [
+                { y: 2.2, z: 2.5 },
+                { y: 2.1, z: 3, x: -0.5 },
+                { y: 2.2, z: 3.2, x: -1 },
+                { y: 2.1, z: 4, x: -1 },
+                { y: 2.8, z: 5, x: -1 },
+              ],
+              config: {
+                duration: 250
+              },
+              loop:false
+            })
+            //cameraControllerRef.focus model
+          }
+        });
       }
     });
-
 
     // cameraControllerRef.current.setTarget(-1000,0,0, false);
     // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
@@ -142,7 +186,7 @@ function ThreejsRendering({
     //   recenter();
     //}, 1000);
 
-  },[texture, widthTexture, heightTexture, cameraControllerRef]);
+   },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
 
   async function recenter() {
@@ -232,6 +276,14 @@ function ThreejsRendering({
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
+
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (1 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (2 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (3 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (4 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (5 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+
           </group>
         </Stage>
         
