@@ -12,7 +12,6 @@ interface TrainProps {
 
 function Train ({position} : TrainProps ) {
 	const gltf = useLoader(GLTFLoader, `${BASE_URL}/train.glb`);
-	console.log(position)
 	const [x, y, z] = position;
 
 	useEffect(() => {
