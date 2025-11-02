@@ -1,4 +1,5 @@
 import { useRef , useEffect } from 'react';
+import { DoubleSide } from "three";
 import { Canvas } from '@react-three/fiber';
 import { 
   CameraControls,
@@ -20,7 +21,7 @@ import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
 import Tunnel from "./Metro/Tunnel";
-
+import Train from "./Train";
 const { BASE_URL, MODE } = import.meta.env;
 
 interface ThreejsRenderingProps {
@@ -43,7 +44,7 @@ function ThreejsRendering({
   const height = 750;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
-  const cameraControllerRef = useRef<PerspectiveCamera|null>(null);
+  const cameraControllerRef = useRef<typeof PerspectiveCamera|null>(null);
   const frameRef = useRef(null);
   const backgroundColor = "purple";
   const originalCameraPosition = 20;
@@ -139,9 +140,9 @@ function ThreejsRendering({
     });
 
     apiCamera.start({
-      from: { x: 7.55 - 8, y: 2, z: 2.5 },
+      from: { x: 7.55 - 8, y: 2, z: 0.80 },
       to: [
-        { x: -70 -8, y: 2, z: 2.5 },
+        { x: -70 -8, y: 2, z: 0.80 },
       ],
       config: {
         duration: 2000,
@@ -149,7 +150,7 @@ function ThreejsRendering({
       loop: false,
       onRest: () => {
         apiCamera.start({
-          from: { x: 70 - 8, z: 2.5, y: 2.2 },
+          from: { x: 70 - 8, z: 0.80, y: 2.2 },
           to: [
               { x: 10 - 8, },
               { x: 8 - 8,  },
@@ -161,7 +162,7 @@ function ThreejsRendering({
           loop: false,
           onRest: () => {
             apiCamera.start({
-              from: { y: 2, z: 2.5 },
+              from: { y: 2, z: 0.80 },
               to: [
                 { y: 2.2, z: 2.5 },
                 { y: 2.1, z: 3, x: -0.5 },
@@ -209,8 +210,6 @@ function ThreejsRendering({
     //   { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
     // );
   }
-
-
 
   return (
     <div className="flex flex-col gap-5 w-full">
@@ -261,18 +260,9 @@ function ThreejsRendering({
                 <boxGeometry args={[1,1,1]} />
               </animated.mesh>
             </>*/}
-            <AnimatedGltf 
-            src={`${BASE_URL}/train.glb`}
-            scale={0.0075}
-            position-x={propsTrain.x}
-            position-y={0}
-            position-z={-0.5}
-            //position={[7.55, 0, -0.5]}
-            rotation={[ 0, -Math.PI/28, 0]}
-          />
           <Tunnel position={[70,-6,0]}/>
+          <Train position={[propsTrain.x, 0, -0.5]}></Train>
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
-          
           <Tunnel position={[-20, -6, 0]}/>
 
           </group>
