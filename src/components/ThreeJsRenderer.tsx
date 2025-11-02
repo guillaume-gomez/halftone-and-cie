@@ -19,6 +19,7 @@ import {
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+import Tunnel from "./Metro/Tunnel";
 
 const { BASE_URL, MODE } = import.meta.env;
 
@@ -269,20 +270,10 @@ function ThreejsRendering({
             //position={[7.55, 0, -0.5]}
             rotation={[ 0, -Math.PI/28, 0]}
           />
+          <Tunnel position={[70,-6,0]}/>
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[34,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
-
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (1 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (2 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (3 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (4 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (5 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          
+          <Tunnel position={[-20, -6, 0]}/>
 
           </group>
         </Stage>
