@@ -1,4 +1,5 @@
 import { useRef , useEffect } from 'react';
+import { DoubleSide } from "three";
 import { Canvas } from '@react-three/fiber';
 import { 
   CameraControls,
@@ -19,6 +20,7 @@ import {
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+import Train from "./Train";
 
 const { BASE_URL, MODE } = import.meta.env;
 
@@ -42,97 +44,86 @@ function ThreejsRendering({
   const height = 750;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
-  const cameraControllerRef = useRef<PerspectiveCamera|null>(null);
+  const cameraControllerRef = useRef<typeof PerspectiveCamera|null>(null);
   const frameRef = useRef(null);
   const backgroundColor = "purple";
   const originalCameraPosition = 20;
 
   const [propsTrain, apiTrain] = useSpring(
     () => (
-      {
-        from: { x: 70 },
-        to: [
-          { x: 10 },
-          { x: 7 },
-          { x: 5.5 },
-        ],
-        config: {
-          duration: 2000,
-        },
-        loop: false
-      }),
+      {}),
       []
     );
-
   const [propsCamera, apiCamera] = useSpring(
-     () => ({
-        from: { x: 70 - 6, z: 2.5, y: 2 },
-        to: [
-          { x: 10 - 6, },
-          { x: 7 - 6,  },
-          { x: 5.5 - 6, },
-        ],
-        config: {
-          duration: 2000,
-        },
-        loop: false
-      }),
+     () => ({}),
     []
   );
 
-  const propsCameraMoveForward = useSpring({
-    from: { z: 2.5, y: 2 },
-    to: [
-      {z: 2.5, y: 3 },
-      { z: 2.5, y: 4 },
-      { z: 2.5, y: 5 },
-      {z: 2.5, y: 6 },
-    ],
-    config: {
-      duration: 2000,
-    },
-    loop: false
-  })
-
-
   useEffect(() => {
     apiTrain.start({
-      from: { x: 70 },
+      from: { x: 7.55 },
       to: [
-        { x: 10 },
-        { x: 7 },
-        { x: 5.5 },
-      ],
-    });
-    apiCamera.start({
-      from: { x: 70 - 6, z: 2.5, y: 2 },
-      to: [
-          { x: 10 - 6, },
-          { x: 7 - 6,  },
-          { x: 5.5 - 6, },
+        { x: -70 },
       ],
       config: {
         duration: 2000,
       },
       loop: false,
       onRest: () => {
-        apiCamera.start({
-          from: { y: 2, z: 2.5 },
+        apiTrain.start({
+         from: { x: 70 },
           to: [
-            { y: 3.5, z: 2.5 },
-            { y: 3.5, z: 3 },
-            { y: 3, z: 3.2 },
-            { y: 3.5, z: 4 },
-            { y: 3, z: 5, x: -1 }
+            { x: 10 },
+            { x: 8 },
+            { x: 7.55 },
           ],
           config: {
-            duration: 250
+            duration: 2000,
           },
-          loop:false
-        })
+          loop: false,
+        });
       }
     });
 
+    apiCamera.start({
+      from: { x: -(7.55 - 7), y: 2, z: -2 },
+      to: [
+        { x: -(-70 -7), y: 2, z: -2 },
+      ],
+      config: {
+        duration: 2000,
+      },
+      loop: false,
+      onStart: () => {
+        cameraControllerRef.current.setTarget(0, 0, -10000, false);
+      },
+      onChange: ({value}, spring) => {
+        cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
+      },
+      onRest: () => {
+        apiCamera.start({
+          from: { x: -(70 - 7), z: -2, y: 2.2 },
+          to: [
+              { x: -(10 - 7), },
+              { x: -(8 - 7),  },
+              { x: -(7.55 - 7), },
+          ],
+          config: {
+            duration: 2000,
+          },
+          loop: false,
+          onStart: () => {
+            cameraControllerRef.current.setTarget(0, 0, -10000, false);
+          },
+          onChange: ({value}, spring) => {
+            cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
+          },
+          onRest: () => {
+            cameraControllerRef.current.fitToBox(frameRef.current, true, { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 })
+          }
+        });
+      }
+    });
 
     // cameraControllerRef.current.setTarget(-1000,0,0, false);
     // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
@@ -141,7 +132,7 @@ function ThreejsRendering({
     //   recenter();
     //}, 1000);
 
-  },[texture, widthTexture, heightTexture, cameraControllerRef]);
+   },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
 
   async function recenter() {
@@ -164,8 +155,6 @@ function ThreejsRendering({
     // );
   }
 
-
-
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
@@ -179,7 +168,7 @@ function ThreejsRendering({
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
         <Sky distance={4500} sunPosition={[0, 10, 0]} inclination={0} azimuth={0.25} />
-        <Stage environment={null} adjustCamera={false} shadows="contact">
+        <Stage environment={null} /*environment={"city"}*/ adjustCamera={false} shadows="contact">
           <Frame
             position={[0.95,3.5, -8.5]}
             scale={1.5}
@@ -197,31 +186,27 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
 
-
+          <CameraControls ref={cameraControllerRef} makeDefault />
           <group rotation={[0, Math.PI, 0]}>
-            <AnimatedCamera
+            {/*<AnimatedCamera
               makeDefault
               ref={cameraControllerRef}
               position-x={propsCamera.x}
               position-y={propsCamera.y}
               position-z={propsCamera.z}
+              position={[-0.5, 2, 1]}
               rotation={[0, Math.PI, 0]}
-            />
+            />*/}
+            
             {/*<>
-              <CameraControls makeDefault />
-              <animated.mesh position-x={propsCamera.x} position-y={2} position-z={2.5}>
+              <CameraControls makeDefault canPan />
+              <animated.mesh position-x={propsCamera.x} position-y={propsCamera.y} position-z={propsCamera.z}>
                 <meshStandardMaterial color="blue" />
                 <boxGeometry args={[1,1,1]} />
               </animated.mesh>
             </>*/}
-            <AnimatedGltf 
-            src={`${BASE_URL}/train.glb`}
-            scale={0.0075}
-            position-x={propsTrain.x}
-            position-y={0}
-            position-z={-0.5}
-            rotation={[ 0, -Math.PI/28, 0]}
-          />
+            <Train position={[propsTrain.x, 0, -0.5]}></Train>
+           
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
@@ -229,6 +214,14 @@ function ThreejsRendering({
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
           <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
+
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20,-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (1 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (2 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (3 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (4 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (5 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+
           </group>
         </Stage>
         
