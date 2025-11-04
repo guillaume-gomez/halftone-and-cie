@@ -86,34 +86,34 @@ function ThreejsRendering({
     });
 
     apiCamera.start({
-      from: { x: -(7.55 - 8+1), y: 2, z: -2 },
+      from: { x: -(7.55 - 7), y: 2, z: -2 },
       to: [
-        { x: -(-70 -8+1), y: 2, z: -2 },
+        { x: -(-70 -7), y: 2, z: -2 },
       ],
       config: {
         duration: 2000,
       },
       loop: false,
       onStart: () => {
-        cameraControllerRef.current.setTarget(0, 0, -1000, false);
+        cameraControllerRef.current.setTarget(0, 0, -10000, false);
       },
       onChange: ({value}, spring) => {
         cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
       },
       onRest: () => {
         apiCamera.start({
-          from: { x: -(70 - 8+1), z: -2, y: 2.2 },
+          from: { x: -(70 - 7), z: -2, y: 2.2 },
           to: [
-              { x: -(10 - 8+1), },
-              { x: -(8 - 8+1),  },
-              { x: -(7.55 - 8+1), },
+              { x: -(10 - 7), },
+              { x: -(8 - 7),  },
+              { x: -(7.55 - 7), },
           ],
           config: {
             duration: 2000,
           },
           loop: false,
           onStart: () => {
-            cameraControllerRef.current.setTarget(0, 0, -1000, false);
+            cameraControllerRef.current.setTarget(0, 0, -10000, false);
           },
           onChange: ({value}, spring) => {
             cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
@@ -168,7 +168,7 @@ function ThreejsRendering({
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
         <Sky distance={4500} sunPosition={[0, 10, 0]} inclination={0} azimuth={0.25} />
-        <Stage environment={null} adjustCamera={false} shadows="contact">
+        <Stage environment={null} /*environment={"city"}*/ adjustCamera={false} shadows="contact">
           <Frame
             position={[0.95,3.5, -8.5]}
             scale={1.5}
