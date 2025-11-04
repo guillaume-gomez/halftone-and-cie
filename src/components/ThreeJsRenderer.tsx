@@ -51,67 +51,13 @@ function ThreejsRendering({
 
   const [propsTrain, apiTrain] = useSpring(
     () => (
-      {
-        from: { x: 70 },
-        to: [
-          { x: 10 },
-          { x: 8 },
-          { x: 7.55 },
-        ],
-        config: {
-          duration: 2000,
-        },
-        loop: false
-      }),
+      {}),
       []
     );
-
-  // animation infinite in the tunnel
-  // const [propsTrain, apiTrain] = useSpring(
-  //   () => (
-  //     {
-  //       from: { x: 70 },
-  //       to: [
-  //         { x: 25 },
-  //       ],
-  //       config: {
-  //         duration: 2000,
-  //       },
-  //       loop: true
-  //     }),
-  //     []
-  //   );
-
   const [propsCamera, apiCamera] = useSpring(
-     () => ({
-        from: { x: 70 - 8, z: 2.5, y: 2.2 },
-        to: [
-            { x: 10 - 8, },
-            { x: 8 - 8,  },
-            { x: 7.55 - 8, },
-        ],
-        config: {
-          duration: 2000,
-        },
-        loop: false
-      }),
+     () => ({}),
     []
   );
-
-  const propsCameraMoveForward = useSpring({
-    from: { z: 2.5, y: 2 },
-    to: [
-      {z: 2.5, y: 3 },
-      {z: 2.5, y: 4 },
-      {z: 2.5, y: 5 },
-      {z: 2.5, y: 6 },
-    ],
-    config: {
-      duration: 2000,
-    },
-    loop: false
-  })
-
 
   useEffect(() => {
     apiTrain.start({
@@ -140,42 +86,40 @@ function ThreejsRendering({
     });
 
     apiCamera.start({
-      from: { x: 7.55 - 8, y: 2, z: 0.80 },
+      from: { x: -(7.55 - 8+1), y: 2, z: -2 },
       to: [
-        { x: -70 -8, y: 2, z: 0.80 },
+        { x: -(-70 -8+1), y: 2, z: -2 },
       ],
       config: {
         duration: 2000,
       },
       loop: false,
+      onStart: () => {
+        cameraControllerRef.current.setTarget(0, 0, -1000, false);
+      },
+      onChange: ({value}, spring) => {
+        cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
+      },
       onRest: () => {
         apiCamera.start({
-          from: { x: 70 - 8, z: 0.80, y: 2.2 },
+          from: { x: -(70 - 8+1), z: -2, y: 2.2 },
           to: [
-              { x: 10 - 8, },
-              { x: 8 - 8,  },
-              { x: 7.55 - 8, },
+              { x: -(10 - 8+1), },
+              { x: -(8 - 8+1),  },
+              { x: -(7.55 - 8+1), },
           ],
           config: {
             duration: 2000,
           },
           loop: false,
+          onStart: () => {
+            cameraControllerRef.current.setTarget(0, 0, -1000, false);
+          },
+          onChange: ({value}, spring) => {
+            cameraControllerRef.current && cameraControllerRef.current.setPosition(value.x, value.y, value.z, false)
+          },
           onRest: () => {
-            apiCamera.start({
-              from: { y: 2, z: 0.80 },
-              to: [
-                { y: 2.2, z: 2.5 },
-                { y: 2.1, z: 3, x: -0.5 },
-                { y: 2.2, z: 3.2, x: -1 },
-                { y: 2.1, z: 4, x: -1 },
-                { y: 2.8, z: 5, x: -1 },
-              ],
-              config: {
-                duration: 250
-              },
-              loop:false
-            })
-            //cameraControllerRef.focus model
+            cameraControllerRef.current.fitToBox(frameRef.current, true, { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 })
           }
         });
       }
@@ -242,9 +186,9 @@ function ThreejsRendering({
           </Frame>
           <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
 
-
+          <CameraControls ref={cameraControllerRef} makeDefault />
           <group rotation={[0, Math.PI, 0]}>
-            <AnimatedCamera
+            {/*<AnimatedCamera
               makeDefault
               ref={cameraControllerRef}
               position-x={propsCamera.x}
@@ -252,7 +196,8 @@ function ThreejsRendering({
               position-z={propsCamera.z}
               position={[-0.5, 2, 1]}
               rotation={[0, Math.PI, 0]}
-            />
+            />*/}
+            
             {/*<>
               <CameraControls makeDefault canPan />
               <animated.mesh position-x={propsCamera.x} position-y={propsCamera.y} position-z={propsCamera.z}>
