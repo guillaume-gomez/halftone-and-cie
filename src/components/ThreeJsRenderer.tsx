@@ -1,10 +1,13 @@
 import { useRef , useEffect } from 'react';
+import { Color } from "three";
+import { useControls } from 'leva'
 import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+import LightBulb from "./LightBulb";
 
 interface ThreejsRenderingProps {
   texture?: string;
@@ -26,6 +29,33 @@ function ThreejsRendering({
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
+  const pointRef = useRef()
+  useControls('Point Light', {
+    visible: {
+      value: true,
+      onChange: (v) => {
+        if(pointRef.current) {
+          pointRef.current.visible = v  
+        }
+      },
+    },
+    position: {
+      x: 2,
+      y: 0,
+      z: 0,
+      onChange: (v) => {
+        pointRef?.current?.position.copy(v)
+      },
+    },
+    color: {
+      value: 'white',
+      onChange: (v) => {
+        if(pointRef.current) {
+          pointRef.current.color = new Color(v) 
+        }
+      },
+    },
+  })
   const backgroundColor = "purple";
   const originalCameraPosition = 3;
 
@@ -76,7 +106,8 @@ function ThreejsRendering({
           makeDefault
           maxDistance={3}
         />
-        <Stage environment={null} adjustCamera={false} shadows="contact">
+        <Stage environment={"night"} adjustCamera={false} shadows="contact">
+          <pointLight /*ref={pointRef}*/ position={[0, 0, -27.5]} />
           <Frame
             position={[0,1, -25]}
             widthTexture={widthTexture}
