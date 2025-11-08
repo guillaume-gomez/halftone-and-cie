@@ -9,6 +9,7 @@ import {
   Stats,
   GizmoHelper,
   GizmoViewport,
+  Stars,
   Gltf,
   Sky
 } from '@react-three/drei';
@@ -46,7 +47,7 @@ function ThreejsRendering({
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
   const cameraControllerRef = useRef<typeof PerspectiveCamera|null>(null);
   const frameRef = useRef(null);
-  const backgroundColor = "purple";
+  const backgroundColor = "#100d36";
   const originalCameraPosition = 20;
 
   const [propsTrain, apiTrain] = useSpring(
@@ -137,37 +138,9 @@ function ThreejsRendering({
   }
 
   useEffect(() => {
-    
     move();
-    // cameraControllerRef.current.setTarget(-1000,0,0, false);
-    // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
+  },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
-    // setTimeout(() => {
-    //   recenter();
-    //}, 1000);
-
-   },[texture, widthTexture, heightTexture, cameraControllerRef]);
-
-
-  async function recenter() {
-    // if(!frameRef.current || !cameraControllerRef.current) {
-    //   return;
-    // }
-
-    // await cameraControllerRef.current.setTarget(-1000,0,0, false);
-    // await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
-    // await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
-
-    // const position = cameraControllerRef.current._camera.position
-    // await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
-
-    // await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
-
-    // await cameraControllerRef.current.setTarget(0,0,0,false)
-    // await cameraControllerRef.current.fitToBox(frameRef.current, true,
-    //   { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
-    // );
-  }
 
   return (
     <div className="flex flex-col gap-5 w-full">
@@ -181,7 +154,8 @@ function ThreejsRendering({
       >
         <color attach="background" args={[backgroundColor]} />
         <ambientLight intensity={0.30} />
-        <Sky distance={4500} sunPosition={[0, 10, 0]} inclination={0} azimuth={0.25} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      
         <Stage environment={null} /*environment={"city"}*/ adjustCamera={false} shadows="contact">
           <Frame
             position={[0.95,3.5, -8.5]}
