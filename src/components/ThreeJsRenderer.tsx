@@ -1,5 +1,5 @@
 import { useRef , useEffect } from 'react';
-import { DoubleSide } from "three";
+import { DoubleSide, MathUtils } from "three";
 import { Canvas } from '@react-three/fiber';
 import { 
   CameraControls,
@@ -59,7 +59,17 @@ function ThreejsRendering({
     []
   );
 
-  useEffect(() => {
+  async function move() {
+    await cameraControllerRef.current.setTarget(0, 0, -10000, false);
+    const {x, y, z } = cameraControllerRef.current.camera.position
+    await cameraControllerRef.current.setTarget(x, y, z-0.1, false);
+    await cameraControllerRef.current.rotate(180 * MathUtils.DEG2RAD, 0, true )
+    await cameraControllerRef.current.setTarget(0,3,0, true);
+    await cameraControllerRef.current.setPosition(0,3, -2, true);
+    await cameraControllerRef.current.setTarget(6,3,-1, true);
+    
+    const {x:xx, y: yy, z: zz } = cameraControllerRef.current.camera.position
+    
     apiTrain.start({
       from: { x: 7.55 },
       to: [
@@ -123,8 +133,12 @@ function ThreejsRendering({
           }
         });
       }
-    });
+    });  
+  }
 
+  useEffect(() => {
+    
+    move();
     // cameraControllerRef.current.setTarget(-1000,0,0, false);
     // cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
 
