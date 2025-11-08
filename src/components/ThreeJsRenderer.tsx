@@ -20,8 +20,8 @@ import {
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
+import Tunnel from "./Metro/Tunnel";
 import Train from "./Train";
-
 const { BASE_URL, MODE } = import.meta.env;
 
 interface ThreejsRenderingProps {
@@ -219,22 +219,10 @@ function ThreejsRendering({
                 <boxGeometry args={[1,1,1]} />
               </animated.mesh>
             </>*/}
-            <Train position={[propsTrain.x, 0, -0.5]}></Train>
-           
+          <Tunnel position={[70,-6,0]}/>
+          <Train position={[propsTrain.x, 0, -0.5]}></Train>
           <Gltf src={`${BASE_URL}/japanese-train-station.glb`} scale={5} position={[0,4,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[10,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[22,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[34,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[46,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[58,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[70,-6,0]}  rotation={[ 0, 0, 0]}/>
-
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20,-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (1 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (2 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (3 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (4 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
-          <Gltf src={`${BASE_URL}/connector.glb`} scale={4} position={[-20 - (5 * 12),-6,0]}  rotation={[ 0, 0, 0]}/>
+          <Tunnel position={[-20, -6, 0]}/>
 
           </group>
         </Stage>
