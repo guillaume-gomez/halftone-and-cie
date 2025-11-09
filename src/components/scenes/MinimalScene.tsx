@@ -17,32 +17,32 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
   const pointRef = useRef()
-  useControls('Point Light', {
-    visible: {
-      value: true,
-      onChange: (v) => {
-        if(pointRef.current) {
-          pointRef.current.visible = v  
-        }
-      },
-    },
-    position: {
-      x: 2,
-      y: 0,
-      z: 0,
-      onChange: (v) => {
-        pointRef?.current?.position.copy(v)
-      },
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if(pointRef.current) {
-          pointRef.current.color = new Color(v) 
-        }
-      },
-    },
-  });
+  // useControls('Point Light', {
+  //   visible: {
+  //     value: true,
+  //     onChange: (v) => {
+  //       if(pointRef.current) {
+  //         pointRef.current.visible = v  
+  //       }
+  //     },
+  //   },
+  //   position: {
+  //     x: 0,
+  //     y: 1,
+  //     z: -14.1,
+  //     onChange: (v) => {
+  //       pointRef?.current?.position.copy(v)
+  //     },
+  //   },
+  //   color: {
+  //     value: 'white',
+  //     onChange: (v) => {
+  //       if(pointRef.current) {
+  //         pointRef.current.color = new Color(v) 
+  //       }
+  //     },
+  //   },
+  // });
   useEffect(() => {
     if(!cameraControllerRef.current) {
       return;
@@ -80,7 +80,7 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
           makeDefault
           maxDistance={3}
         />
-        <pointLight ref={pointRef} position={[0, 1, -14.1]} />
+        <pointLight /*ref={pointRef}*/ position={[0, 1, -14.1]} />
         <Frame
           position={[0,1.5, -12.4]}
           widthTexture={widthTexture}
