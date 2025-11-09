@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { CameraControls, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import SceneWithWalking from "./scenes/SceneWithWalking";
+import MinimalScene from "./scenes/MinimalScene";
 
 interface ThreejsRenderingProps {
   texture?: string;
@@ -34,7 +35,7 @@ function ThreejsRendering({
         style={{width, height}}
         className={"hover:cursor-grab"}
       >
-        <SceneWithWalking
+        <MinimalScene
           widthTexture={widthTexture}
           heightTexture={heightTexture}
           texture={texture}
