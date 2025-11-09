@@ -1,13 +1,10 @@
 import { useRef , useEffect } from 'react';
-import { Color } from "three";
-import { useControls } from 'leva'
 import { Canvas } from '@react-three/fiber';
 import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import Ad from "./Ad";
 import Frame from "./Frame";
 import MetroHallway from "./Metro/MetroHallway";
-import LightBulb from "./LightBulb";
 
 interface ThreejsRenderingProps {
   texture?: string;
@@ -29,42 +26,22 @@ function ThreejsRendering({
   const { toggleFullscreen } = useFullscreen({ target: canvasRef });
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
-  const pointRef = useRef()
-  useControls('Point Light', {
-    visible: {
-      value: true,
-      onChange: (v) => {
-        if(pointRef.current) {
-          pointRef.current.visible = v  
-        }
-      },
-    },
-    position: {
-      x: 2,
-      y: 0,
-      z: 0,
-      onChange: (v) => {
-        pointRef?.current?.position.copy(v)
-      },
-    },
-    color: {
-      value: 'white',
-      onChange: (v) => {
-        if(pointRef.current) {
-          pointRef.current.color = new Color(v) 
-        }
-      },
-    },
-  })
   const backgroundColor = "purple";
-  const originalCameraPosition = 3;
+  const originalCameraPosition = 20;
 
 
   useEffect(() => {
     if(!cameraControllerRef.current) {
       return;
     }
-    recenter();
+
+    cameraControllerRef.current.setTarget(-1000,0,0, false);
+    cameraControllerRef.current.setPosition(10,0, originalCameraPosition, false);
+
+    setTimeout(() => {
+      recenter();
+    }, 1000);
+
   },[texture, widthTexture, heightTexture, cameraControllerRef]);
 
 
@@ -72,12 +49,19 @@ function ThreejsRendering({
     if(!frameRef.current || !cameraControllerRef.current) {
       return;
     }
-    console.log(cameraControllerRef.current.camera.position)
-    const { x, y, z } = cameraControllerRef.current.camera.position
-    await cameraControllerRef.current.setPosition(x,y, z+3, false);
+
+    await cameraControllerRef.current.setTarget(-1000,0,0, false);
+    await cameraControllerRef.current.setPosition(10,0, originalCameraPosition, true);
+    await cameraControllerRef.current.setPosition(0,0, originalCameraPosition, true);
+    const position = cameraControllerRef.current.camera.position
+    await cameraControllerRef.current.setTarget(position.x-0.1,position.y,position.z, false);
+
+    await cameraControllerRef.current.rotate(-Math.PI/2,0,true);
+
+    await cameraControllerRef.current.setTarget(0,0,0,false)
     await cameraControllerRef.current.fitToBox(frameRef.current, true,
       { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
-     );
+    );
   }
 
 
@@ -85,7 +69,7 @@ function ThreejsRendering({
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [0,1.5, originalCameraPosition], fov: 75, far: 1000 }}
+        camera={{ position: [10, 2, originalCameraPosition], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -93,21 +77,14 @@ function ThreejsRendering({
         className={"hover:cursor-grab"}
       >
         <color attach="background" args={[backgroundColor]} />
-        <ambientLight intensity={0.1} />
+        <ambientLight intensity={0.30} />
         <CameraControls
           makeDefault
           smoothTime={0.25}
           restThreshold={0.1}
           ref={cameraControllerRef}
-          minPolarAngle={0}
-          maxPolarAngle={Math.PI / 1.9}
-          minAzimuthAngle={0}
-          maxAzimuthAngle={0.55}
-          makeDefault
-          maxDistance={3}
         />
-        <Stage environment={"night"} adjustCamera={false} shadows="contact">
-          <pointLight /*ref={pointRef}*/ position={[0, 0, -27.5]} />
+        <Stage environment={null} adjustCamera={false} shadows="contact">
           <Frame
             position={[0,1, -25]}
             widthTexture={widthTexture}
@@ -132,7 +109,22 @@ function ThreejsRendering({
           height={4}
           hideFaces={["front"]}
         />
-        
+        <MetroHallway
+          position={[8,0,20.4]}
+          width={6}
+          depth={10}
+          height={4}
+          rotation={[0, Math.PI/2, 0]}
+          hideFaces={["back"]}
+        />
+        <MetroHallway
+          position={[0,0,20.4]}
+          width={6}
+          depth={6}
+          height={4}
+          hideFaces={["right", "back"]}
+        />
+
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
