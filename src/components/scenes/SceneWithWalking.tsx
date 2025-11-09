@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react';
-import { CameraControls, Stage } from '@react-three/drei';
+import { CameraControls } from '@react-three/drei';
 import Ad from "../Ad";
 import Frame from "../Frame";
 import MetroHallway from "../Metro/MetroHallway";
@@ -23,14 +23,13 @@ function SceneWithWalking({ cameraRef, frameRef, widthTexture, heightTexture, te
         restThreshold={0.1}
         ref={cameraRef}
       />
-      <Stage environment={null} adjustCamera={false} shadows="contact">
-        <Frame
-          position={[0,1, -25]}
+      <Frame
+          position={[0,1.5, -12.4]}
           widthTexture={widthTexture}
           heightTexture={heightTexture}
           ref={frameRef}
-          hasWindow={false}
-          hasBackLight={false}
+          hasWindow={true}
+          hasBackLight={true}
         >
           <Ad
             base64Texture={texture}
@@ -38,7 +37,6 @@ function SceneWithWalking({ cameraRef, frameRef, widthTexture, heightTexture, te
             heightTexture={heightTexture}
           />
         </Frame>
-      </Stage>
 
       <MetroHallway
         position={[0,0,2.4]}
