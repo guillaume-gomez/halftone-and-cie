@@ -1,10 +1,7 @@
 import { useRef , useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { CameraControls, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
-import Ad from "./Ad";
-import Frame from "./Frame";
-import MetroHallway from "./Metro/MetroHallway";
 import SceneWithWalking from "./scenes/SceneWithWalking";
 
 interface ThreejsRenderingProps {
@@ -64,8 +61,6 @@ function ThreejsRendering({
     );
   }
 
-
-
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
@@ -83,7 +78,7 @@ function ThreejsRendering({
           heightTexture={heightTexture}
           texture={texture}
         />
-
+        <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />

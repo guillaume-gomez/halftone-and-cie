@@ -1,13 +1,11 @@
-import { useRef , useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { CameraControls, Stage, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
-import { useFullscreen } from "rooks";
+import { MutableRefObject } from 'react';
+import { CameraControls, Stage } from '@react-three/drei';
 import Ad from "../Ad";
 import Frame from "../Frame";
 import MetroHallway from "../Metro/MetroHallway";
 
 interface SceneWithWalkingProps {
-  cameraRef: any
+  cameraRef: MutableRefObject<CameraControls | null>;
   frameRef: any;
   widthTexture: number;
   heightTexture: number;
@@ -40,7 +38,6 @@ function SceneWithWalking({ cameraRef, frameRef, widthTexture, heightTexture, te
             heightTexture={heightTexture}
           />
         </Frame>
-        <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
       </Stage>
 
       <MetroHallway
