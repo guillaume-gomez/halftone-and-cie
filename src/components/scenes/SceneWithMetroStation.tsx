@@ -31,6 +31,7 @@ function SceneWithMetroStation({ widthTexture, heightTexture, texture } : SceneW
   const frameRef = useRef(null);
   const originalCameraPosition = 20;
   const backgroundColor = "#100d36";
+  const cameraOffset = 8;
   
   const [propsTrain, apiTrain] = useSpring(
     () => (
@@ -79,9 +80,9 @@ function SceneWithMetroStation({ widthTexture, heightTexture, texture } : SceneW
     });
 
     apiCamera.start({
-      from: { x: -(7.55 - 7), y: 2, z: -2 },
+      from: { x: -(7.55 - cameraOffset), y: 2, z: -2 },
       to: [
-        { x: -(-70 -7), y: 2, z: -2 },
+        { x: -(-70 -cameraOffset), y: 2, z: -2 },
       ],
       config: {
         duration: 2000,
@@ -95,11 +96,11 @@ function SceneWithMetroStation({ widthTexture, heightTexture, texture } : SceneW
       },
       onRest: () => {
         apiCamera.start({
-          from: { x: -(70 - 7), z: -2, y: 2.2 },
+          from: { x: -(70 - cameraOffset), z: -2, y: 2.2 },
           to: [
-              { x: -(10 - 7), },
-              { x: -(8 - 7),  },
-              { x: -(7.55 - 7), },
+              { x: -(10 - cameraOffset), },
+              { x: -(8 - cameraOffset),  },
+              { x: -(7.55 - cameraOffset), },
           ],
           config: {
             duration: 2000,
