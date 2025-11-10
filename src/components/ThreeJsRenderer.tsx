@@ -1,6 +1,6 @@
 import { useRef  } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { CameraControls, Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import SceneWithWalking from "./scenes/SceneWithWalking";
 
