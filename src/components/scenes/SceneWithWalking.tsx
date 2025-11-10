@@ -1,4 +1,4 @@
-import { useRef , useEffect, MutableRefObject } from 'react';
+import { useRef , useEffect } from 'react';
 import { CameraControls } from '@react-three/drei';
 import Ad from "../Ad";
 import Frame from "../Frame";
@@ -62,7 +62,6 @@ function SceneWithWalking({ widthTexture, heightTexture, texture } : SceneWithWa
         minPolarAngle={0}
         maxPolarAngle={Math.PI / 1.9}
         maxDistance={3}
-        makeDefault
       />
       <Frame
           position={[0,1.5, -12.4]}
