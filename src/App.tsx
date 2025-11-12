@@ -127,17 +127,7 @@ function App() {
   }
 
   function renderNoImage() {
-    return (<span>Upload an image</span>);
-  }
-
-  function renderImage() {
-    return display2DView ?
-      <canvas ref={canvasBufferRef} style={{display: "none"}} /> :
-      <ThreeJsRenderer
-        texture={texture}
-        widthTexture={widthTexture}
-        heightTexture={heightTexture}
-      />;
+    return (!image && display2DView && <span>Upload an image</span>);
   }
 
   return (
