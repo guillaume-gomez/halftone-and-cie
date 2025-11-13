@@ -63,8 +63,7 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
   }
 
   const originalCameraPosition = 3;
-  
-
+ 
   return (
 		<>
 		  <ambientLight intensity={0.1} />
@@ -79,6 +78,7 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
           maxAzimuthAngle={0.55}
           makeDefault
           maxDistance={3}
+          minDistance={0.2}
         />
         <pointLight /*ref={pointRef}*/ position={[0, 1, -14.1]} />
         <Frame
