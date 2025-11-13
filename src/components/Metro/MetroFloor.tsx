@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useMemo } from "react";
 import { TextureLoader } from 'three';
 import { useLoader } from '@react-three/fiber';
 
@@ -33,8 +33,8 @@ function MetroFloor({ position, depth, width }: MetroFloorProps) {
     'Concrete_019_SD/Concrete_019_AmbientOcclusion.jpg',
   ]);
 
-  const material = useCallback(
-    new MeshStandardMaterial({
+  const material = useMemo(
+    () => new MeshStandardMaterial({
       displacementScale: 0,
       map: colorMap,
       displacementMap,
