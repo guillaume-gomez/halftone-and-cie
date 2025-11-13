@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useMemo } from "react";
 import { TextureLoader } from 'three';
 import { useLoader } from '@react-three/fiber';
 
@@ -33,8 +33,8 @@ function MetroCeil({ position, depth, width }: MetroCeilProps) {
     'Concrete_Ceiling_001_SD/Concrete_Ceiling_001_ambientOcclusion.jpg',
   ]);
 
-  const material = useCallback(
-    new MeshStandardMaterial({
+  const material = useMemo(
+    () => new MeshStandardMaterial({
       displacementScale: 0,
       map: colorMap,
       displacementMap,

@@ -126,6 +126,10 @@ function App() {
     setImage(newImage);
   }
 
+  function renderNoImage() {
+    return (!image && display2DView && <span>Upload an image</span>);
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Navbar />
@@ -187,14 +191,14 @@ function App() {
               </button>
         </Card>
         <Card title="Result" className="bg-secondary w-full">
-          <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          { !display2DView &&
-            <ThreeJsRenderer
+          { 
+            !display2DView && <ThreeJsRenderer
               texture={texture}
               widthTexture={widthTexture}
               heightTexture={heightTexture}
             />
           }
+          <canvas ref={canvasBufferRef} style={{display: "none"}} />
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
