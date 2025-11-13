@@ -126,6 +126,24 @@ function App() {
     setImage(newImage);
   }
 
+  function renderGenerateButton() {
+    const button = (
+      <button
+        className="custom-shadow btn btn-secondary w-full text-xl"
+        onClick={generateButton}
+        disabled={!image}
+      >
+        Generate
+      </button>
+    );
+
+    if(!image) {
+      return (<div className="tooltip tooltip-warning" data-tip="Upload an image first !">{button}</div>)
+    }
+
+    return button;
+  }
+
   function renderNoImage() {
     return (!image && display2DView && <span>Upload an image</span>);
   }
@@ -183,12 +201,7 @@ function App() {
 
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
-              <button
-                className="custom-shadow btn btn-secondary w-full text-xl"
-                onClick={generateButton}
-              >
-                Generate !
-              </button>
+              {renderGenerateButton()}
         </Card>
         <Card title="Result" className="bg-secondary w-full">
           { 
