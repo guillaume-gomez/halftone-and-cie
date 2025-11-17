@@ -29,7 +29,7 @@ const Frame = forwardRef<{}, FrameProps>(({
   ref
   ) => {
   const light = useRef<any>();
-  useHelper(light, RectAreaLightHelper, 'green');
+  //useHelper(light, RectAreaLightHelper, 'green');
 
 
   return (
