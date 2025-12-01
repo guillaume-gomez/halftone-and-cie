@@ -1,6 +1,6 @@
 import { forwardRef, ReactNode, useRef } from 'react';
 import { Text, useHelper } from '@react-three/drei';
-import { MeshPhysicalMaterial } from "three";
+import { MeshPhysicalMaterial, Vector3 } from "three";
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 interface FrameProps {
@@ -91,7 +91,7 @@ const Frame = forwardRef<{}, FrameProps>(({
             {hasBackLight && <rectAreaLight
               ref={light}
               position={[0, 0,0.225]}
-              lookAt={[0,0,-1]}
+              lookAt={new Vector3(0,0,-1)}
               castShadow={true}
               args={[ 0xffffff, 0.4, 1, heightTexture/widthTexture]}
             />}
