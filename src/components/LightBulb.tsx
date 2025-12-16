@@ -17,6 +17,7 @@ function LightBulb({
           //ref={light}
           position={[0,-0.01,0]}
           rotation={[-Math.PI/2,0, 0]}
+          // @ts-ignore
           lookAt={new Vector3(0,-1,0)}
           castShadow={true}
           args={[ 0xffffff, 5, 3, 1]}

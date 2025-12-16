@@ -144,9 +144,9 @@ function App() {
     return button;
   }
 
-  function renderNoImage() {
-    return (!image && display2DView && <span>Upload an image</span>);
-  }
+  // function renderNoImage() {
+  //   return (!image && display2DView && <span>Upload an image</span>);
+  // }
 
   return (
     <div className="flex flex-col gap-4">
