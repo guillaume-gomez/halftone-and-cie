@@ -1,7 +1,6 @@
 import { forwardRef, ReactNode, useRef } from 'react';
-import { Text, useHelper } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import { MeshPhysicalMaterial } from "three";
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 interface FrameProps {
   position: [number, number, number];

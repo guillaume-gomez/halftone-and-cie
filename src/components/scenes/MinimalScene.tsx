@@ -1,7 +1,5 @@
-import { useRef , useEffect, MutableRefObject } from 'react';
-import { Color } from "three";
-import { CameraControls, Stage } from '@react-three/drei';
-import { useControls } from 'leva';
+import { useRef , useEffect } from 'react';
+import { CameraControls } from '@react-three/drei';
 import Ad from "../Ad";
 import Frame from "../Frame";
 import MetroHallway from "../Metro/MetroHallway";
@@ -16,7 +14,6 @@ interface SceneWithWalkingProps {
 function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkingProps) {
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
-  const pointRef = useRef();
 
   useEffect(() => {
     if(!cameraControllerRef.current) {
@@ -36,14 +33,11 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
       { paddingLeft: .1, paddingRight: .1, paddingBottom: .1, paddingTop: .1 }
      );
   }
-
-  const originalCameraPosition = 3;
  
   return (
 		<>
 		  <ambientLight intensity={0.1} />
         <CameraControls
-          makeDefault
           smoothTime={0.25}
           restThreshold={0.1}
           ref={cameraControllerRef}
