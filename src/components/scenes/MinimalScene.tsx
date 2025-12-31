@@ -16,33 +16,8 @@ interface SceneWithWalkingProps {
 function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkingProps) {
   const cameraControllerRef = useRef<CameraControls|null>(null);
   const frameRef = useRef(null);
-  const pointRef = useRef()
-  // useControls('Point Light', {
-  //   visible: {
-  //     value: true,
-  //     onChange: (v) => {
-  //       if(pointRef.current) {
-  //         pointRef.current.visible = v  
-  //       }
-  //     },
-  //   },
-  //   position: {
-  //     x: 0,
-  //     y: 1,
-  //     z: -14.1,
-  //     onChange: (v) => {
-  //       pointRef?.current?.position.copy(v)
-  //     },
-  //   },
-  //   color: {
-  //     value: 'white',
-  //     onChange: (v) => {
-  //       if(pointRef.current) {
-  //         pointRef.current.color = new Color(v) 
-  //       }
-  //     },
-  //   },
-  // });
+  const pointRef = useRef();
+
   useEffect(() => {
     if(!cameraControllerRef.current) {
       return;
@@ -72,7 +47,7 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
           smoothTime={0.25}
           restThreshold={0.1}
           ref={cameraControllerRef}
-          minPolarAngle={0}
+          minPolarAngle={Math.PI /4 }
           maxPolarAngle={Math.PI / 1.9}
           minAzimuthAngle={0}
           maxAzimuthAngle={0.55}
