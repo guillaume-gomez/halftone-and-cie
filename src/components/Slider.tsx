@@ -6,7 +6,7 @@ interface SliderProps {
     max: number;
     onChange: (value: number) => void;
     float?: boolean;
-    step?: float;
+    step?: number;
 }
 
 function Slider({
