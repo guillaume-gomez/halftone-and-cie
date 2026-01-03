@@ -3,8 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import SceneWithMetroStation from "./scenes/SceneWithMetroStation";
+import SceneWithWalking from "./scenes/SceneWithWalking";
+import MinimalScene from "./scenes/MinimalScene";
 
 interface ThreejsRenderingProps {
+  sceneType?: string;
   texture?: string;
   widthTexture: number;
   heightTexture: number;
@@ -14,6 +17,7 @@ const exampleTexture="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYA
 
 function ThreejsRendering({
     texture = exampleTexture,
+    sceneType = "minimal",
     widthTexture,
     heightTexture
   } : ThreejsRenderingProps) {
@@ -33,11 +37,30 @@ function ThreejsRendering({
         style={{width, height}}
         className={"hover:cursor-grab"}
       >
-        <SceneWithMetroStation
-          widthTexture={widthTexture}
-          heightTexture={heightTexture}
-          texture={texture}
-        />
+        {
+          sceneType === "minimal" && 
+          <MinimalScene
+            widthTexture={widthTexture}
+            heightTexture={heightTexture}
+            texture={texture}
+          />
+        }
+        {
+          sceneType === "hallway" && 
+          <SceneWithWalking
+            widthTexture={widthTexture}
+            heightTexture={heightTexture}
+            texture={texture}
+          />
+        }
+        {
+          sceneType=== "metro" &&
+          <SceneWithMetroStation
+            widthTexture={widthTexture}
+            heightTexture={heightTexture}
+            texture={texture}
+          />
+        }
         <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
         <Stats showPanel={0} className="stats"/>
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>

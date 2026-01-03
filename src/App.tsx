@@ -126,6 +126,24 @@ function App() {
     setImage(newImage);
   }
 
+  function renderGenerateButton() {
+    const button = (
+      <button
+        className="custom-shadow btn btn-secondary w-full text-xl"
+        onClick={generateButton}
+        disabled={!image}
+      >
+        Generate
+      </button>
+    );
+
+    if(!image) {
+      return (<div className="tooltip tooltip-warning" data-tip="Upload an image first !">{button}</div>)
+    }
+
+    return button;
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Navbar />
@@ -179,22 +197,17 @@ function App() {
 
               <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
 
-              <button
-                className="custom-shadow btn btn-secondary w-full text-xl"
-                onClick={generateButton}
-              >
-                Generate !
-              </button>
+              {renderGenerateButton()}
         </Card>
         <Card title="Result" className="bg-secondary w-full">
-          <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          { !display2DView &&
-            <ThreeJsRenderer
+          { 
+            !display2DView && <ThreeJsRenderer
               texture={texture}
               widthTexture={widthTexture}
               heightTexture={heightTexture}
             />
           }
+          <canvas ref={canvasBufferRef} style={{display: "none"}} />
           <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
