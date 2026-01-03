@@ -146,7 +146,14 @@ function SceneWithMetroStation({ widthTexture, heightTexture, texture } : SceneW
               heightTexture={heightTexture}
             />
           </Frame>
-          <CameraControls ref={cameraControllerRef} makeDefault />
+          <CameraControls
+            ref={cameraControllerRef}
+            makeDefault
+            // minPolarAngle={Math.PI /4 }
+            // maxPolarAngle={Math.PI / 1.9}
+            // minAzimuthAngle={0}
+            // maxAzimuthAngle={0.55}
+          />
           <group rotation={[0, Math.PI, 0]}>
             {/*<AnimatedCamera
               makeDefault
