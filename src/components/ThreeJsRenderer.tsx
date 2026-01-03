@@ -2,6 +2,7 @@ import { useRef  } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
+import SceneWithMetroStation from "./scenes/SceneWithMetroStation";
 import SceneWithWalking from "./scenes/SceneWithWalking";
 import MinimalScene from "./scenes/MinimalScene";
 
@@ -23,14 +24,13 @@ function ThreejsRendering({
   const width = 750;
   const height = 750;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { toggleFullscreen } = useFullscreen({ target: canvasRef });
-  
+  const { toggleFullscreen } = useFullscreen({ target: canvasRef });  
   const originalCameraPosition = 20;
 
   return (
     <div className="flex flex-col gap-5 w-full">
       <Canvas
-        camera={{ position: [10, 2, originalCameraPosition], fov: 75, far: 1000 }}
+        camera={{ position: [10, 2, originalCameraPosition], target:[0,10,-10], fov: 75, far: 1000 }}
         dpr={window.devicePixelRatio}
         onDoubleClick={toggleFullscreen}
         ref={canvasRef}
@@ -48,6 +48,14 @@ function ThreejsRendering({
         {
           sceneType === "hallway" && 
           <SceneWithWalking
+            widthTexture={widthTexture}
+            heightTexture={heightTexture}
+            texture={texture}
+          />
+        }
+        {
+          sceneType=== "metro" &&
+          <SceneWithMetroStation
             widthTexture={widthTexture}
             heightTexture={heightTexture}
             texture={texture}
