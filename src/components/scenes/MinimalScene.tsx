@@ -1,5 +1,5 @@
 import { useRef , useEffect } from 'react';
-import { CameraControls } from '@react-three/drei';
+import { CameraControls, Environment } from '@react-three/drei';
 import Ad from "../Ad";
 import Frame from "../Frame";
 import MetroHallway from "../Metro/MetroHallway";
@@ -36,7 +36,8 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
  
   return (
 		<>
-		  <ambientLight intensity={0.1} />
+		  <ambientLight intensity={0.0} />
+        <Environment preset="night" />
         <CameraControls
           smoothTime={0.25}
           restThreshold={0.1}
