@@ -5,6 +5,8 @@ import { useFullscreen } from "rooks";
 import SceneWithWalking from "./scenes/SceneWithWalking";
 import MinimalScene from "./scenes/MinimalScene";
 
+const { MODE } = import.meta.env;
+
 interface ThreejsRenderingProps {
   sceneType?: string;
   texture?: string;
@@ -54,7 +56,7 @@ function ThreejsRendering({
           />
         }
         <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
-        <Stats showPanel={0} className="stats"/>
+        { MODE === "development" && <Stats showPanel={0} className="stats"/> }
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
         </GizmoHelper>
