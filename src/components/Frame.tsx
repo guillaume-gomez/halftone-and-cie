@@ -7,6 +7,7 @@ interface FrameProps {
   children: ReactNode;
   widthTexture: number;
   heightTexture: number;
+  scale?: number;
   padding? : number;
   hasBackLight?: boolean;
   hasWindow?: boolean;
@@ -22,6 +23,7 @@ const Frame = forwardRef<{}, FrameProps>(({
     widthTexture,
     heightTexture,
     padding = 0.4,
+    scale = 1.0,
     hasBackLight = true,
     hasWindow = true
   }: FrameProps,
@@ -36,6 +38,7 @@ const Frame = forwardRef<{}, FrameProps>(({
       position={position as any}
       ref={ref as any}
       castShadow
+      scale={scale}
 
     >
       <group>
@@ -82,8 +85,11 @@ const Frame = forwardRef<{}, FrameProps>(({
                 {/*<meshStandardMaterial color="blue" wireframe={true} />*/}
                 <meshPhysicalMaterial
                   transmission={1}
-                  thickness={0.1}
+                  thickness={0.25}
                   roughness={0.1}
+                  ior={1.1}
+                  clearcoat={.6}
+
                 />
               </mesh>
             }
