@@ -4,8 +4,11 @@ import ColorInput from "./components/ColorInput";
 import InputFileWithPreview from "./components/InputFileWithPreview";
 import Card from "./components/Card";
 import SaveImageButton from "./components/SaveImageButton";
+import ThreeJsRenderer from "./components/ThreeJsRenderer";
 import CustomSettingsCard from "./components/CustomSettingsCard";
+import Toggle from "./components/Toggle";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { reloadCanvasPreview } from "./utils";
 import { halftoneDuatone, fromRGBToCMYK } from "./halftone";
 import { addNoise } from "./noise";
@@ -31,11 +34,23 @@ function App() {
   const [keyAngle, setKeyAngle] = useState<number>(45);
   const [noise, setNoise] = useState<number>(0.15);
 
+  const [display2DView, setDisplay2DView] = useState<boolean>(false);
+  const [widthTexture, setWidthTexture] = useState<number>(100);
+  const [heightTexture, setHeightTexture] = useState<number>(100);
+
   useEffect(() => {
     if(canvasBufferRef.current && image) {
       reloadCanvasPreview(image, canvasBufferRef.current, maxSize);
     }
   }, [canvasBufferRef, maxSize, image]);
+
+  useEffect(() => {
+    if(imageProcessingMode === "CMYK+Noise") {
+      setBackgroundColor("#FFFFFF");
+    } else {
+      setBackgroundColor("transparent");
+    }
+  }, [imageProcessingMode]);
 
   function generateButton() {
     if(!canvasBufferRef.current || !canvasRef.current) {
@@ -45,32 +60,25 @@ function App() {
     switch(imageProcessingMode) {
       case "Duatone":
       default:
-        halftoneDuatone(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            angle,
-            dotSize,
-            dotResolution,
-            backgroundColor,
-            colorLayer1: dotColorOne,
-            colorLayer2: dotColorTwo
-          }
-        );
+        halftoneDuatone(canvasBufferRef.current, canvasRef.current, {
+          angle,
+          dotSize,
+          dotResolution,
+          backgroundColor,
+          colorLayer1: dotColorOne,
+          colorLayer2: dotColorTwo
+        });
         break;
       case "CMYK":
-        fromRGBToCMYK(
-          canvasBufferRef.current,
-          canvasRef.current,
-          {
-            dotSize,
-            dotResolution,
-            cyanAngle,
-            magentaAngle,
-            yellowAngle,
-            keyAngle
-          }
-        );
+        fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+          dotSize,
+          dotResolution,
+          cyanAngle,
+          magentaAngle,
+          yellowAngle,
+          keyAngle,
+          backgroundColor
+        });
         break;
       case "Noise":
         addNoise(
@@ -94,6 +102,8 @@ function App() {
         break;
     };
     const base64Image = canvasRef.current.toDataURL();
+    setWidthTexture(canvasRef.current.width);
+    setHeightTexture(canvasRef.current.height);
     setTexture(base64Image);
   }
 
@@ -101,7 +111,15 @@ function App() {
     if(!canvasBufferRef.current || !canvasRef.current) {
       return;
     }
-    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, { dotSize, dotResolution, cyanAngle, magentaAngle, yellowAngle, keyAngle});
+    fromRGBToCMYK(canvasBufferRef.current, canvasRef.current, {
+        dotSize,
+        dotResolution,
+        cyanAngle,
+        magentaAngle,
+        yellowAngle,
+        keyAngle,
+        backgroundColor
+    });
     addNoise(canvasRef.current, canvasRef.current, 0.20);
   }
 
@@ -115,6 +133,8 @@ function App() {
         return (
               <Slider float step={0.01} min={0} max={1.0} value={noise} onChange={(value) => setNoise(value)} label="Noise" />
         );
+      case "maskPoints":
+        return null;
       case "CMYK":
       case "CMYK+Noise":
         return (<>
@@ -137,45 +157,67 @@ function App() {
     }
   }
 
+  function renderGenerateButton() {
+    const button = (
+      <button
+        className="custom-shadow btn btn-secondary w-full text-xl"
+        onClick={generateButton}
+        disabled={!image}
+      >
+        Generate
+      </button>
+    );
+
+    if(!image) {
+      return (<div className="tooltip tooltip-warning" data-tip="Upload an image first !">{button}</div>)
+    }
+
+    return button;
+  }
+
   return (
-    <div className="bg-base-300 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <Navbar />
       <div className="flex md:flex-row flex-col gap-4">
-        <Card title="Settings" className="border-primary basis-1/4">
-          <InputFileWithPreview onChange={uploadImage} value={image} />
-            <select
-              className="select"
-              onChange={(e)=> setImageProcessingMode(e.target.value)}
-              value={imageProcessingMode}
-            >
-              <option disabled>Select the filter</option>
-              {
-                ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
-                  <option
-                    key={mode}
-                    value={mode}
-                  >
-                    {mode}
-                  </option>
-                )
-              }
+        <Card title="Settings" className="bg-primary basis-1/4">
+          <div className="py-2">
+            <InputFileWithPreview onChange={uploadImage} value={image} />
+          </div>
+          <select
+            className="select"
+            onChange={(e)=> setImageProcessingMode(e.target.value)}
+            value={imageProcessingMode}
+          >
+            <option disabled>Select the filter</option>
+            {
+              ["CMYK+Noise", "Duatone", "CMYK", "Noise", "maskPoints"].map(mode =>
+                <option
+                  key={mode}
+                  value={mode}
+                >
+                  {mode}
+                </option>
+              )
+            }
             </select>
             <CustomSettingsCard>
             <div className="Options">
               {form()}
             </div>
             </CustomSettingsCard>
-
-            <button
-              className="btn btn-primary w-full button-lg text-xl"
-              onClick={generateButton}
-            >
-              Generate
-            </button>
+            <Toggle value={display2DView} label="2D view" toggle={() => setDisplay2DView(!display2DView)}/>
+            {renderGenerateButton()}
         </Card>
-        <Card title="Result" className="bg-base-200 w-full border-secondary">
+        <Card title="Result" className="bg-secondary w-full">
+          { 
+            !display2DView && <ThreeJsRenderer
+              texture={texture}
+              widthTexture={widthTexture}
+              heightTexture={heightTexture}
+            />
+          }
           <canvas ref={canvasBufferRef} style={{display: "none"}} />
-          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize}} />
+          <canvas ref={canvasRef} style={{maxWidth: maxSize, maxHeight: maxSize, display: display2DView ? "" : "none"}} />
           <div className="flex flex-row justify-end">
             <SaveImageButton
              label={"Save"}
@@ -186,6 +228,7 @@ function App() {
           </div>
         </Card>
       </div>
+      <Footer />
     </div>
   )
 }
