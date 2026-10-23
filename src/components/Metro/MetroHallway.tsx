@@ -31,9 +31,7 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
               position={[0, 3.45, z]}
             />);
         })
-
       }
-
         <MetroWall
           position={[0,0,0]}
           width={width}
@@ -51,7 +49,7 @@ function MetroHallway({ position, width, height, depth, rotation = [0,0,0], hide
           width={width}
           depth={depth}
         />
-        {/*<PanelFrame position={[0,0,0.5]} ratio={1} />*/}
+        {/*<PanelFrame position={[0,0,0.5]} />*/}
     </group>
   );
 }

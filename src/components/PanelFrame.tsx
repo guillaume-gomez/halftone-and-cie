@@ -1,35 +1,30 @@
-import { useCallback } from "react";
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useMemo } from "react";
 import { useLoader } from '@react-three/fiber';
-import { MeshStandardMaterial, FrontSide } from "three";
+import { MeshStandardMaterial, FrontSide, TextureLoader } from "three";
 
-interface PanelFramePros {
+interface PanelFrameProps {
   position?: [number, number, number]
-  ratio: number;
 }
 
 function PanelFrame({
   position = [0,0,0],
-  ratio
 }: PanelFrameProps) {
   const [texture] = useLoader(TextureLoader, [
     "panel-frame.png"
   ]);
 
-  const material = useCallback(
+  const material : MeshStandardMaterial = useMemo(() =>
     new MeshStandardMaterial({ map: texture, side: FrontSide})
   , [texture]);
-
 
 
   if(!texture) {
     return <></>;
   }
 
-  
   return (
     <mesh
-      position={position as any}
+      position={position}
       material={material}
     >
       <planeGeometry args={[1, 0.5]} />
