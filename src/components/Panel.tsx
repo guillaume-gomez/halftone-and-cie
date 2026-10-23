@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import { useLoader } from '@react-three/fiber';
-import { FrontSide } from "three";
+import { TextureLoader } from "three";
 
 interface PanelProps {
   path: string
