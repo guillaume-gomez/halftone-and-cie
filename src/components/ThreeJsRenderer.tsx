@@ -1,6 +1,6 @@
 import { useRef  } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Grid, Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { Stats, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import { useFullscreen } from "rooks";
 import SceneWithWalking from "./scenes/SceneWithWalking";
 import MinimalScene from "./scenes/MinimalScene";
@@ -55,12 +55,11 @@ function ThreejsRendering({
             texture={texture}
           />
         }
-        <Grid  args={[50, 50]} position={[0,-0.5,0]} cellColor='white' />
-        { MODE === "development" && <Stats showPanel={0} className="stats"/> }
          <GizmoHelper alignment="bottom-right" margin={[50, 50]}>
             <GizmoViewport labelColor="white" axisHeadScale={1} />
         </GizmoHelper>
       </Canvas>
+      { MODE === "development" && <Stats showPanel={0} className="stats"/> }
       <ul className="text-xs">
         <li>Double click to switch to fullscreen</li>
         <li>Use your mouse or finger to move the camera</li>

@@ -1,6 +1,7 @@
 import { useRef , useEffect } from 'react';
 import { CameraControls, Environment } from '@react-three/drei';
 import Ad from "../Ad";
+import Panel from "../Panel";
 import Frame from "../Frame";
 import MetroHallway from "../Metro/MetroHallway";
 
@@ -65,6 +66,11 @@ function MinimalScene({ widthTexture, heightTexture, texture } : SceneWithWalkin
             heightTexture={heightTexture}
           />
         </Frame>
+        <Panel
+          path="paris-metro-map.png"
+          position={[-2.93,1.75,-11.5]}
+          rotation={[0,Math.PI/2,0]}
+        />
         <MetroHallway
           position={[0,0,2.4]}
           width={6}
